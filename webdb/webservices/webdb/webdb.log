@@ -1,0 +1,355 @@
+
+**  ProxyGen, Progress Version 10.2A
+
+** Checking for existence of .r files ...
+
+** Processing non-persistent procedures ...
+
+** Processing: D:\Maxim\webservices\webdb\src\BasetypeSearch.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\BasetypeSearch.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT basetype CHARACTER
+          INPUT AppendParam CHARACTER
+          INPUT ContextParam CHARACTER
+          INPUT SearchString CHARACTER
+          OUTPUT SearchData TABLE-HANDLE
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\BasetypeSelect.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\BasetypeSelect.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT basetype CHARACTER
+          INPUT AppendParam CHARACTER
+          INPUT ContextParam CHARACTER
+          INPUT SearchString CHARACTER
+          OUTPUT SearchData TABLE-HANDLE
+          OUTPUT AllRecords LOGICAL
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\ContextParams.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\ContextParams.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ContextRid INTEGER
+          OUTPUT ContextParams TABLE
+       TABLE: ContextParams
+          ParamName character
+          ParamValue character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\ContextThreads.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\ContextThreads.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT SessionRid INTEGER
+          OUTPUT ContextThreads TABLE
+       TABLE: ContextThreads
+          ContextId integer
+          ParentId integer
+          ContextType character
+          CreateTime datetime-tz
+          EndTime datetime-tz
+          Queries integer
+          SecErrors integer
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\DeleteService.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\DeleteService.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ServiceRid INTEGER
+          OUTPUT OutMessage CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\DeleteUser.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\DeleteUser.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT UserLogin CHARACTER
+          OUTPUT OutMessage CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\InputParams.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\InputParams.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT ViewOnly LOGICAL
+          OUTPUT MenuParams CHARACTER
+          OUTPUT ModuleName CHARACTER
+          OUTPUT RidMenu INTEGER
+          OUTPUT EndPoint CHARACTER
+          OUTPUT EndPoint2 CHARACTER
+          OUTPUT lang CHARACTER
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: D:\Maxim\webservices\webdb\src\ReadDB.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\ReadDB.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT DBList TABLE
+       TABLE: DBList
+          DBRid integer
+          DBId integer
+          DB_Name character
+          WSPath character
+          WSPath2 character
+          ImagePath character
+          Services character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\ReadServices.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\ReadServices.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT DBRid INTEGER
+          INPUT STRid INTEGER
+          OUTPUT ServiceList TABLE
+       TABLE: ServiceList
+          ServiceRid integer
+          ServiceName character
+          STRid integer
+          ServiceType character
+          DBRid integer
+          DB character
+          EasyLogin logical
+          NumUsers integer
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\ReadServiceTypes.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\ReadServiceTypes.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT STList TABLE
+       TABLE: STList
+          STRid integer
+          STName character
+          ImagePath character
+          Services character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\ReadSessions.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\ReadSessions.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT UserRid INTEGER
+          INPUT DateFrom DATE
+          INPUT DateTo DATE
+          INPUT MaxRecordCount INTEGER
+          OUTPUT SessionsList TABLE
+       TABLE: SessionsList
+          SessionId integer
+          UserName character
+          Login datetime-tz
+          EndTime datetime-tz
+          Threads integer
+          Queries integer
+          SecErrors integer
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\ReadUsers.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\ReadUsers.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT MyUsers LOGICAL
+          INPUT RidService CHARACTER
+          INPUT RidUser CHARACTER
+          OUTPUT UserProfile TABLE
+       TABLE: UserProfile
+          Id integer
+          Login character
+          Name character
+          Banned logical
+          Company character
+          Position character
+          EMail character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\RunAdmin.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\RunAdmin.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ServiceId INTEGER
+          OUTPUT ModuleContextId CHARACTER
+          OUTPUT Module CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\RunUserAdmin.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\RunUserAdmin.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ServiceId INTEGER
+          OUTPUT ModuleContextId CHARACTER
+          OUTPUT OutMessage CHARACTER
+          OUTPUT ReadOnly LOGICAL
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\SaveDB.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\SaveDB.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT DBList TABLE
+          OUTPUT OutMessage CHARACTER
+       TABLE: DBList
+          DBRid integer
+          DBId integer
+          DB_Name character
+          WSPath character
+          WSPath2 character
+          ImagePath character
+          Services character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\SaveProfile.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\SaveProfile.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT IsNew LOGICAL
+          INPUT UserProfile TABLE
+          INPUT AvailServices TABLE
+          OUTPUT OutMessage CHARACTER
+       TABLE: UserProfile
+          UserLogin character
+          UserName character
+          UserEMail character
+          UserCompany character
+          UserPosition character
+          UserBanned logical
+          ConfPass character
+          NewPass character
+          OldPass character
+          ChangePass logical
+       TABLE: AvailServices
+          ServiceId integer
+          ServiceRid integer
+          UserServiceName character
+          ServiceName character
+          ServiceType character
+          RunCount integer
+          ReadOnly logical
+          Enabled logical
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\SaveServiceParams.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\SaveServiceParams.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ServiceId INTEGER
+          INPUT ContextData CHARACTER
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: D:\Maxim\webservices\webdb\src\SessionStart.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\SessionStart.p 
+          INPUT login CHARACTER
+          INPUT pwd CHARACTER
+          INPUT lang CHARACTER
+          OUTPUT ContextId CHARACTER
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: D:\Maxim\webservices\webdb\src\Relogin.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\Relogin.p 
+          INPUT login CHARACTER
+          INPUT pwd CHARACTER
+          INPUT-OUTPUT ContextId CHARACTER
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: D:\Maxim\webservices\webdb\src\SaveServices.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\SaveServices.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ServiceList TABLE
+          OUTPUT OutMessage CHARACTER
+       TABLE: ServiceList
+          ServiceRid integer
+          ServiceName character
+          STRid integer
+          DBRid integer
+          EasyLogin logical
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\SaveServiceTypes.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\SaveServiceTypes.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT STList TABLE
+          OUTPUT OutMessage CHARACTER
+       TABLE: STList
+          STRid integer
+          STName character
+          ImagePath character
+          Services character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\webdb\src\UserData.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\UserData.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT UserName CHARACTER
+          OUTPUT UserPos CHARACTER
+          OUTPUT AvailServices TABLE
+       TABLE: AvailServices
+          ServiceId integer
+          ServiceName character
+          ServiceType character
+          ImageLink character
+          ServiceDbName character
+          EndPoint character
+          DefLogin character
+          RunCount integer
+          EasyLogin logical
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Customizations applied to: 4 matching parameters
+
+** Processing: D:\Maxim\webservices\webdb\src\UserProfile.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\webdb\src\UserProfile.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT IsNew LOGICAL
+          INPUT UserLogin CHARACTER
+          OUTPUT UserProfile TABLE
+          OUTPUT AvailServices TABLE
+       TABLE: UserProfile
+          UserLogin character
+          UserName character
+          UserEMail character
+          UserCompany character
+          UserPosition character
+          UserBanned logical
+          ConfPass character
+          NewPass character
+          OldPass character
+          ChangePass logical
+       TABLE: AvailServices
+          ServiceId integer
+          ServiceRid integer
+          UserServiceName character
+          ServiceName character
+          ServiceType character
+          RunCount integer
+          ReadOnly logical
+          Enabled logical
+   -- No customizations; Validation not necessary
+
+** Processing persistent procedures ...
+
+** Checking method and parameter names ...
+
+** Generating Web Services files ...
+   Creating wsm file ...
+   Generation of wsm file complete ...
+   Creating test wsdl file ...
+   Generation of test wsdl file complete ...
+
+** Generation complete

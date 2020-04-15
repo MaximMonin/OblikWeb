@@ -1,0 +1,11 @@
+.
+PSC
+filename=_sec-authentication-system
+records=0000000000000
+ldbname=webdb
+timestamp=2010/01/08-00:29:53
+numformat=44,46
+dateformat=dmy-1950
+cpstream=ibm866
+.
+0000000003

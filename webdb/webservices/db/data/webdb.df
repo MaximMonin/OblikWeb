@@ -1,0 +1,695 @@
+ADD SEQUENCE "web-seq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+
+ADD SEQUENCE "session-seq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+
+ADD SEQUENCE "context-seq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+
+ADD TABLE "Context"
+  AREA "Schema Area"
+  LABEL "Контекст"
+  DUMP-NAME "context"
+  TABLE-TRIGGER "CREATE" NO-OVERRIDE PROCEDURE "webservices/db/c_context.p" CRC "?" 
+  TABLE-TRIGGER "DELETE" NO-OVERRIDE PROCEDURE "webservices/db/d_context.p" CRC "?" 
+
+ADD FIELD "RidContext" OF "Context" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Контекст"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "RidContextUp" OF "Context" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Контекст вышестоящий"
+  POSITION 3
+  MAX-WIDTH 4
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "RidSession" OF "Context" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Сессия"
+  POSITION 4
+  MAX-WIDTH 4
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "ContextKey" OF "Context" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 5
+  MAX-WIDTH 100
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "NumUsed" OF "Context" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Использован раз"
+  POSITION 6
+  MAX-WIDTH 4
+  ORDER 50
+  MANDATORY
+
+ADD FIELD "ContextType" OF "Context" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  POSITION 7
+  MAX-WIDTH 60
+  ORDER 60
+
+ADD FIELD "CreationTime" OF "Context" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Создан"
+  POSITION 8
+  MAX-WIDTH 12
+  ORDER 70
+  MANDATORY
+
+ADD FIELD "UseTime" OF "Context" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Использован до"
+  POSITION 9
+  MAX-WIDTH 12
+  ORDER 80
+  MANDATORY
+
+ADD FIELD "PublicKey" OF "Context" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Публичный ключ"
+  POSITION 10
+  MAX-WIDTH 1
+  ORDER 90
+
+ADD FIELD "SecurityErrors" OF "Context" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Безопасность"
+  POSITION 11
+  MAX-WIDTH 4
+  HELP "Число ошибок системы безопасности"
+  ORDER 100
+
+ADD INDEX "ctime" ON "Context" 
+  AREA "Schema Area"
+  PRIMARY
+  INDEX-FIELD "CreationTime" DESCENDING 
+
+ADD INDEX "isession" ON "Context" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidSession" ASCENDING 
+
+ADD INDEX "key" ON "Context" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "ContextKey" ASCENDING 
+
+ADD INDEX "rid" ON "Context" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "RidContext" ASCENDING 
+
+ADD INDEX "ridup" ON "Context" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidContextUp" ASCENDING 
+
+ADD INDEX "type" ON "Context" 
+  AREA "Schema Area"
+  INDEX-FIELD "ContextType" ASCENDING 
+
+ADD INDEX "utime" ON "Context" 
+  AREA "Schema Area"
+  INDEX-FIELD "UseTime" DESCENDING 
+
+ADD TABLE "ContextData"
+  AREA "Schema Area"
+  LABEL "Данные контекста"
+  DUMP-NAME "contextdata"
+
+ADD FIELD "RidContext" OF "ContextData" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Контекст"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "ParamName" OF "ContextData" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 60
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "DataValue" OF "ContextData" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 100
+  ORDER 30
+
+ADD INDEX "paramname" ON "ContextData" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "RidContext" ASCENDING 
+  INDEX-FIELD "ParamName" ASCENDING 
+
+ADD INDEX "context" ON "ContextData" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidContext" ASCENDING 
+
+ADD TABLE "Db"
+  AREA "Schema Area"
+  LABEL "Базы данных"
+  DUMP-NAME "db"
+  TABLE-TRIGGER "CREATE" NO-OVERRIDE PROCEDURE "webservices/db/c_db.p" CRC "?" 
+  TABLE-TRIGGER "DELETE" NO-OVERRIDE PROCEDURE "webservices/db/d_db.p" CRC "?" 
+
+ADD FIELD "RidDb" OF "Db" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> База данных"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "IdDb" OF "Db" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Номер БД"
+  POSITION 3
+  MAX-WIDTH 4
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "Db_Name" OF "Db" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Название"
+  POSITION 4
+  MAX-WIDTH 100
+  ORDER 30
+
+ADD FIELD "WebServPath" OF "Db" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Веб сервис путь"
+  POSITION 5
+  MAX-WIDTH 100
+  HELP "Для StateFree соединений"
+  ORDER 40
+
+ADD FIELD "WebServPath2" OF "Db" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Веб сервис путь (дополн)"
+  POSITION 6
+  MAX-WIDTH 100
+  HELP "Для StateAware соединений"
+  ORDER 50
+
+ADD FIELD "ImagePath" OF "Db" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Изображение"
+  POSITION 7
+  MAX-WIDTH 100
+  ORDER 60
+
+ADD INDEX "id" ON "Db" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "IdDb" ASCENDING 
+
+ADD INDEX "name" ON "Db" 
+  AREA "Schema Area"
+  INDEX-FIELD "Db_Name" ASCENDING 
+
+ADD INDEX "rid" ON "Db" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "RidDb" ASCENDING 
+
+ADD TABLE "Service"
+  AREA "Schema Area"
+  LABEL "Сервисы"
+  DUMP-NAME "service"
+  TABLE-TRIGGER "CREATE" NO-OVERRIDE PROCEDURE "webservices/db/c_service.p" CRC "?" 
+  TABLE-TRIGGER "DELETE" NO-OVERRIDE PROCEDURE "webservices/db/d_service.p" CRC "?" 
+
+ADD FIELD "RidServiceType" OF "Service" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Тип сервиса"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "RidDb" OF "Service" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> База данных"
+  POSITION 3
+  MAX-WIDTH 4
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ServiceName" OF "Service" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 100
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "RidService" OF "Service" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Сервис"
+  POSITION 5
+  MAX-WIDTH 4
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "EasyLogin" OF "Service" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  POSITION 6
+  MAX-WIDTH 1
+  ORDER 50
+
+ADD INDEX "name" ON "Service" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ServiceName" ASCENDING 
+
+ADD INDEX "db" ON "Service" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidDb" ASCENDING 
+
+ADD INDEX "rid" ON "Service" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "RidService" ASCENDING 
+
+ADD INDEX "type" ON "Service" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidServiceType" ASCENDING 
+
+ADD TABLE "ServiceType"
+  AREA "Schema Area"
+  LABEL "Типы сервисов"
+  DUMP-NAME "servicetype"
+  TABLE-TRIGGER "CREATE" NO-OVERRIDE PROCEDURE "webservices/db/c_servtype.p" CRC "?" 
+  TABLE-TRIGGER "DELETE" NO-OVERRIDE PROCEDURE "webservices/db/d_servtype.p" CRC "?" 
+
+ADD FIELD "RidServiceType" OF "ServiceType" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Тип сервиса"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "TypeName" OF "ServiceType" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Тип"
+  POSITION 3
+  MAX-WIDTH 60
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ImagePath" OF "ServiceType" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Изображение"
+  POSITION 4
+  MAX-WIDTH 100
+  ORDER 30
+
+ADD INDEX "type" ON "ServiceType" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TypeName" ASCENDING 
+
+ADD INDEX "rid" ON "ServiceType" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "RidServiceType" ASCENDING 
+
+ADD TABLE "UserService"
+  AREA "Schema Area"
+  LABEL "Сервисы пользователя"
+  DUMP-NAME "userservice"
+  TABLE-TRIGGER "CREATE" NO-OVERRIDE PROCEDURE "webservices/db/c_usrserv.p" CRC "?" 
+  TABLE-TRIGGER "DELETE" NO-OVERRIDE PROCEDURE "webservices/db/d_usrserv.p" CRC "?" 
+
+ADD FIELD "RidUser" OF "UserService" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Пользователь"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "RidService" OF "UserService" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Сервис"
+  POSITION 3
+  MAX-WIDTH 4
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "RidUserService" OF "UserService" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Сервис пользователя"
+  POSITION 4
+  MAX-WIDTH 4
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "ServiceName" OF "UserService" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Имя сервиса"
+  POSITION 5
+  MAX-WIDTH 100
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "CountStarted" OF "UserService" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  POSITION 6
+  MAX-WIDTH 4
+  ORDER 50
+  MANDATORY
+
+ADD FIELD "ReadOnly" OF "UserService" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Только просмотр"
+  POSITION 7
+  MAX-WIDTH 1
+  ORDER 60
+
+ADD INDEX "rid" ON "UserService" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "RidUserService" ASCENDING 
+
+ADD INDEX "icount" ON "UserService" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidUser" ASCENDING 
+  INDEX-FIELD "CountStarted" DESCENDING 
+
+ADD INDEX "name" ON "UserService" 
+  AREA "Schema Area"
+  INDEX-FIELD "ServiceName" ASCENDING 
+
+ADD INDEX "riduser" ON "UserService" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidUser" ASCENDING 
+
+ADD INDEX "service" ON "UserService" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidService" ASCENDING 
+
+ADD TABLE "UserServiceParams"
+  AREA "Schema Area"
+  LABEL "Параметры сервиса"
+  DUMP-NAME "userserviceparams"
+
+ADD FIELD "RidUserService" OF "UserServiceParams" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Сервис пользователя"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "ParamName" OF "UserServiceParams" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 60
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ParamValue" OF "UserServiceParams" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 100
+  ORDER 30
+
+ADD INDEX "name" ON "UserServiceParams" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "RidUserService" ASCENDING 
+  INDEX-FIELD "ParamName" ASCENDING 
+
+ADD INDEX "userservice" ON "UserServiceParams" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidUserService" ASCENDING 
+
+ADD TABLE "UserSession"
+  AREA "Schema Area"
+  LABEL "Сессии"
+  DUMP-NAME "usersession"
+  TABLE-TRIGGER "CREATE" NO-OVERRIDE PROCEDURE "webservices/db/c_session.p" CRC "?" 
+  TABLE-TRIGGER "DELETE" NO-OVERRIDE PROCEDURE "webservices/db/d_session.p" CRC "?" 
+
+ADD FIELD "RidUser" OF "UserSession" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Пользователь"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "UserLogin" OF "UserSession" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Логин"
+  POSITION 3
+  MAX-WIDTH 40
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "RidSession" OF "UserSession" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Сессия"
+  POSITION 4
+  MAX-WIDTH 4
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "StartTime" OF "UserSession" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Старт сессии"
+  POSITION 5
+  MAX-WIDTH 12
+  ORDER 40
+  MANDATORY
+
+ADD INDEX "starttime" ON "UserSession" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "StartTime" DESCENDING 
+
+ADD INDEX "iuser" ON "UserSession" 
+  AREA "Schema Area"
+  INDEX-FIELD "RidUser" ASCENDING 
+
+ADD INDEX "login" ON "UserSession" 
+  AREA "Schema Area"
+  INDEX-FIELD "UserLogin" ASCENDING 
+
+ADD INDEX "rid" ON "UserSession" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "RidSession" ASCENDING 
+
+ADD TABLE "WebModules"
+  AREA "Schema Area"
+  DUMP-NAME "webmodules"
+  TABLE-TRIGGER "CREATE" NO-OVERRIDE PROCEDURE "webservices/db/c_webm.p" CRC "?" 
+
+ADD FIELD "RidModule" OF "WebModules" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Модуль"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "pModule" OF "WebModules" AS character 
+  FORMAT "X(64)"
+  INITIAL ""
+  LABEL "Модуль Progress 4GL"
+  POSITION 3
+  MAX-WIDTH 128
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "wModule" OF "WebModules" AS character 
+  FORMAT "x(64)"
+  INITIAL ""
+  LABEL "Модуль Web"
+  POSITION 4
+  MAX-WIDTH 128
+  ORDER 30
+  MANDATORY
+
+ADD INDEX "pModule" ON "WebModules" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "pModule" ASCENDING 
+
+ADD INDEX "rid" ON "WebModules" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "RidModule" ASCENDING 
+
+ADD INDEX "wModule" ON "WebModules" 
+  AREA "Schema Area"
+  INDEX-FIELD "wModule" ASCENDING 
+
+ADD TABLE "WebUsers"
+  AREA "Schema Area"
+  LABEL "Веб пользователи"
+  DUMP-NAME "users"
+  TABLE-TRIGGER "CREATE" NO-OVERRIDE PROCEDURE "webservices/db/c_user.p" CRC "?" 
+  TABLE-TRIGGER "DELETE" NO-OVERRIDE PROCEDURE "webservices/db/d_user.p" CRC "?" 
+
+ADD FIELD "RidUser" OF "WebUsers" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "-> Пользователь"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "IdUser" OF "WebUsers" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "№ пользователя"
+  POSITION 3
+  MAX-WIDTH 4
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "UserLogin" OF "WebUsers" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Логин"
+  POSITION 4
+  MAX-WIDTH 40
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "UserPwd" OF "WebUsers" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Пароль"
+  POSITION 5
+  MAX-WIDTH 40
+  ORDER 40
+
+ADD FIELD "UserName" OF "WebUsers" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 6
+  MAX-WIDTH 100
+  ORDER 50
+
+ADD FIELD "UserEmail" OF "WebUsers" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 7
+  MAX-WIDTH 100
+  ORDER 60
+
+ADD FIELD "UserCompany" OF "WebUsers" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 8
+  MAX-WIDTH 100
+  ORDER 70
+
+ADD FIELD "UserPosition" OF "WebUsers" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 9
+  MAX-WIDTH 100
+  ORDER 80
+
+ADD FIELD "Banned" OF "WebUsers" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  POSITION 10
+  MAX-WIDTH 1
+  ORDER 90
+  MANDATORY
+
+ADD INDEX "id" ON "WebUsers" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "IdUser" ASCENDING 
+
+ADD INDEX "login" ON "WebUsers" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "UserLogin" ASCENDING 
+
+ADD INDEX "rid" ON "WebUsers" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "RidUser" ASCENDING 
+
+.
+PSC
+cpstream=ibm866
+.
+0000014563

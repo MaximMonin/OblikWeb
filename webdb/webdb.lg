@@ -1,0 +1,8 @@
+
+                Mon Sep 27 09:04:37 2010
+[2010/09/27@09:04:37.674+0300] P-22091      T--1789340608 I          : (451)   Truncate bi session begin for root on /dev/pts/14. 
+[2010/09/27@09:04:37.697+0300] P-22091      T--1789340608 I          : (5326)  Begin Physical Redo Phase at 128 . 
+[2010/09/27@09:04:37.744+0300] P-22091      T--1789340608 I          : (7161)  Physical Redo Phase Completed at blk 215 off 6805 upd 0. 
+[2010/09/27@09:04:37.761+0300] P-22091      T--1789340608 I          : (13547) At end of Physical redo, transaction table size is 256. 
+[2010/09/27@09:04:37.834+0300] P-22091      T--1789340608 I          : (123)   .bi file truncated. 
+[2010/09/27@09:04:37.836+0300] P-22091      T--1789340608 I          : (334)   Truncate bi session end. 

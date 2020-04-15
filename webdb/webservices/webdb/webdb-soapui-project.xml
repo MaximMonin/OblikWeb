@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project name="webdb" resourceRoot="" soapui-version="3.0.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="webdbObj" type="wsdl" bindingName="{urn:oblikerp-com-webdb}webdbObj" soapVersion="1_1" anonymous="optional" definition="https://maximmonin:8443/webdb/wsa1/wsdl?targetURI=webdb" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://maximmonin:8443/webdb/wsa1/wsdl?targetURI=webdb"><con:part><con:url>https://maximmonin:8443/webdb/wsa1/wsdl?targetURI=webdb</con:url><con:content><![CDATA[<definitions name="webdb" targetNamespace="urn:oblikerp-com-webdb" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="urn:oblikerp-com-webdb" xmlns:S2="urn:oblikerp-com-webdb:webdb" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:S1="urn:soap-fault:details" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:documentation>EncodingType=DOC_LITERAL, WSA_Product=10.1B - N/A</wsdl:documentation>
+  <types>
+    <schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="FaultDetail">
+        <complexType>
+          <sequence>
+            <element name="errorMessage" type="xsd:string"/>
+            <element name="requestID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-webdb:webdb" xmlns="http://www.w3.org/2001/XMLSchema">
+      <complexType name="UserData_AvailServicesRow">
+        <sequence>
+          <element name="ServiceId" nillable="true" type="xsd:int"/>
+          <element name="ServiceName" nillable="true" type="xsd:string"/>
+          <element name="ServiceType" nillable="true" type="xsd:string"/>
+          <element name="ImageLink" nillable="true" type="xsd:string"/>
+          <element name="ServiceDbName" nillable="true" type="xsd:string"/>
+          <element name="EndPoint" nillable="true" type="xsd:string"/>
+          <element name="DefLogin" nillable="true" type="xsd:string"/>
+          <element name="RunCount" nillable="true" type="xsd:int"/>
+        </sequence>
+      </complexType>
+      <complexType name="UserData_AvailServicesParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="AvailServicesRow" type="S2:UserData_AvailServicesRow"/>
+        </sequence>
+      </complexType>
+      <element name="InputParams">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="InputParamsResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+            <element name="MenuParams" nillable="true" type="xsd:string"/>
+            <element name="ModuleName" nillable="true" type="xsd:string"/>
+            <element name="RidMenu" nillable="true" type="xsd:int"/>
+            <element name="EndPoint" nillable="true" type="xsd:string"/>
+            <element name="EndPoint2" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SaveServiceParams">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="ServiceId" nillable="true" type="xsd:int"/>
+            <element name="ContextData" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SaveServiceParamsResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SessionStart">
+        <complexType>
+          <sequence>
+            <element name="login" nillable="true" type="xsd:string"/>
+            <element name="pwd" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SessionStartResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Relogin">
+        <complexType>
+          <sequence>
+            <element name="login" nillable="true" type="xsd:string"/>
+            <element name="pwd" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ReloginResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UserData">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UserDataResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="UserName" nillable="true" type="xsd:string"/>
+            <element name="UserPos" nillable="true" type="xsd:string"/>
+            <element name="AvailServices" nillable="true" type="S2:UserData_AvailServicesParam"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="webdb_SessionStartResponse">
+    <part name="parameters" element="S2:SessionStartResponse"/>
+  </message>
+  <message name="webdb_SaveServiceParamsResponse">
+    <part name="parameters" element="S2:SaveServiceParamsResponse"/>
+  </message>
+  <message name="webdb_InputParamsResponse">
+    <part name="parameters" element="S2:InputParamsResponse"/>
+  </message>
+  <message name="webdb_SaveServiceParams">
+    <part name="parameters" element="S2:SaveServiceParams"/>
+  </message>
+  <message name="webdb_ReloginResponse">
+    <part name="parameters" element="S2:ReloginResponse"/>
+  </message>
+  <message name="webdb_InputParams">
+    <part name="parameters" element="S2:InputParams"/>
+  </message>
+  <message name="webdb_UserDataResponse">
+    <part name="parameters" element="S2:UserDataResponse"/>
+  </message>
+  <message name="webdb_SessionStart">
+    <part name="parameters" element="S2:SessionStart"/>
+  </message>
+  <message name="webdb_Relogin">
+    <part name="parameters" element="S2:Relogin"/>
+  </message>
+  <message name="webdb_UserData">
+    <part name="parameters" element="S2:UserData"/>
+  </message>
+  <message name="FaultDetailMessage">
+    <part name="FaultDetail" element="S1:FaultDetail"/>
+  </message>
+  <portType name="webdbObj">
+    <operation name="InputParams">
+      <input message="tns:webdb_InputParams"/>
+      <output message="tns:webdb_InputParamsResponse"/>
+      <fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="SaveServiceParams">
+      <input message="tns:webdb_SaveServiceParams"/>
+      <output message="tns:webdb_SaveServiceParamsResponse"/>
+      <fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="SessionStart">
+      <input message="tns:webdb_SessionStart"/>
+      <output message="tns:webdb_SessionStartResponse"/>
+      <fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="Relogin">
+      <input message="tns:webdb_Relogin"/>
+      <output message="tns:webdb_ReloginResponse"/>
+      <fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="UserData">
+      <input message="tns:webdb_UserData"/>
+      <output message="tns:webdb_UserDataResponse"/>
+      <fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </operation>
+  </portType>
+  <binding name="webdbObj" type="tns:webdbObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="InputParams">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="SaveServiceParams">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="SessionStart">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="Relogin">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="UserData">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="webdbService">
+    <port name="webdbObj" binding="tns:webdbObj">
+      <wsdl:documentation/>
+      <soap:address location="http://maximmonin:8080/webdb/wsa1"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://maximmonin:8080/webdb/wsa1</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="InputParams" bindingOperationName="InputParams" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/webdb/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-webdb:webdb">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:InputParams>
+         <urn:ContextId>?</urn:ContextId>
+      </urn:InputParams>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-webdb/webdbObj/InputParamsRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="Relogin" bindingOperationName="Relogin" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/webdb/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-webdb:webdb">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Relogin>
+         <urn:login>?</urn:login>
+         <urn:pwd>?</urn:pwd>
+         <urn:ContextId>?</urn:ContextId>
+      </urn:Relogin>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-webdb/webdbObj/ReloginRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="SaveServiceParams" bindingOperationName="SaveServiceParams" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/webdb/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-webdb:webdb">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:SaveServiceParams>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:ServiceId>?</urn:ServiceId>
+         <urn:ContextData>?</urn:ContextData>
+      </urn:SaveServiceParams>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-webdb/webdbObj/SaveServiceParamsRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="SessionStart" bindingOperationName="SessionStart" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/webdb/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-webdb:webdb">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:SessionStart>
+         <urn:login>demo</urn:login>
+         <urn:pwd>demo</urn:pwd>
+      </urn:SessionStart>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-webdb/webdbObj/SessionStartRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="UserData" bindingOperationName="UserData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/webdb/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-webdb:webdb">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:UserData>
+         <urn:ContextId>?</urn:ContextId>
+      </urn:UserData>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-webdb/webdbObj/UserDataRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

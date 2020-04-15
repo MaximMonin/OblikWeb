@@ -1,0 +1,10 @@
+.
+PSC
+filename=ContextData
+ldbname=webdb
+timestamp=2010/01/08-00:50:21
+numformat=44,46
+dateformat=dmy-1950
+map=NO-MAP
+cpstream=ibm866
+.

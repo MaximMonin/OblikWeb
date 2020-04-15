@@ -7,8 +7,6 @@ Web Interface for Oblik ERP/WMS. Build on Flex and OpenEdge Webservices. SOA Arc
 
 Большинство материалов на русском языке. Проект использует state free модель по работе с БД (нет реального соединения и использования ресурсов в момент простоя). Вместо глобальных переменных используется БД контекст менеджмента.
 
-Documentation: (russian language) http://code.google.com/p/oblikweb/source/browse/doc/Architecture.doc?repo=webservices
-
 На текущий момент доступ к рабочей БД сделан упрощенный, с запоминанием первого успешного входа, поэтому вводить логин/пароль для работы с БД почти никогда не нужно.
 
 At the moment 7 services implemented:
@@ -26,7 +24,7 @@ Console.
 
 1.6 Multilanguage Support
 
-Dbview service. Приложение (application) Администратор приложений, Модуль (module) База данных. Direct demo link to service http://213.133.163.126:8888/oblikweb/admin/DbView.html#ContextId=demoeng
+Dbview service. Приложение (application) Администратор приложений, Модуль (module) База данных. 
 2.1 Displays Db table list.
 
 2.2 Displays Fields/indexes/triggers/table relations available for selected table.

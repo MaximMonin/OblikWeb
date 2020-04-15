@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OblikParams>
+  <ApplicationName>
+    <ru_RU>Облик Web портал</ru_RU>
+    <en_US>Oblik Web Portal</en_US>
+  </ApplicationName>
+  <ApplicationLogo>images/oblikerp_logo.png</ApplicationLogo>
+  <RootEndPoint>/webdb/wsa1</RootEndPoint>
+  <DateFormat>DD/MM/YYYY</DateFormat>
+</OblikParams>

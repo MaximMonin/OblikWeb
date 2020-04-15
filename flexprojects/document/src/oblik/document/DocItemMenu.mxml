@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"	initialize="init()">
+	<mx:Script>
+		<![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import mx.controls.Menu;
+			import flexlib.controls.IconLoader ;
+			import mx.events.MenuEvent;
+			import flash.events.MouseEvent;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.controls.Alert;
+            import mx.utils.ObjectUtil;
+			import mx.rpc.soap.Operation;
+			import mx.rpc.soap.WebService;
+	    	import mx.collections.ArrayCollection;
+			import mx.resources.ResourceManager;
+			
+			private var dmenu:ArrayCollection;
+			private var Sendquery:Boolean = false;
+			private var mi:Object;
+			private var mac:ArrayCollection;
+
+			private function RM (messname:String):String
+			{
+				return resourceManager.getString('Document',messname);
+			}
+			private function init ():void
+			{
+				dmenu = new ArrayCollection();
+				mi = new Object();
+				mi["ItemName"] = ">";
+				mac = new ArrayCollection ();
+				mi["children"] = mac;
+				
+				var emi:Object = new Object();
+				emi["ItemName"] = RM('ContextMenu');
+				emi["ItemKey"] = "";		
+				mac.addItem(emi);
+				
+				dmenu.addItem(mi);
+				myMenuBar.dataProvider = dmenu;
+			}
+			private function GetMenu (e:MouseEvent):void
+			{
+				if (Sendquery) return;
+				
+          		var srv:WebService = new WebService();
+				srv.wsdl = parentApplication.servicepath;
+				var CMOper:Operation = new Operation(null, "DocContextMenu");
+				CMOper.addEventListener(ResultEvent.RESULT, OnMenu, false, 0, true);
+				CMOper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [CMOper];
+				srv.loadWSDL();
+				var o:Object /* o:OblikDocs */ = e.target.parent.parent.parent.parent.data;
+				var ViewOnly:Boolean = o.ViewOnly;
+				CMOper.send(parentApplication.ContextId, data.RidDocument, ViewOnly);
+				Sendquery = true;
+			}
+			private function runModule (e:MenuEvent):void
+			{
+				parentApplication.OnDocItemMenu (e.item.ItemKey, data, e.item.AppParam, myMenuBar.parent.parent.parent);
+				ReInitMenu ();
+			}
+			private function ReInitMenu ():void
+			{
+				mac.removeAll();
+				init ();
+				Sendquery = false;
+			}
+            private function OnMenu(event:ResultEvent):void
+            {
+            	var menu:ArrayCollection = event.result.ContextMenu; 
+/*
+            	Alert.show (ObjectUtil.toString(menu));
+*/
+				var newmenu:ArrayCollection = CreateTree (menu, 0, mac);
+				mac.removeItemAt(0);
+            }
+            private function CreateTree (menu:ArrayCollection, UpItem:uint, mac:ArrayCollection):ArrayCollection
+            {
+            	var menutree:ArrayCollection = mac; 
+
+		        var ln:uint = menu.length;
+				var menuitem:Object;
+    			for (var i:int=0;i<ln;i++)  
+    			{      
+    				menuitem = menu.list.getItemAt(i);
+    				if (menuitem.UpItem == UpItem)
+    				{ 
+    					if (menutree == null)
+    					{
+			            	menutree = new ArrayCollection ();
+    					}
+    					menutree.addItem(menuitem);
+    					menuitem["children"] = CreateTree (menu, menuitem.ItemId, null);
+    				}	
+    			}
+            	return menutree;
+            }
+            
+            private function Onfault(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultString, RM('ConnectionError'));
+            }
+			
+		]]>
+	</mx:Script>
+        <mx:MenuBar id="myMenuBar" labelField="ItemName" height="20" textAlign="left"
+        	click="GetMenu (event)" itemClick="runModule(event)">
+        </mx:MenuBar>
+</mx:VBox>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="200" height="200"
+	paddingBottom="0" paddingLeft="2" paddingRight="2" paddingTop="0" creationComplete="init()"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" mouseOver="OnActivate()" mouseOut="OnDeactivate()">
+	<mx:Script>
+		<![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import mx.rpc.soap.Operation;
+			import mx.rpc.soap.WebService;
+	    	import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.utils.ObjectUtil;    
+
+			private var LoginFails:int = 3;
+			private var parentContextId:String;
+			private var OblikContextId:String;
+			private var srv:WebService;
+			private var srv2:WebService;
+			private var srv3:WebService;
+			private var RunUserAdmin:Operation;
+			private var RunAdmin:Operation;
+			private var Start:Operation;
+			
+            private function init():void
+            {
+            	srv = new WebService();
+				Start = new Operation(null, "Start");
+				Start.addEventListener(ResultEvent.RESULT, OnLogin, false, 0, true);
+				Start.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [Start];
+            	srv.wsdl = data.EndPoint + "/wsdl?targetURI=Oblik_Main";
+   	        	srv.loadWSDL();
+            	srv2 = new WebService();
+				RunAdmin = new Operation(null, "RunAdmin");
+				RunAdmin.addEventListener(ResultEvent.RESULT, OnBeforeRunAdmin, false, 0, true);
+				RunAdmin.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv2.operations = [RunAdmin];
+	           	srv2.wsdl = data.EndPoint + "/wsdl?targetURI=webdb";
+	           	srv2.loadWSDL();
+            	srv3 = new WebService();
+				RunUserAdmin = new Operation(null, "RunUserAdmin");
+				RunUserAdmin.addEventListener(ResultEvent.RESULT, OnUserAdmin, false, 0, true);
+				RunUserAdmin.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv3.operations = [RunUserAdmin];
+	           	srv3.wsdl = data.EndPoint + "/wsdl?targetURI=webdb";
+	           	srv3.loadWSDL();
+            	parentContextId = parentApplication.ContextId;
+            }
+
+            private function OnActivate():void
+            {
+            	if (LoginFails > 0)
+            	{
+	            	currentState = "Active";
+	            	if (data.EasyLogin == false)
+	            	{
+	            		LoginForm.visible = true;
+	            		LoginForm.height = 60;
+	            	}
+            	}
+            	else
+            	{
+            		currentState = "Disabled";
+            	}
+            }
+            private function OnDeactivate():void
+            {
+            	if (LoginFails > 0)
+            	{
+           			currentState = "";
+           		} 
+           		else
+           		{
+            		currentState = "Disabled";
+           		}
+            }
+            private function Login ():void
+            {
+            	if (data.ServiceType == "UserAdmin")
+            	{
+        	   		RunUserAdmin.send (parentContextId, data.ServiceId); 
+            		return;
+            	}
+            	if (data.ServiceType == "SystemAdmin")
+            	{
+            		RunAdmin.send (parentContextId, data.ServiceId); 
+            		return;
+            	}
+            	Start.send (parentContextId, data.ServiceId, db_login.text, db_pwd.text); 
+            }
+            private function OnBeforeRunAdmin (event:ResultEvent):void
+            {
+				var mContextId:String = event.result.ModuleContextId;
+                var Module:String = event.result.Module;
+            	if (Module != "")
+            	{
+                    Module = Module.replace('swf','html');
+                    var request:URLRequest = new URLRequest(Module + "#ContextId=" + mContextId);
+  					navigateToURL(request, "_blank");
+            	}
+            }
+            private function OnUserAdmin (event:ResultEvent):void
+            {
+				var mContextId:String = event.result.ModuleContextId;
+                var OutMessage:String = event.result.OutMessage;
+            	if (OutMessage == "OK")
+            	{
+            		parentApplication.runUserAdmin (mContextId, event.result.ReadOnly);
+            	}
+            }
+            
+            private function OnLogin(event:ResultEvent):void
+            {
+            	if (event.result.result == "OK")
+            	{
+	           		OblikContextId = event.result.OblikContextId;
+            		LoginFails = 3;
+   			    	parentApplication.OnServiceRun(OblikContextId, srv.wsdl, db_login.text, data.ServiceId, data.ServiceName);
+            	}
+            	else
+            	{
+            		if (event.result.result == "")
+            		{
+            			Alert.show (resourceManager.getString('Console','OblikBadLogin'));
+            			LoginForm.visible = true;
+	            		LoginForm.height = 60;
+            		}
+            		if (event.result.result == "Timeout" || event.result.result.search("Relogin") >=0 )
+            		{
+            			Alert.show (resourceManager.getString('Console','TimeoutError'));
+            			LoginFails = 0;
+            		}
+            		
+            		LoginFails -= 1;
+            	}
+            }
+			private function Onfault(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultDetail, resourceManager.getString('Console','OblikConnectError'));
+            }
+            
+		]]>
+	</mx:Script>
+    <mx:Metadata>
+        [ResourceBundle("Console")]
+    </mx:Metadata> 
+	<mx:states>
+		<mx:State name="Active">
+			<mx:SetProperty target="{Run}" name="enabled" value="true"/>
+		</mx:State>
+		<mx:State name="Disabled">
+			<mx:SetProperty target="{Run}" name="enabled" value="false"/>
+			<mx:SetProperty target="{db_login}" name="enabled" value="false"/>
+			<mx:SetProperty target="{db_pwd}" name="enabled" value="false"/>
+		</mx:State>
+	</mx:states>
+
+	<mx:VBox id="vb" width="100%" height="100%" horizontalAlign="center" verticalAlign="middle"
+		     backgroundColor="#FFFFFF">
+		<mx:Image source="{data.ImageLink}" />
+		<mx:Text text="{data.ServiceName}" />
+		<mx:Form id="LoginForm" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" visible="false" height="0"> 
+            <mx:FormItem label="{resourceManager.getString('Console','ServiceLogin')}">
+                <mx:TextInput id="db_login" width="100" text="{data.DefLogin}" />
+            </mx:FormItem>
+			<mx:FormItem label="{resourceManager.getString('Console','ServicePassword')}">
+                <mx:TextInput id="db_pwd" displayAsPassword="true" width="100" />
+            </mx:FormItem>
+		</mx:Form>
+		
+   		<mx:Button id="Run" label="{resourceManager.getString('Console','RunService')}" enabled="false" mouseOver="OnActivate()" click="Login()" />
+	</mx:VBox>
+</mx:VBox>

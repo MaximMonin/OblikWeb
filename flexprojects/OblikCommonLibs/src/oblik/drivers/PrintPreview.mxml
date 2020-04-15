@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:flexlib="flexlib.containers.*"
+	xmlns:classes="oblik.basetype.*"
+	paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="0" 
+	width="100%" height="100%" >
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+			import flash.events.Event;
+			import flash.events.KeyboardEvent;
+			import flash.events.MouseEvent;
+        	import mx.events.ItemClickEvent;
+			import mx.resources.ResourceManager;
+	       	import mx.controls.Alert;
+            import mx.utils.ObjectUtil;
+        	import mx.collections.ArrayCollection;
+        	import mx.controls.TileList;
+        	import mx.controls.DataGrid;
+        	import mx.controls.TabBar;
+
+        	import oblik.drivers.LoadAreaRender;
+        	import oblik.drivers.PrintFileTransfer;
+        	
+			import com.as3xls.xls.ExcelFile;
+			import com.as3xls.xls.Sheet;
+
+        	import org.print.Preview;
+			import org.doc.PaperFormat;
+			import org.doc.Document;
+			import org.doc.PageFit;
+
+            private var servicepath:String;
+			private var ContextId:String;
+			private var ReadOnly:Boolean;
+			private var fileref:PrintFileTransfer;
+            private var LoadArea:TileList;
+            private var LoadList:ArrayCollection;
+        	private var AllLoadList:ArrayCollection;
+        	private var xlsFile:String;
+        	private var xlsBinary:ByteArray;
+
+        	private var grid:DataGrid;
+        	private var sheetList:TabBar;
+        	private var printPreview:Preview
+
+            [Bindable] private var xls:ExcelFile;
+	        [Bindable] private var doc:Document = null;
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Инициализация и загрузка файла с Application сервера																	 */
+			
+			public function Initialize ( iReadOnly:Boolean, iservicepath:String, iContextId:String, printObj:Object):void 
+        	{
+				LoadList = new ArrayCollection ();
+				AllLoadList = new ArrayCollection ();
+  				LoadArea = new TileList ();
+  				LoadArea.height = 35;
+  				LoadArea.percentWidth = 100;
+  				LoadArea.setStyle("borderStyle", "solid");
+  				LoadArea.itemRenderer = new ClassFactory (oblik.drivers.LoadAreaRender);
+  				LoadArea.dataProvider = LoadList;
+  				ControlArea.addChild(LoadArea);
+
+				servicepath = iservicepath;
+				ContextId = iContextId;
+				ReadOnly = iReadOnly;
+				this.label = printObj.FileName;
+				DownloadPrintFile (ContextId, printObj);
+	       	}
+			private function RM (messname:String):String
+			{
+				return ResourceManager.getInstance().getString('CommonLibs',messname);
+			}
+			
+			private function DownloadPrintFile (ContextId:String, o:Object):void
+			{
+				var downfile:PrintFileTransfer = new PrintFileTransfer ();
+				downfile.Module = o.Module;
+				downfile.ViewOnly = o.ViewOnly;
+				downfile.FileName = o.FileName;
+				downfile.FileType = o.FileType;
+				downfile.PrintParams = o.PrintParams;
+				downfile.addEventListener("DownloadError", LoadError);
+			    downfile.addEventListener("DownloadBegin", LoadBegin);
+				downfile.addEventListener("DownloadProgress", LoadProgress);
+				downfile.addEventListener("DownloadComplete", LoadComplete);
+				downfile.addEventListener("DownloadSaved", LoadSaved);
+				downfile.PrintDriver(ContextId, servicepath);
+				AllLoadList.addItem(downfile);
+			}			
+            
+			private function LoadError (e:Event):void
+			{
+				var fileref:PrintFileTransfer = PrintFileTransfer (e.target);
+				var o:Object = fileref.o;
+				Alert.show (fileref.ErrorMessage);
+				LoadDeleteItem ( fileref, o );
+			}
+			private function LoadBegin (e:Event):void
+			{
+				var fileref:PrintFileTransfer = PrintFileTransfer (e.target);
+				var o:Object = fileref.o;
+				ControlArea.height = 35;
+				LoadArea.height = 35;
+				var of:Object = new Object ();
+				of["File"] = fileref;
+				LoadList.addItemAt (of, 0);
+			}
+			private function LoadProgress (e:Event):void
+			{
+				var fileref:PrintFileTransfer = PrintFileTransfer (e.target);
+				var o:Object = fileref.o;
+				LoadArea.invalidateList();
+			}
+			private function LoadComplete (e:Event):void
+			{
+				var fileref:PrintFileTransfer = PrintFileTransfer (e.target);
+				var o:Object = fileref.o;
+				LoadArea.invalidateList();
+				this.label = fileref.LocalFileName;
+				PreviewDownload (fileref);
+			}
+			private function LoadCanceled (e:Event):void
+			{
+				var fileref:PrintFileTransfer = PrintFileTransfer (e.target);
+				var o:Object = fileref.o;
+				LoadDeleteItem ( fileref, o );
+			}
+			public function LoadDeleteItem (fileref:PrintFileTransfer, o:Object ):void
+			{
+ 				for (var i:int=0;i<LoadList.length;i++)
+ 				{
+ 					if (LoadList.getItemAt(i).File == fileref) 
+ 					{
+ 						LoadList.removeItemAt(i);
+ 					}
+ 				}
+ 				for (i=0;i<AllLoadList.length;i++)
+ 				{
+ 					if (AllLoadList.getItemAt(i) == fileref) 
+ 					{
+ 						AllLoadList.removeItemAt(i);
+ 					}
+ 				}
+ 				if (LoadList.length == 0)
+ 				{ 	
+ 					LoadArea.height = 0;
+ 					ControlArea.height = 0;
+ 				}
+			}
+			private function LoadSaved (e:Event):void
+			{
+				var fileref:PrintFileTransfer = PrintFileTransfer (e.target);
+				var o:Object = fileref.o;
+				LoadDeleteItem ( fileref, o );
+			}
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Поддержка просмотра загруженных файлов																				 */
+			private function PreviewDownload (fileref:PrintFileTransfer):void
+			{
+                var b:ByteArray = fileref.trData;
+                b.position = 0;
+				if (fileref.FileType == "EXCEL")
+				{
+					xlsFile = fileref.LocalFileName;
+					xlsBinary = b;
+	            	CheckPHP.send();
+	                b.position = 0;
+
+					if (fileref.LocalFileName.indexOf('.xls') > 0) // binary xls95 file
+					{
+                    	xls = new ExcelFile();
+                    	xls.loadFromByteArray(b);
+					}
+					if (fileref.LocalFileName.indexOf('.csv') > 0) // text cvs file
+					{
+                        var csvFile:String = b.readMultiByte(b.length, "windows-1251");
+                        // Choose the line ending to split the lines based on which one yields more than one line
+                        var endings:Array = ["\n"];
+                        var i:uint = 1;
+                        var lines:Array = csvFile.split(endings[0]);
+                        while(lines.length == 1 && i < endings.length) {
+                              lines = csvFile.split(endings[i++]);
+                        }
+                                
+                        // Figure out the number of columns and split each line
+                        var numCols:uint = 0;
+                        for(var n:uint = 0; n < lines.length; n++) {
+                        	lines[n] = lines[n].split(";");
+                            numCols = Math.max(numCols, lines[n].length);
+                        }
+                                
+                        // Set up the Excel sheet and size it appropriately
+                        var s:Sheet = new Sheet();
+                        s.resize(lines.length, numCols);
+                                
+                        // Loop over the input array and set each cell to the appropriate value
+                        for(var r:uint = 0; r < s.rows; r++) {
+                           for(var c:uint = 0; c < s.cols; c++) {
+                              s.setCell(r, c, lines[r][c]);
+                           }
+                        }
+                                
+                        xls = new ExcelFile();
+                        xls.sheets.addItem(s);
+					}
+					
+                    if (xls)
+                    {
+                    	grid = new DataGrid();
+                    	grid.percentWidth = 100;
+                    	grid.percentHeight = 100;
+                    	grid.sortableColumns = false;
+                    	grid.draggableColumns = false;
+                    	grid.horizontalScrollPolicy = "auto";
+                    	grid.verticalScrollPolicy = "auto";
+                    	sheetList = new TabBar ();
+                    	sheetList.labelField = "name";
+    	            	sheetList.selectedIndex = 0;
+    	            	sheetList.addEventListener(ItemClickEvent.ITEM_CLICK, onExcelTabSelect );
+                    	TopArea.addChild(grid);
+    	            	TopArea.addChild(sheetList);
+                    	grid.dataProvider = xls.sheets.getItemAt(0).values;
+ 	                	sheetList.dataProvider = xls.sheets;
+    	            	sheetList.selectedIndex = 0;
+                    }
+				}
+				if (fileref.FileType == "TEXT")
+				{
+					var printtext:String;
+					var maxwidth:int = 0;
+					b.position = 0.
+					printtext = b.readMultiByte(b.length, "windows-1251");
+                    lines = printtext.split("\r");
+                    printtext = "";
+                    for(n = 0; n < lines.length; n++) 
+                    {
+                    	if (String(lines[n]).length > maxwidth) maxwidth = String(lines[n]).length;
+                    	printtext += String(lines[n]) /* .replace("\n","") */;
+                    }
+					
+					printPreview = new Preview ();
+					printPreview.percentWidth = 100;
+					printPreview.percentHeight = 100;
+					TopArea.addChild(printPreview);
+					
+					printPreview.pdfExportEnabled = false;
+/*					
+					printPreview.page.width = PaperFormat.A4R.width; 
+					printPreview.page.height = PaperFormat.A4R.height
+*/					
+
+					var source:TextReportDP = new TextReportDP(printtext, maxwidth); 
+					var report:TextReport = new TextReport(); 
+/*
+					report.width = PaperFormat.A4R.width; 
+					report.height = PaperFormat.A4R.height;
+*/					
+/*
+					doc = new Document(report, source, PaperFormat.A4R);
+*/
+					doc = new Document(report, source, PaperFormat.A4);
+						                	
+					doc.pdfEnabled = false;
+					printPreview.doc = doc;	     
+
+				}
+				
+			}
+			private function onExcelTabSelect (event:ItemClickEvent):void
+			{
+                grid.dataProvider = xls.sheets.getItemAt(sheetList.selectedIndex).values;
+			}		
+			private function OnPhpInstalled (event:ResultEvent):void
+            {
+/*				Alert.show (ObjectUtil.toString(event.result)); */
+				if (event.result.toString() == 'An error occured.') // correct answer from php script
+				{				
+					var url:String;
+					url = "loadfile.php";
+					var header:URLRequestHeader = new URLRequestHeader ("Content-type","application/octet-stream");
+					var myRequest:URLRequest = new URLRequest (url+'?name='+xlsFile+'&method='+"inline" );
+					myRequest.requestHeaders.push (header);
+					myRequest.method = URLRequestMethod.POST;
+					myRequest.data = xlsBinary;
+					navigateToURL ( myRequest, "_blank" );
+				}
+			}	
+			private function faultPhp (event:FaultEvent):void
+			{
+				
+			}
+        ]]>
+    </mx:Script>
+    <mx:HTTPService id="CheckPHP" url="loadfile.php"
+        result="OnPhpInstalled(event)" fault="faultPhp(event)"/>
+	<mx:HBox id="ControlArea" width="100%" height="0">
+   	</mx:HBox>
+	<mx:VBox id="TopArea" width="100%" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+   	</mx:VBox>
+</mx:VBox>

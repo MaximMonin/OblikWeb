@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="140" height="130"
+	paddingBottom="0" paddingLeft="2" paddingRight="2" paddingTop="0" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import flexlib.controls.IconLoader ;
+
+			private function runModule ():void
+			{
+				parentApplication.runFastItem (vb.parent.parent.parent, data.ModulePath, data.RidMenu);
+			}
+		]]>
+	</mx:Script>
+    <mx:Metadata>
+        [ResourceBundle("Console")]
+    </mx:Metadata> 
+
+	<mx:VBox id="vb" width="100%" height="100%" horizontalAlign="center" verticalAlign="middle"
+		     backgroundColor="#FFFFFF" toolTip="{data.ItemHelp}">
+		<IconLoader xmlns="flexlib.controls.*" height="48" width="48"
+    		source="{data.ImagePath}" scaleContent="true"/>
+		<mx:Text text="{data.ItemName}" height="45"  width="130" selectable="false"/>
+		<mx:LinkButton label="{resourceManager.getString('Console','RunModule')}" id="runButton" click="runModule ()" />
+		
+	</mx:VBox>
+</mx:VBox>

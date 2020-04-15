@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="org.print.PagesButton"/>
+<classEntry path="org.idmedia.as3commons.util.ListIterator"/>
+<classEntry path="oblik.drivers.TextReportDP"/>
+<classEntry path="org.idmedia.as3commons.util.Observer"/>
+<classEntry path="com.as3xls.xls.Type"/>
+<classEntry path="org.print.PrintTextArea"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.ShorterTextInput"/>
+<classEntry path="oblik.drivers.LoadAreaRender"/>
+<classEntry path="com.hillelcoren.components.CloseableTitleWindow"/>
+<classEntry path="org.idmedia.as3commons.lang.NoSuchElementException"/>
+<classEntry path="org.idmedia.as3commons.util.Arrays"/>
+<classEntry path="org.idmedia.as3commons.lang.NullPointerException"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.IconButton"/>
+<classEntry path="oblik.basetype.OblikDateTimeBr"/>
+<classEntry path="oblik.basetype.OblikBasetype"/>
+<classEntry path="org.idmedia.as3commons.util.Set"/>
+<classEntry path="org.print.ReportDataGrid"/>
+<classEntry path="org.doc.Document"/>
+<classEntry path="oblik.basetype.OblikDecimalBr"/>
+<classEntry path="oblik.basetype.OblikCharacter"/>
+<classEntry path="com.as3xls.xls.formula.Tokens"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.FlowBox"/>
+<classEntry path="org.idmedia.as3commons.util.Map"/>
+<classEntry path="org.utils.PageRangeParser"/>
+<classEntry path="oblik.drivers.FileTransfer"/>
+<classEntry path="org.idmedia.as3commons.util.Collections"/>
+<classEntry path="org.print.PrintToolBar"/>
+<classEntry path="com.as3xls.xls.Formatter"/>
+<classEntry path="org.alivepdf.layout.Size"/>
+<classEntry path="com.hillelcoren.components.AdvancedAutoComplete"/>
+<classEntry path="oblik.basetype.OblikDocumentRender"/>
+<classEntry path="com.hillelcoren.components.PromptTextInput"/>
+<classEntry path="oblik.basetype.OblikDate"/>
+<classEntry path="org.idmedia.as3commons.util.EntrySetIterator"/>
+<classEntry path="com.hillelcoren.components.AutoComplete"/>
+<classEntry path="org.utils.ByteArrayUtil"/>
+<classEntry path="org.idmedia.as3commons.util.EntrySet"/>
+<classEntry path="com.hillelcoren.utils.KeyboardUtil"/>
+<classEntry path="com.as3xls.biff.BIFFReader"/>
+<classEntry path="com.hillelcoren.assets.skins.MacMailSkin"/>
+<classEntry path="Consts"/>
+<classEntry path="org.idmedia.as3commons.util.AbstractMap"/>
+<classEntry path="org.doc.PaperFormat"/>
+<classEntry path="oblik.basetype.OblikLogicalBr"/>
+<classEntry path="com.hillelcoren.components.autoComplete.interfaces.iComboItem"/>
+<classEntry path="com.as3xls.xls.formula.Functions"/>
+<classEntry path="com.hillelcoren.components.autoComplete.interfaces.IBrowser"/>
+<classEntry path="org.alivepdf.layout.Orientation"/>
+<classEntry path="oblik.basetype.OblikLogical"/>
+<classEntry path="com.as3xls.biff.BIFFVersion"/>
+<classEntry path="org.idmedia.as3commons.lang.ConcurrentModificationException"/>
+<classEntry path="com.as3xls.xls.Sheet"/>
+<classEntry path="org.idmedia.as3commons.lang.Throwable"/>
+<classEntry path="com.hillelcoren.assets.skins.BlankSkin"/>
+<classEntry path="oblik.drivers.DocFileTransfer"/>
+<classEntry path="org.idmedia.as3commons.util.Entry"/>
+<classEntry path="org.utils.PNGEncoder"/>
+<classEntry path="com.as3xls.xls.ExcelFile"/>
+<classEntry path="com.as3xls.xls.Cell"/>
+<classEntry path="org.idmedia.as3commons.util.Iterator"/>
+<classEntry path="org.idmedia.as3commons.util.Observable"/>
+<classEntry path="org.doc.PageFit"/>
+<classEntry path="org.idmedia.as3commons.util.AbstractCollection"/>
+<classEntry path="org.idmedia.as3commons.util.Comparator"/>
+<classEntry path="org.print.ThumbnailButton"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.BrowserItemRenderer"/>
+<classEntry path="org.idmedia.as3commons.util.ArrayList"/>
+<classEntry path="org.idmedia.as3commons.util.HashMap"/>
+<classEntry path="org.print.Report"/>
+<classEntry path="org.print.ThumbList"/>
+<classEntry path="org.events.PageRangeEvent"/>
+<classEntry path="com.hillelcoren.utils.StringUtils"/>
+<classEntry path="oblik.basetype.OblikDateBr"/>
+<classEntry path="org.idmedia.as3commons.lang.IllegalStateException"/>
+<classEntry path="org.idmedia.as3commons.lang.IllegalArgumentException"/>
+<classEntry path="org.idmedia.as3commons.util.StringUtils"/>
+<classEntry path="org.idmedia.as3commons.lang.IndexOutOfBoundsException"/>
+<classEntry path="com.hillelcoren.utils.ArrayCollectionUtils"/>
+<classEntry path="org.idmedia.as3commons.lang.Exception"/>
+<classEntry path="com.as3xls.biff.BIFFWriter"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.SelectedItem"/>
+<classEntry path="oblik.drivers.PrintPreview"/>
+<classEntry path="org.idmedia.as3commons.util.HashSet"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.Browser"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.MultiSelect"/>
+<classEntry path="oblik.basetype.OblikDecimal"/>
+<classEntry path="oblik.basetype.OblikCharacterBr"/>
+<classEntry path="oblik.basetype.OblikSelList"/>
+<classEntry path="org.idmedia.as3commons.util.AbstractList"/>
+<classEntry path="org.print.Preview"/>
+<classEntry path="com.hillelcoren.components.ListBuilder"/>
+<classEntry path="org.print.PrintComponent"/>
+<classEntry path="org.alivepdf.layout.Unit"/>
+<classEntry path="oblik.basetype.OblikInteger"/>
+<classEntry path="oblik.controls.OblikDeleteRow"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.EditableItem"/>
+<classEntry path="org.idmedia.as3commons.lang.UnsupportedOperationException"/>
+<classEntry path="oblik.drivers.TextReport"/>
+<classEntry path="oblik.basetype.DocDataGridColumn"/>
+<classEntry path="com.as3xls.cdf.CDFReader"/>
+<classEntry path="oblik.basetype.OblikButton"/>
+<classEntry path="com.as3xls.biff.Record"/>
+<classEntry path="com.hillelcoren.assets.skins.FacebookSkin"/>
+<classEntry path="com.as3xls.xls.style.XFormat"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.ListBuilderBrowser"/>
+<classEntry path="org.print.Page"/>
+<classEntry path="oblik.basetype.OblikTime"/>
+<classEntry path="org.print.Thumbnail"/>
+<classEntry path="oblik.drivers.PrintFileTransfer"/>
+<classEntry path="com.as3xls.xls.formula.Formula"/>
+<classEntry path="org.print.PrintRangeWindow"/>
+<classEntry path="org.idmedia.as3commons.util.Collection"/>
+<classEntry path="org.print.Body"/>
+<classEntry path="org.idmedia.as3commons.util.List"/>
+<classEntry path="org.utils.PageRangeManager"/>
+<classEntry path="org.utils.IntegerUtils"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.ActionsMenu"/>
+<classEntry path="org.doc.ComponentUtils"/>
+<classEntry path="org.idmedia.as3commons.util.AbstractSet"/>
+<classEntry path="com.hillelcoren.components.autoComplete.classes.DropDownItemRenderer"/>
+</includeClasses>
+<includeResources>
+<resourceEntry destPath="com/hillelcoren/assets/icons/up.png" sourcePath="com/hillelcoren/assets/icons/up.png"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/remove.png" sourcePath="com/hillelcoren/assets/icons/remove.png"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/actionsUp.png" sourcePath="com/hillelcoren/assets/icons/actionsUp.png"/>
+<resourceEntry destPath="locale/en_US/CommonLibs.properties" sourcePath="locale/en_US/CommonLibs.properties"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/left.png" sourcePath="com/hillelcoren/assets/icons/left.png"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/top.png" sourcePath="com/hillelcoren/assets/icons/top.png"/>
+<resourceEntry destPath="oblik/controls/remove.png" sourcePath="oblik/controls/remove.png"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/actionsOver.png" sourcePath="com/hillelcoren/assets/icons/actionsOver.png"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/clear.png" sourcePath="com/hillelcoren/assets/icons/clear.png"/>
+<resourceEntry destPath="down.png" sourcePath="down.png"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/down.png" sourcePath="com/hillelcoren/assets/icons/down.png"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/actionsDown.png" sourcePath="com/hillelcoren/assets/icons/actionsDown.png"/>
+<resourceEntry destPath="defaults.css" sourcePath="defaults.css"/>
+<resourceEntry destPath="com/hillelcoren/components/icon.png" sourcePath="com/hillelcoren/components/icon.png"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/bottom.png" sourcePath="com/hillelcoren/assets/icons/bottom.png"/>
+<resourceEntry destPath="locale/ru_RU/CommonLibs.properties" sourcePath="locale/ru_RU/CommonLibs.properties"/>
+<resourceEntry destPath="com/hillelcoren/assets/icons/right.png" sourcePath="com/hillelcoren/assets/icons/right.png"/>
+</includeResources>
+<namespaceManifests/>
+</flexLibProperties>

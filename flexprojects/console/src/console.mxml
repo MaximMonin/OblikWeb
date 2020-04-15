@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:flexlib="flexlib.containers.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	backgroundGradientColors="[0x000000,0x323232]" 
+	paddingTop="0" paddingRight="0" paddingBottom="0" paddingLeft="0" layout="absolute"
+	creationComplete="init()" pageTitle="Web консоль" historyManagementEnabled="false"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" >
+
+	<mx:Script>
+		<![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import mx.controls.CheckBox;
+			import mx.controls.FormItemLabel;
+			import mx.containers.FormItem;
+			import mx.containers.Form;
+			import mx.containers.Tile;
+			import mx.events.ListEvent;
+			import mx.containers.Canvas;
+			import mx.containers.HDividedBox;
+			import mx.controls.ComboBox;
+			import mx.controls.Tree;
+			import mx.rpc.soap.Operation;
+			import mx.rpc.soap.WebService;
+	    	import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.utils.ObjectUtil;  
+            import mx.core.ClassFactory;
+	        import mx.resources.ResourceBundle;
+	        import mx.managers.BrowserManager;
+    	    import mx.managers.IBrowserManager;
+        	import mx.utils.URLUtil;
+			import flexlib.controls.SuperTabBar;
+			import flexlib.events.TabReorderEvent;
+			import flexlib.controls.tabBarClasses.SuperTab;
+			import oblik.main.OblikApp;
+			import webdb.UserProfile;
+			import webdb.UserAdmin;
+
+            [Bindable]
+            private var servicelogo:String = "";
+            [Bindable]
+            private var servicetitle:String = "";
+            private var servicetitleObj:Object;
+            [Bindable]
+            private var lang:String;
+			private var bm:IBrowserManager;
+            private var srv:WebService; 
+            private var servicepath:String;
+            private var Loginoper:Operation;
+            private var UserDataoper:Operation;
+            private var SaveParamsoper:Operation;
+            public  var ContextId:String;
+            public  var OldContextId:String;
+            private var logincount:int;
+            
+            private var availservices:ArrayCollection;
+            private var AppsRunCount:int = 0;   
+            private var Apps:Array = new Array();          
+
+            private function init():void
+            {
+            	Oblsrv.send();
+
+                bm = BrowserManager.getInstance();
+                bm.init();
+                var o:Object = URLUtil.stringToObject(bm.fragment, "&");
+                lang = "en_US";
+            	if (o["hl"] == "ru" || Capabilities.language == "ru") lang = "ru_RU";
+            	if (o["hl"] == "en" || Capabilities.language == "en") lang = "en_US";
+            	ChangeLang (lang);
+            }
+            private function ChangeLang (l:String):void
+            {
+            	lang = l;
+            	resourceManager.localeChain = [lang];
+	            ChangeLogin ();
+            }
+            private function ChangeLogin ():void
+            {
+	            label1.text = resourceManager.getString('LoginForm','Login');	
+	            label2.text = resourceManager.getString('LoginForm','Password');	
+	            Submit.label = resourceManager.getString('LoginForm','Submit_Button');
+	            if (servicetitleObj)
+	            {
+	            	servicetitle = servicetitleObj[lang];	
+                	bm.init("", servicetitle);
+             	}
+            }
+			private function faultHandler(event:FaultEvent):void
+            {
+                Alert.show(resourceManager.getString('Console','FaultParamFile'));
+            }
+            private function init2(event:ResultEvent):void
+            {
+            	servicepath = event.result.OblikParams.RootEndPoint;
+            	servicelogo = event.result.OblikParams.ApplicationLogo;
+            	servicetitleObj = event.result.OblikParams.ApplicationName;
+            	ChangeLogin ()
+          		servicepath += "/wsdl?targetURI=webdb";
+            	/* Динамиское создание объекта связи с WebServices с операциями. Каждая имеет свою процедуру callback */
+            	srv = new WebService();
+				srv.wsdl = servicepath;
+				Loginoper = new Operation(null, "SessionStart");
+				Loginoper.addEventListener(ResultEvent.RESULT, OnLogin, false, 0, true);
+				Loginoper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				UserDataoper = new Operation(null, "UserData");
+				UserDataoper.addEventListener(ResultEvent.RESULT, OnUserData, false, 0, true);
+				UserDataoper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				SaveParamsoper = new Operation(null, "SaveServiceParams");
+				SaveParamsoper.addEventListener(ResultEvent.RESULT, OnSaveParams, false, 0, true);
+				SaveParamsoper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [Loginoper,UserDataoper, SaveParamsoper];
+
+				if (servicepath == null || servicepath == "")
+				{
+					Alert.show (resourceManager.getString('Console','FaultWebDB'));
+					return;
+				}
+				srv.loadWSDL();
+				if (srv.canLoadWSDL() == false)
+				{
+					Alert.show (resourceManager.getString('Console','NoWebDBService') + servicepath);
+					return;
+				}
+				logincount = 3;
+            }
+            private function OnLogin(event:ResultEvent):void
+            {
+            	if (event.result.result == "OK")
+            	{
+            		currentState = "Logged In";
+            		ContextId = event.result.ContextId;
+            		UserDataoper.send (ContextId);
+            		callLater(initNonClosableTab);
+            	}
+            	if (event.result.result == "Banned")
+            	{
+            		Alert.show(resourceManager.getString('Console','UserBanned'));
+            		logincount -= 1;
+            	}
+            	if (event.result.result == "")
+            	{
+            		Alert.show(resourceManager.getString('Console','BadLogin'));
+            		logincount -= 1;
+            	}
+            	if (logincount <= 0)
+            	{
+            		closeApp ();
+            	}
+            }
+			private function initNonClosableTab():void {
+				tn.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
+				tn.addEventListener("CloseTab", OnCloseTab);
+			}
+            
+            private function OnUserData(event:ResultEvent):void
+            {
+           		ContextId = event.result.ContextId;
+            	loggedusername.text = resourceManager.getString('Console','WebUser') + " " + event.result.UserName;
+            	if (event.result.UserPos != "")
+            		loggedusername.text += ", " + event.result.UserPos;
+            	availservices = event.result.AvailServices;
+            	tl.dataProvider = availservices; 
+            }
+            private function OnSaveParams(event:ResultEvent):void
+            {
+            	Alert.show (resourceManager.getString('Console','ParamSaved'));
+            }
+            private function OnAvailApps(event:ResultEvent):void
+            {
+/*
+            	Alert.show (ObjectUtil.toString(event.result), "Полученые доступные приложения");
+*/
+            	var AppsId:int = event.result.AppId;
+            	var ln:uint = Apps.length;
+				for(var i:uint; i < ln; i++) 
+				{
+    				if (OblikApp(Apps[i]).AppsId == AppsId)
+    				{
+    					var o:OblikApp = OblikApp(Apps[i]);
+    					o.ContextId = event.result.ContextId;
+    					o.login.text = o.uid + " " + event.result.UserName; 
+    					o.db.text = event.result.Db_Name;
+    					o.ent.labelField = "EntName";
+    					o.ent.dataProvider = event.result.AvailEnt; 
+    					o.ent.selectedItem = null;
+    					
+    					var defent:int = event.result.DefEnt;
+		            	var ln2:uint = event.result.AvailEnt.length;
+						for(var j:uint; j < ln2; j++) 
+						{
+							if (event.result.AvailEnt.list.source[j].rident == defent)
+							{
+								o.ent.selectedItem = event.result.AvailEnt.list.source[j];
+								o.rident = defent;
+							}
+						}
+    					
+    					o.cathg.labelField = "CathgName";
+    					o.cathg.dataProvider = event.result.AvailCathg;
+    					o.cathg.selectedItem = null;
+    					o.appResult = event.result.AvailApp;
+    					o.appDP = null;
+    					var defcathg:int = event.result.DefCathg;
+		            	ln2 = event.result.AvailCathg.length;
+						for(j = 0; j < ln2; j++) 
+						{
+							if (event.result.AvailCathg.list.source[j].ridcathg == defcathg)
+							{
+								o.cathg.selectedItem = event.result.AvailCathg.list.source[j];
+								o.ridcathg = defcathg;
+								CreateAppList (o);
+							}
+						}
+    					var defapp:int = event.result.DefApp;
+    					var ao:Object;
+    					o.app.labelField = "AppName";
+    					o.app.dataProvider = o.appDP;
+    					o.app.selectedItem = null;
+    					if (!o.appDP) ln2 = 0;
+    					else ln2 = o.appDP.length;
+						for(j = 0; j < ln2; j++) 
+						{
+							ao = o.appDP.list.getItemAt(j); 
+							if (ao.ridapp == defapp)
+							{
+								o.app.selectedItem = ao;
+								o.ridapp = defapp;
+								GetMenu (o);
+							}
+						}
+    				}
+    				
+    			}
+            }
+            private function OnMenu(event:ResultEvent):void
+            {
+/*
+            	Alert.show (ObjectUtil.toString(event.result), "Получено меню");
+*/
+            	var AppsId:int = event.result.AppId;
+            	var ln:uint = Apps.length;
+				for(var i:uint; i < ln; i++) 
+				{
+    				if (OblikApp(Apps[i]).AppsId == AppsId)
+    				{
+    					var o:OblikApp = OblikApp(Apps[i]);
+    					o.ContextId = event.result.ContextId;
+    					o.mainmenu.labelField = "ItemName";
+    					o.mainmenu.dataProvider = CreateTree (event.result.MainMenu, 0);
+    					o.fastmenu.dataProvider = event.result.FastMenu;
+    				}
+    			}		
+            }
+            private function OnBeforeRun(event:ResultEvent):void
+            {
+/*
+            	Alert.show (ObjectUtil.toString(event.result), "Создан контекст запускаемого модуля");
+*/            	
+            	var AppsId:int = event.result.AppId;
+            	var ln:uint = Apps.length;
+				for(var i:uint; i < ln; i++) 
+				{
+    				if (OblikApp(Apps[i]).AppsId == AppsId)
+    				{
+    					var o:OblikApp = OblikApp(Apps[i]);
+    					o.ContextId = event.result.ContextId;
+    					var mContextId:String = event.result.ModuleContextId;
+                        var Module:String = event.result.Module;
+                        Module = Module.replace('swf','html');
+                        var request:URLRequest = new URLRequest(Module + "#ContextId=" + mContextId);
+/*    					
+    					var request:URLRequest = new URLRequest(event.result.Module + "?ContextId=" + mContextId);
+*/    					
+    					navigateToURL(request, "_blank");
+    				}
+    			}		
+            }
+            
+            private function Onfault(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultString, resourceManager.getString('Console','ConnectionError'));
+            }
+            private function TryLogin ():void
+            {
+            	Loginoper.send(username.text, password.text, lang);
+            }
+            private function closeApp():void
+            {
+	            var urlString:String = "logout.html";
+       			var request:URLRequest = new URLRequest(urlString);
+       			navigateToURL(request, "_self");                                               
+            }
+            public function OnServiceRun(OblikContextId:String, ServiceURL:String, uid:String, ServiceId:int, ServiceName:String):void
+            {
+				var o:OblikApp = new OblikApp();
+				AppsRunCount += 1;
+				Apps.push (o); 
+				o.AppsId = AppsRunCount;
+				o.serviceURL = ServiceURL;
+				o.ws = new WebService();
+				o.ws.wsdl = o.serviceURL;
+				o.ws.loadWSDL();
+				var oper:Operation = new Operation(null, "AvailApps");
+				oper.addEventListener(ResultEvent.RESULT, OnAvailApps, false, 0, true);
+				oper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				o.GetAvailApps = oper;
+				var oper2:Operation = new Operation(null, "GetMenu");
+				oper2.addEventListener(ResultEvent.RESULT, OnMenu, false, 0, true);
+				oper2.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				o.GetMenu = oper2;
+				var oper3:Operation = new Operation(null, "RunModule");
+				oper3.addEventListener(ResultEvent.RESULT, OnBeforeRun, false, 0, true);
+				oper3.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				o.runModule = oper3;
+				o.ws.operations = [oper,oper2,oper3];
+				
+				o.ServiceId = ServiceId;
+				o.ContextId = OblikContextId;
+				o.uid = uid;
+				tn.selectedChild = addOblikTab (ServiceName, o); 
+				o.GetAvailApps.send (o.AppsId, o.ContextId, o.ServiceId);
+            }
+            private function addOblikTab(labeltext:String, o:OblikApp):VBox 
+            {
+  				var newVBox:VBox = new VBox();
+  				newVBox.minHeight = 300;
+  				var newHBox:HBox = new HBox();
+  				var newHBox2:HBox = new HBox();
+
+  				var t:Label = new Label();
+  				var ti:TextInput = new TextInput();
+  				t.text = resourceManager.getString('Console','OblikLogin');
+  				ti.width = 220;
+  				ti.editable = false;
+  				newHBox.addChild(t);
+  				newHBox.addChild(ti);
+  				o.login = ti;
+  				t = new Label();
+  				ti = new TextInput();
+  				t.text = resourceManager.getString('Console','OblikDB');
+  				ti.width = 255;
+  				ti.editable = false;
+  				newHBox.addChild(t);
+  				newHBox.addChild(ti);
+  				o.db = ti;
+  				
+  				t = new Label();
+  				t.text = resourceManager.getString('Console','OblikEnt');
+  				var cb:ComboBox = new ComboBox();
+  				cb.width = 180;
+  				cb.rowCount = 15;
+  				cb.toolTip = resourceManager.getString('Console','OblikEntTip');
+  				cb.addEventListener(ListEvent.CHANGE, EntChanged, false, 0, true);
+  				newHBox2.addChild(t);
+  				newHBox2.addChild(cb);
+  				o.ent = cb;
+  				cb.data = o;
+  				
+  				t = new Label();
+  				t.text = resourceManager.getString('Console','OblikCathg');
+  				cb = new ComboBox();
+  				cb.width = 180;
+  				cb.rowCount = 15;
+  				cb.toolTip = resourceManager.getString('Console','OblikCathgTip');
+  				cb.addEventListener(ListEvent.CHANGE, CathgChanged, false, 0, true);
+  				newHBox2.addChild(t);
+  				newHBox2.addChild(cb);
+  				o.cathg = cb;
+  				cb.data = o;
+
+  				t = new Label();
+  				t.text = resourceManager.getString('Console','OblikApplication');
+  				cb = new ComboBox();
+  				cb.rowCount = 15;
+  				cb.width = 180;
+  				cb.toolTip = resourceManager.getString('Console','OblikApplicationTip');
+  				cb.addEventListener(ListEvent.CHANGE, AppChanged, false, 0, true);
+  				newHBox2.addChild(t);
+  				newHBox2.addChild(cb);
+  				o.app = cb;
+  				cb.data = o;
+
+  				var saveButton:Button = new Button();
+  				saveButton.width = 100;
+  				saveButton.label = resourceManager.getString('Console','SaveParams');
+  				saveButton.toolTip = resourceManager.getString('Console','SaveParamsTip');
+				saveButton.addEventListener(MouseEvent.CLICK, SaveContext, false, 0, true);
+  				newHBox.addChild(saveButton);
+  				var resetButton:Button = new Button();
+  				resetButton.width = 100;
+  				resetButton.label = resourceManager.getString('Console','ResetParams');
+  				resetButton.toolTip = resourceManager.getString('Console','ResetParamsTip');
+				resetButton.addEventListener(MouseEvent.CLICK, DelContext, false, 0, true);
+  				newHBox.addChild(resetButton);
+/*  				
+  				var clButton:Button = new Button();
+  				clButton.width = 100;
+  				clButton.label = "Закрыть";
+ 				clButton.toolTip = "Закрыть службу";
+				clButton.addEventListener(MouseEvent.CLICK, delTab, false, 0, true);
+  				newHBox.addChild(clButton);
+*/  				
+  				newHBox.setStyle("verticalAlign", "middle");
+  				newHBox2.setStyle("verticalAlign", "middle");
+  				
+  				newVBox.label = labeltext;
+  				newVBox.addChild(newHBox);
+  				newVBox.addChild(newHBox2);
+  				
+  				var cv1:Canvas = new Canvas();
+  				var cv2:Canvas = new Canvas();
+  				cv1.percentWidth=100;
+  				cv1.percentHeight=100;
+  				cv1.setStyle("borderStyle", "solid");
+  				cv1.setStyle("borderThickness", 1);
+  				
+  				cv1.setStyle("horizontalScrollPolicy","off");
+  				cv1.setStyle("verticalScrollPolicy","off");
+  				cv2.setStyle("horizontalScrollPolicy","off");
+  				cv2.setStyle("verticalScrollPolicy","off");
+  				var mainmenu:Tree = new Tree();
+ 				mainmenu.percentWidth=100;
+  				mainmenu.percentHeight=100;
+  				mainmenu.doubleClickEnabled = true;
+    			mainmenu.addEventListener(ListEvent.ITEM_CLICK, MenuItemSelected);
+				mainmenu.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, MenuItemSelected, false, 0, true);
+/*				
+				mainmenu.addEventListener(KeyboardEvent.KEY_DOWN, MenuItemSelected, false, 0, true);
+*/				
+  				cv1.addChild(mainmenu);
+  				var fastmenu:TileList = new TileList();
+ 				fastmenu.percentWidth=100;
+  				fastmenu.percentHeight=100;
+  				fastmenu.doubleClickEnabled = true;
+  				fastmenu.itemRenderer= new ClassFactory(RenderFastMenu);;
+				fastmenu.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, FastItemSelected, false, 0, true);
+/*
+				fastmenu.addEventListener(KeyboardEvent.KEY_DOWN, FastItemSelected, false, 0, true);
+*/				
+  				cv2.addChild(fastmenu);
+  				o.mainmenu = mainmenu;
+  				o.fastmenu = fastmenu;
+  				o.fastmenu.setStyle("horizontalScrollPolicy","off");
+  				mainmenu.data = o;
+  				fastmenu.data = o;
+
+  				cv2.percentWidth=100;
+  				cv2.percentHeight=100;
+  				cv2.setStyle("borderStyle", "solid");
+  				cv2.setStyle("borderThickness", 1);
+  				
+  				var divb:HDividedBox = new HDividedBox();
+  				divb.percentWidth=100;
+  				divb.percentHeight=100;
+  				divb.setStyle("horizontalScrollPolicy","off");
+  				divb.setStyle("verticalScrollPolicy","off");
+  				divb.addChild(cv1);
+  				divb.addChild(cv2);
+  				newVBox.addChild(divb);
+  				newVBox.setStyle("paddingBottom", 10);
+  				newVBox.setStyle("paddingLeft", 10);
+  				newVBox.setStyle("paddingRight", 10);
+  				
+  				newVBox.data = o;
+
+  				tn.addChild(newVBox);
+  				return newVBox;
+  			}
+            private function delTab(event:Event):void
+            {
+				tn.removeChild(event.target.parent.parent);
+            } 
+            private function SaveContext(event:Event):void
+            {
+				var targetvbox:VBox = event.target.parent.parent;
+				var o:OblikApp = OblikApp(targetvbox.data);
+				var context:String;
+				context = "uid=" + o.uid;
+				if (o.rident != 0) {context += "&rid-ent=" + o.rident.toString();}
+				if (o.ridcathg != 0) {context += "&rid-cathg=" + o.ridcathg.toString();}
+				if (o.ridapp != 0) {context += "&rid-app=" + o.ridapp.toString();}
+				SaveParamsoper.send(o.ContextId, o.ServiceId, context); 
+            } 
+            private function DelContext(event:Event):void
+            {
+				var targetvbox:VBox = event.target.parent.parent;
+				var o:OblikApp = OblikApp(targetvbox.data);
+				SaveParamsoper.send(o.ContextId, o.ServiceId, "uid=&rid-ent=&rid-cathg=&rid-app="); 
+            } 
+            private function EntChanged(event:Event):void
+            {
+            	var o:OblikApp = OblikApp(event.target.data);
+            	var cb:ComboBox = ComboBox(event.target);
+            	o.rident = cb.selectedItem.rident;
+            }
+			private function CathgChanged(event:Event):void
+            {
+            	var o:OblikApp = OblikApp(event.target.data);
+            	var cb:ComboBox = ComboBox(event.target);
+            	o.ridcathg = cb.selectedItem.ridcathg;
+				CreateAppList (o);
+    			o.app.dataProvider = o.appDP;
+    			o.app.selectedItem = null;
+    			o.mainmenu.dataProvider = null;
+    			o.fastmenu.dataProvider = null;
+            }
+            private function AppChanged(event:Event):void
+            {
+            	var o:OblikApp = OblikApp(event.target.data);
+            	var cb:ComboBox = ComboBox(event.target);
+            	o.ridapp = cb.selectedItem.ridapp;
+            	GetMenu (o);
+            }
+            private function CreateAppList (o:OblikApp):void
+            {
+				var ao:Object;
+		        var ln:uint = o.appResult.length;
+				var listitem:Object;
+				o.appDP = new ArrayCollection();
+    			for (var i:int=0;i<ln;i++)  
+    			{      
+    				ao = o.appResult.list.getItemAt(i);
+    				if (ao.ridcathg == o.ridcathg)
+    				{             
+       					listitem = new Object();
+      					listitem["ridapp"] = ao.ridapp;
+      					listitem["AppName"] = ao.AppName;     
+      					o.appDP.addItem(listitem);
+      				}                                        
+    			}
+
+            }
+            private function GetMenu (o:OblikApp):void
+            {
+				o.GetMenu.send (o.AppsId, o.ContextId, o.rident, o.ridcathg, o.ridapp);
+            }
+            private function CreateTree (menu:ArrayCollection, ParentId:uint):ArrayCollection
+            {
+            	var menutree:ArrayCollection; 
+
+		        var ln:uint = menu.length;
+				var menuitem:Object;
+    			for (var i:int=0;i<ln;i++)  
+    			{      
+    				menuitem = menu.list.getItemAt(i);
+    				if (menuitem.ParentId == ParentId)
+    				{ 
+    					if (menutree == null)
+    					{
+			            	menutree = new ArrayCollection ();
+    					}
+    					menutree.addItem(menuitem);
+    					menuitem["children"] = CreateTree (menu, menuitem.ItemId);
+    				}	
+    			}
+            	return menutree;
+            }
+            private function MenuItemSelected(event:Event):void
+            {
+				var tl:Tree = Tree(event.target);
+				var o:OblikApp = OblikApp(tl.data); 
+				if (tl.selectedItem.ModulePath == '') return;
+				runModule (o, tl.selectedItem.ModulePath, tl.selectedItem.RidMenu);
+            } 
+            private function FastItemSelected(event:Event):void
+            {
+				var tl:TileList = TileList(event.target);
+				var o:OblikApp = OblikApp(tl.data); 
+				runModule (o, tl.selectedItem.ModulePath, tl.selectedItem.RidMenu);
+            }
+            public function runFastItem(tl:TileList, ModulePath:String, RidMenu:int):void
+            {
+				var o:OblikApp = OblikApp(tl.data); 
+				runModule (o, ModulePath, RidMenu);
+            }
+
+            private function runModule (o:OblikApp, m:String, ridmenu:int):void
+			{
+				if (m.length < 2)
+				{
+					Alert.show ( resourceManager.getString('Console','Module') + m + resourceManager.getString('Console','WebInterface'));
+					return;
+				} 
+				var m1:String = m.substr(m.length - 2, 2);
+				if (m1 == ".p" || m1 == ".w" ) 
+				{
+					Alert.show ( resourceManager.getString('Console','Module') + m + resourceManager.getString('Console','WebInterface'));
+					return;
+				}	
+				o.runModule.send(o.AppsId, o.ContextId, m, o.rident, o.ridcathg, o.ridapp, ridmenu);
+            } 
+
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Администрирование																									 */
+            private function OnUserProfileTab():void 
+			{
+				var o:UserProfile = new UserProfile ();
+				var newVBox:VBox = o.addUserProfileTab (false, false, false, servicepath, ContextId, "" );
+  				tn.addChild(newVBox);
+				tn.selectedChild = newVBox;
+			} 
+			public function runUserAdmin (aContextId:String, ReadOnly:Boolean):void
+			{
+				var o:UserAdmin = new UserAdmin ();
+  				tn.addChild(o);
+				o.Initialize (ReadOnly, servicepath, aContextId );
+				tn.selectedChild = o;
+			}
+            public function UpdateProfile(aContextId:String, isNew:Boolean, isReadOnly:Boolean, UserName:String):void 
+			{
+				var o:UserProfile = new UserProfile ();
+				var newVBox:VBox = o.addUserProfileTab (true, isNew, isReadOnly, servicepath, aContextId, UserName );
+  				tn.addChild(newVBox);
+				tn.selectedChild = newVBox;
+			} 
+			public function OnCloseTab (e:Event):void
+			{
+				tn.removeChild(e.target as VBox);
+			}
+            
+
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Другое																									 */
+
+			private function aboutservice ():void
+            {
+            	Alert.show (resourceManager.getString('Console','Copyright'));
+            }
+/*
+ 			<mx:SetProperty target="{panel1}" name="title" value="{resourceManager.getString('Console','Welcome') + ' ' + servicetitle}"/> 
+ 			<mx:SetProperty target="{Application.application}" name="backgroundColor" value="0xFFFFFF"/> 
+*/
+		]]>
+	</mx:Script>
+    <mx:Metadata>
+        [ResourceBundle("LoginForm")]
+        [ResourceBundle("Console")]
+        [ResourceBundle("CommonLibs")]
+    </mx:Metadata> 
+	<mx:states>
+		<mx:State name="Logged In">
+			<mx:SetProperty target="{Application.application}" name="layout" value="vertical"/>
+			<mx:SetProperty target="{panel1}" name="width" value="100%"/>
+			<mx:SetProperty target="{panel1}" name="height" value="100%"/>
+			<mx:SetProperty target="{panel1}" name="layout" value="vertical"/>
+			<mx:RemoveChild target="{password}"/>
+			<mx:RemoveChild target="{username}"/>
+			<mx:RemoveChild target="{label1}"/>
+			<mx:RemoveChild target="{Submit}"/>
+			<mx:RemoveChild target="{label2}"/>
+			<mx:RemoveChild target="{rulang}"/>
+			<mx:RemoveChild target="{enlang}"/>
+			<mx:RemoveChild target="{panel1}"/>
+            <mx:AddChild relativeTo="{this}" position="FirstChild">
+    			<mx:VBox paddingBottom="3" paddingLeft="3" paddingRight="3" width="100%" height="100%" backgroundColor="0xFFFFFF" >
+					<mx:ApplicationControlBar  dock="true" paddingTop="1" paddingBottom="1" paddingLeft="5" paddingRight="5" 
+						fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]" width="100%"> 
+		          		<mx:Image id="IdImage"  source="{servicelogo}"/>
+		    	        <mx:VBox width="100%" verticalGap="0">
+		     				<mx:HBox paddingBottom="0" paddingLeft="0" paddingRight="0" verticalAlign="middle" horizontalAlign="right" width="100%">
+					           	<mx:Label id="title" fontSize="16" text="{servicetitle}"/>
+				   				<mx:Button fontSize="10" label="{resourceManager.getString('Console','WebProfile')}" 
+				   					enabled="true" toolTip="{resourceManager.getString('Console','WebProfileTip')}" textAlign="left" width="100" click="OnUserProfileTab()"/>
+				   				<mx:Button fontSize="10" label="{resourceManager.getString('Console','About')}" enabled="true"  textAlign="left" width="100" click="aboutservice()"/>
+     						</mx:HBox>
+			     			<mx:HBox paddingBottom="0" paddingLeft="0" paddingRight="0" verticalAlign="middle" horizontalAlign="right" width="100%">
+   		       					<mx:Label id="loggedusername" />
+     						</mx:HBox>
+          				</mx:VBox>
+					</mx:ApplicationControlBar>
+					<flexlib:SuperTabNavigator id="tn" scrollSpeed="25" dropShadowEnabled="true"
+						stopScrollingEvent="{MouseEvent.MOUSE_UP}" startScrollingEvent="{MouseEvent.MOUSE_DOWN}"
+						horizontalGap="0" closePolicy="{SuperTab.CLOSE_ALWAYS}" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+		    	        <mx:VBox id="td" label="{resourceManager.getString('Console','AvailServices')}" paddingBottom="5" paddingLeft="5" paddingRight="5">
+							<mx:TileList id="tl" width="100%" height="100%" horizontalScrollPolicy="off"
+								itemRenderer="RenderService">
+							</mx:TileList>
+          				</mx:VBox>
+        			</flexlib:SuperTabNavigator>
+   				</mx:VBox>  
+            </mx:AddChild>
+		</mx:State>
+	</mx:states>
+	
+    <mx:HTTPService id="Oblsrv" url="OblikParams.xml"
+        result="init2(event)" fault="faultHandler(event)"/>
+	<mx:Panel resizeEffect="Resize" width="250" height="200" layout="absolute"
+		      horizontalCenter="0" verticalCenter="-2" id="panel1" title="{servicetitle}" >
+		<mx:Label x="10" y="10" text="{resourceManager.getString('LoginForm','Login')}" id="label1"/>
+		<mx:TextInput x="10" y="36" id="username" enter="TryLogin()"/>
+		<mx:Label x="10" y="66" text="{resourceManager.getString('LoginForm','Password')}" id="label2"/>
+		<mx:TextInput x="10" y="92" id="password" displayAsPassword="true" enter="TryLogin()"/>
+		<mx:Button x="10" y="122" label="{resourceManager.getString('LoginForm','Submit_Button')}" id="Submit" click="TryLogin()"/>
+		<mx:LinkButton id="rulang" x="110" y="122" width ="27" height = "17" icon="@Embed('ru.png')" toolTip="Использовать русский язык" click="ChangeLang ('ru_RU')"/>
+		<mx:LinkButton id="enlang" x="140" y="122" width ="27" height = "17" icon="@Embed('en.png')" toolTip="Switch to english language" click="ChangeLang ('en_US')"/>
+	</mx:Panel>
+	
+</mx:Application>
+

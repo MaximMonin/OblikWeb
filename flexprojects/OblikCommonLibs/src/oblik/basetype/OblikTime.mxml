@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:classes="oblik.basetype.*"
+	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" 
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	horizontalGap="0" verticalAlign="middle" initialize="init()">
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import flash.events.FocusEvent;
+			import mx.resources.ResourceManager;
+			import mx.controls.dataGridClasses.DataGridListData;
+			import mx.controls.listClasses.BaseListData;
+			
+        	public var InternalValue:String;
+        	public var FormValue:String;
+			public var FormField:int;
+			private var _readonly:Boolean;
+			private var _toolTip:String;
+		
+			private var _listData:DataGridListData;
+        	
+			public function init():void
+			{
+				InternalValue = "";
+				FormValue = "";
+  				hours.SetFormat(">9");
+  				hours.nv.maxValue = 23;
+    			hours.nv.exceedsMaxError=RM('TimeHourError');
+				hours.addEventListener(FocusEvent.FOCUS_IN, FocusIn );
+				hours.addEventListener("ValueCommit", handleChange);
+  				minutes.SetFormat(">9");
+  				minutes.nv.maxValue = 59;
+    			minutes.nv.exceedsMaxError=RM('TimeMinuteError');
+				minutes.addEventListener(FocusEvent.FOCUS_IN, FocusIn );
+				minutes.addEventListener("ValueCommit", handleChange);
+  				seconds.SetFormat(">9");
+  				seconds.nv.maxValue = 59;
+    			seconds.nv.exceedsMaxError=RM('TimeSecondError');
+				seconds.addEventListener(FocusEvent.FOCUS_IN, FocusIn );
+				seconds.addEventListener("ValueCommit", handleChange);
+			}
+			private function RM (messname:String):String
+			{
+				return ResourceManager.getInstance().getString('CommonLibs',messname);
+			}
+			public function get InternalValueStr ():String
+			{
+				return this.InternalValue;
+			}
+			public function set InternalValueStr (value:String):void
+			{
+				InternalValue = value;
+				var secs:int = int (value);
+				seconds.SetValue (secs % 60);
+				secs = (secs - seconds.InternalValue) / 60;
+				minutes.SetValue (secs % 60);
+				secs = (secs - minutes.InternalValue) / 60;
+				hours.SetValue (secs);
+			}
+			public function set ReadOnly (value:Boolean):void
+			{
+				_readonly = value;
+				callLater( callLater, [_setReadOnly] );				
+			}
+			override public function set toolTip (value:String):void
+			{
+				_toolTip = value;
+				callLater( callLater, [_settoolTip] );				
+			}
+
+        	private function _setReadOnly():void
+			{
+				hours.ReadOnly   = _readonly;
+				minutes.ReadOnly = _readonly;
+				seconds.ReadOnly = _readonly;
+			}
+        	private function _settoolTip():void
+			{
+				hours.toolTip   = _toolTip;
+				minutes.toolTip = _toolTip;
+				seconds.toolTip = _toolTip;
+			}
+			public function get ReadOnly ():Boolean
+			{
+				return _readonly;
+			}
+			public function set FormValueStr (value:String):void
+			{
+			}
+            
+            override public function validateProperties():void
+            {
+                super.validateProperties();
+            }
+            
+			public function handleChange(e:Event):void
+            {
+            	if (hours.InternalValue > 23) hours.SetValue(23);
+            	if (minutes.InternalValue > 59) minutes.SetValue(59);
+            	if (seconds.InternalValue > 59) seconds.SetValue(59);
+            	
+				var intv:int = hours.InternalValue * 3600 + minutes.InternalValue * 60 + seconds.InternalValue;
+				InternalValue = intv.toString();
+				if (hours.InternalValue < 10) FormValue = "0"; 
+				else FormValue = "";
+				FormValue += hours.InternalValue.toString() + ":";
+				if (minutes.InternalValue < 10) FormValue += "0";
+				FormValue += minutes.InternalValue.toString() + ":"
+				if (seconds.InternalValue < 10) FormValue += "0"
+				FormValue += seconds.InternalValue.toString(); 
+               	SaveData ();
+            }
+			public function get listData():BaseListData
+    	    {
+        	   	return _listData;
+        	}
+        	public function set listData( value:BaseListData ):void
+        	{
+          		_listData = DataGridListData( value );            	
+        	}
+        	override public function set data( value:Object ):void
+        	{
+           		super.data = value;
+				if (!data)
+					return;
+				callLater( callLater, [_setData] );				
+        	}
+        	private function _setData():void
+        	{
+        	if (!data[ _listData.dataField ])
+        		InternalValueStr = "";
+        	else
+       			InternalValueStr = data [ _listData.dataField ];
+        	}			
+			private function SaveData ():void
+			{
+				if (data) data [ _listData.dataField ] = InternalValueStr;
+				this.dispatchEvent(new Event('ValueCommit', true));
+			}
+			private function FocusIn ( event:FocusEvent ):void
+			{
+				this.dispatchEvent(new Event('OnFocus', true));
+			}
+        ]]>
+    </mx:Script>
+    <classes:OblikInteger id="hours" textAlign="center" width="25" />
+    <classes:OblikInteger id="minutes" textAlign="center" width="25" />
+    <classes:OblikInteger id="seconds" textAlign="center" width="25" />
+</mx:HBox>

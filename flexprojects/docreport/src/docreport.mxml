@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:flexlib="flexlib.containers.*"
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    backgroundGradientColors="[0xFFFFFF,0xFFFFFF]"	paddingTop="0" paddingRight="0" paddingBottom="0" paddingLeft="0" 
+    layout="vertical" creationComplete="init()" pageTitle="Построение отчетов" historyManagementEnabled="false" >
+    <mx:Script>
+        <![CDATA[
+        	import mx.events.ListEvent;
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import mx.controls.Tree;
+ 
+            import mx.managers.PopUpManager;
+	        import mx.managers.BrowserManager;
+    	    import mx.managers.IBrowserManager;
+        	import mx.utils.URLUtil;
+			import mx.rpc.xml.SimpleXMLDecoder;
+			import mx.rpc.soap.Operation;
+			import mx.rpc.soap.WebService;
+	    	import mx.collections.ArrayCollection;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.controls.Alert;
+            import mx.utils.ObjectUtil;
+             
+			import flexlib.controls.SuperTabBar;
+			import flexlib.events.TabReorderEvent;
+			import flexlib.controls.tabBarClasses.SuperTab;
+
+			/* Прием входных параметров в модуль через процедуры init1, init2 c запуском затем процедуры init3 */
+            private var servicelogo:String = "";
+           	[Bindable]
+
+			public  var ContextId:String;
+			private var ViewOnly:Boolean = false;
+			private var MenuParams:String;
+			private var ModuleName:String;
+			private var RidMenu:int;
+			public  var servicepath:String;
+			public  var editservicepath:String;
+			private var lang:String = "ru_RU";
+			private var bm:IBrowserManager;
+			private var Mode:String = "REPORT";
+
+            private function init():void
+            {
+                bm = BrowserManager.getInstance();
+                bm.init("", RM('ServiceTitle'));
+                var o:Object = URLUtil.stringToObject(bm.fragment, "&");
+                ContextId = o.ContextId;
+            	Oblsrv.send();
+
+            	tn.stopScrollingEvent="MouseEvent.MOUSE_UP";
+            	tn.startScrollingEvent="MouseEvent.MOUSE_DOWN";
+            	tn.closePolicy="SuperTab.CLOSE_ALWAYS";
+				tn0.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
+            }
+			private function faultHandler(event:FaultEvent):void
+            {
+                Alert.show(RM('FaultParamFile'));
+            }
+            private function Onfault(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultString, RM('ConnectionError'));
+            }
+			private function RM (messname:String):String
+			{
+				return resourceManager.getString('Document',messname);
+			}
+            private function init2(event:ResultEvent):void
+            {
+            	var servicepath:String = event.result.OblikParams.RootEndPoint;
+            	servicelogo = event.result.OblikParams.ApplicationLogo;
+            	ServImage.source = "../" + servicelogo;
+            	ServImage.visible = true;
+           		servicepath += "/wsdl?targetURI=webdb";
+            	
+            	var srv:WebService = new WebService();
+				srv.wsdl = servicepath;
+				var InputParams:Operation = new Operation(null, "InputParams");
+				InputParams.addEventListener(ResultEvent.RESULT, init3, false, 0, true);
+				InputParams.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [InputParams];
+				srv.loadWSDL();
+
+	            InputParams.send(ContextId);
+            }
+            /* /Прием входных параметров */
+            
+            private function init3(event:ResultEvent):void
+            {
+				ContextId = event.result.ContextId;
+				ViewOnly = event.result.ViewOnly;
+				MenuParams = event.result.MenuParams;
+				ModuleName = event.result.ModuleName;
+				if (ModuleName.indexOf('servdoc.p') > 0) Mode = "SERVDOC";
+				RidMenu = event.result.RidMenu;
+            	servicepath = event.result.EndPoint;
+            	lang = event.result.lang;
+            	var servicepath2:String = event.result.EndPoint;
+            	
+            	if (servicepath == "")
+            	{
+            		return;
+            	} 
+            	ChangeLang (lang);
+
+           		editservicepath = servicepath + "/wsdl?targetURI=Oblik_DocEditor";
+           		servicepath += "/wsdl?targetURI=Oblik_Document";
+           		servicepath2 += "/wsdl?targetURI=Oblik_Main";
+            	
+            	var srv:WebService = new WebService();
+				srv.wsdl = servicepath;
+            	var srv2:WebService = new WebService();
+				srv2.wsdl = servicepath2;
+				var AppContextoper:Operation = new Operation(null, "AppContext");
+				AppContextoper.addEventListener(ResultEvent.RESULT, OnAppContext, false, 0, true);
+				AppContextoper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv2.operations = [AppContextoper];
+
+				srv2.loadWSDL();
+				AppContextoper.send(ContextId);
+				
+				var AppDocMenuoper:Operation = new Operation(null, "AppReportMenu");
+				AppDocMenuoper.addEventListener(ResultEvent.RESULT, OnDocMenu, false, 0, true);
+				AppDocMenuoper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [AppDocMenuoper];
+
+				srv.loadWSDL();
+				AppDocMenuoper.send(ContextId);
+	        }
+            private function ChangeLang (l:String):void
+            {
+            	lang = l;
+            	resourceManager.localeChain = [lang];
+	            RedrawInterface ();
+            }
+            private function RedrawInterface ():void
+            {
+            	aboutBtn.label = RM('About');
+            	title.text = RM('ServiceTitle');
+            	Manage.label = RM('ManagementTitle')
+               	bm.init("", RM('ServiceTitle'));
+            }
+            
+            private function OnAppContext(event:ResultEvent):void
+            {
+            	title1.text = RM('TitleApplication') + ": " + event.result.AppName + ", " + RM('TitleDB') + ": " + event.result.Db_Name;
+            	title2.text = RM('TitleUser') + ": " + event.result.UserName;
+            }
+            private function OnDocMenu(event:ResultEvent):void
+            {
+            	MainFrame.visible = true;
+  				var mainmenu:Tree = new Tree();
+ 				mainmenu.percentWidth=100;
+  				mainmenu.percentHeight=100;
+  				mainmenu.labelField = "MenuItem";
+    			mainmenu.dataProvider = CreateTree (event.result.AppDocMenu, 0);
+   				mainmenu.doubleClickEnabled = true;
+				mainmenu.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, OnMenuClick);
+	   			mainmenu.addEventListener(ListEvent.ITEM_CLICK, OnMenuClick);
+    			
+            	Manage.addChild(mainmenu);
+		        var ln2:uint = event.result.AppDocMenu.length;
+				for(var j:uint; j < ln2; j++) 
+				{
+					if (event.result.AppDocMenu.list.source[j].RidMenu == RidMenu)
+					{
+						mainmenu.selectedItem = event.result.AppDocMenu.list.source[j];
+						CreateReportTab (mainmenu.selectedItem);
+					}
+				}
+            }
+            private function CreateTree (menu:ArrayCollection, ParentId:uint):ArrayCollection
+            {
+            	var menutree:ArrayCollection; 
+
+		        var ln:uint = menu.length;
+				var menuitem:Object;
+    			for (var i:int=0;i<ln;i++)  
+    			{      
+    				menuitem = menu.list.getItemAt(i);
+    				if (menuitem.ParentId == ParentId)
+    				{ 
+    					if (menutree == null)
+    					{
+			            	menutree = new ArrayCollection ();
+    					}
+    					menutree.addItem(menuitem);
+    					menuitem["children"] = CreateTree (menu, menuitem.IdItem);
+    				}	
+    			}
+            	return menutree;
+            }
+            private function OnMenuClick(event:Event):void
+            {
+				var menu:Tree = Tree(event.target);
+				CreateReportTab (menu.selectedItem);
+            }
+            
+			private function CreateReportTab (Data:Object):void
+			{
+  				if (Data.RidTypedoc == 0) return;
+  				if (Data.IsAvailable == false) 
+  				{
+  					Alert.show(RM('ItemNotAvailable'));
+  					return;
+  				}
+				var o:ReportEditor = new ReportEditor ();
+  				tn.addChild(o);
+				o.InitEditor (ContextId, servicepath, editservicepath, Data.MenuItem, Data.RidTypedoc, Data.ViewOnly, Mode );
+				tn.selectedChild = o;
+			}
+            private function OnReportClose(event:Event):void
+            {
+				tn.selectedChild.dispatchEvent(new Event('EditorClosed', true));
+            }
+
+/*-----------------------------------------------------------------------------------------------------------------------*/		
+			private function aboutservice ():void
+            {
+            	Alert.show (RM('Copyright'));
+            }
+
+]]>
+    </mx:Script>
+    <mx:Metadata>
+        [ResourceBundle("Document")]
+        [ResourceBundle("DocumentEditor")]
+        [ResourceBundle("CommonLibs")]
+    </mx:Metadata> 
+ 
+    <mx:HTTPService id="Oblsrv" url="../OblikParams.xml"
+           result="init2(event)" fault="faultHandler(event)"/>
+	<mx:ApplicationControlBar  dock="true" paddingTop="1" paddingBottom="1" paddingLeft="1" paddingRight="1" fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]"> 
+		<mx:VBox id="header2" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%" horizontalAlign="left" verticalGap="0">
+   			<mx:Label id="title1" fontSize="10"/>
+   			<mx:Label id="title2" fontSize="10"/>
+		</mx:VBox>
+   		<mx:HBox paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%"  
+   			verticalAlign="middle"   horizontalAlign="right" >
+           	<mx:Label id="title" fontSize="16"/>
+           	<mx:Image id="ServImage" visible="false"  scaleX="0.5" scaleY="0.5"/>
+	   		<mx:Button  id="aboutBtn" fontSize="10" label="{RM('About')}" enabled="true"  textAlign="left" click="aboutservice()"/>
+   		</mx:HBox>
+	</mx:ApplicationControlBar>
+	<mx:VBox id="MainFrame" visible="true" width="100%" height="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="0" verticalGap="0">
+		<mx:HDividedBox width="100%" height="100%" verticalGap="2" >
+			<mx:VBox width="30%" height="100%" >
+				<flexlib:SuperTabNavigator id="tn0" scrollSpeed="25"  dropShadowEnabled="true"   popUpButtonPolicy="off" 
+					horizontalGap="0" paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0" width="100%" height="100%"> 
+					<mx:VBox id="Manage" width="100%" height="100%" >
+					</mx:VBox>
+				</flexlib:SuperTabNavigator>
+			</mx:VBox>
+			<mx:VBox width="70%" height="100%" >
+				<flexlib:SuperTabNavigator id="tn" scrollSpeed="25"  dropShadowEnabled="true"
+					horizontalGap="0" paddingLeft="0" paddingRight="0" paddingTop="5" paddingBottom="0" width="100%" height="100%" tabClose="OnReportClose(event)"> 
+				</flexlib:SuperTabNavigator>
+			</mx:VBox>
+		</mx:HDividedBox>
+	</mx:VBox>
+</mx:Application>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:flexlib="flexlib.containers.*"
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    backgroundGradientColors="[0xFFFFFF,0xFFFFFF]"	paddingTop="5" paddingRight="5" paddingBottom="5" paddingLeft="5" 
+    layout="vertical" creationComplete="init()" pageTitle="Web SystemAdmin" historyManagementEnabled="false" >
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+        	import mx.events.MenuEvent;
+			import mx.rpc.soap.Operation;
+			import mx.rpc.soap.WebService;
+	    	import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.containers.VBox;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.utils.ObjectUtil;  
+            import mx.core.ClassFactory;
+	        import mx.resources.ResourceBundle;
+	        import mx.managers.BrowserManager;
+    	    import mx.managers.IBrowserManager;
+        	import mx.utils.URLUtil;
+			import flexlib.controls.SuperTabBar;
+			import flexlib.events.TabReorderEvent;
+			import flexlib.controls.tabBarClasses.SuperTab;
+
+			import webdb.UserProfile;
+			import webdb.UserAdmin;
+			import webdb.DBs;
+			import webdb.ServiceTypes;
+			import webdb.Services;
+			import webdb.Sessions;
+
+            private var servicelogo:String = "";
+            [Bindable]
+
+/*---------------------------------------------------------------------------------------------------------------------*/
+/* Прием входных параметров в модуль через процедуры init1, init2 c запуском затем процедуры init3, отрисовка меню     */
+			public  var ContextId:String;
+			public  var servicepath:String;
+			private var ViewOnly:Boolean = false;
+			private var lang:String = "ru_RU";
+			private var bm:IBrowserManager;
+			
+            private function init():void
+            {
+                bm = BrowserManager.getInstance();
+                bm.init("", RM('ServiceTitle'));
+                var o:Object = URLUtil.stringToObject(bm.fragment, "&");
+                ContextId = o.ContextId;
+            	Oblsrv.send();
+            	tn.stopScrollingEvent="MouseEvent.MOUSE_UP";
+            	tn.startScrollingEvent="MouseEvent.MOUSE_DOWN";
+            	tn.closePolicy="SuperTab.CLOSE_ALWAYS";
+				tn.addEventListener("CloseTab", OnCloseTab);
+            }
+			private function faultHandler(event:FaultEvent):void
+            {
+                Alert.show(RM('FaultParamFile'));
+            }
+            private function Onfault(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultString, RM('ConnectionError'));
+            }
+			private function RM (messname:String):String
+			{
+				return resourceManager.getString('SystemAdmin',messname);
+			}
+            private function init2(event:ResultEvent):void
+            {
+            	var servicepath:String = event.result.OblikParams.RootEndPoint;
+            	servicelogo = event.result.OblikParams.ApplicationLogo;
+            	ServImage.source = "../" + servicelogo;
+            	ServImage.visible = true;
+           		servicepath += "/wsdl?targetURI=webdb";
+            	
+            	var srv:WebService = new WebService();
+				srv.wsdl = servicepath;
+				var InputParams:Operation = new Operation(null, "InputParams");
+				InputParams.addEventListener(ResultEvent.RESULT, init3, false, 0, true);
+				InputParams.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [InputParams];
+				srv.loadWSDL();
+
+	            InputParams.send(ContextId);
+            }
+            private function init3(event:ResultEvent):void
+            {
+				ContextId = event.result.ContextId;
+				ViewOnly = event.result.ViewOnly;
+            	servicepath = event.result.EndPoint;
+            	lang = event.result.lang;
+            	
+            	if (servicepath == "")
+            	{
+            		return;
+            	} 
+            	servicepath += "/wsdl?targetURI=webdb";
+            	ChangeLang (lang);
+            	InitMenu ();
+            }
+            private function ChangeLang (l:String):void
+            {
+            	lang = l;
+            	resourceManager.localeChain = [lang];
+	            RedrawInterface ();
+            }
+            private function RedrawInterface ():void
+            {
+            	aboutBtn.label = RM('About');
+            	title.text = RM('ServiceTitle');
+               	bm.init("", RM('ServiceTitle'));
+            }
+            private function InitMenu ():void
+            {
+				var dmenu:ArrayCollection = new ArrayCollection();
+
+				var mi:Object = new Object();
+				mi["label"] = RM('MenuDict');
+				mi["id"] = "Dict";
+					var mac:ArrayCollection = new ArrayCollection ();
+					mi["children"] = mac;
+					var smi:Object = new Object();
+					smi["label"] = RM('MenuServices');
+					smi["id"] = "Services";
+					mac.addItem(smi);
+					smi = new Object();
+					smi["label"] = RM('MenuDBs');
+					smi["id"] = "DBs";
+					mac.addItem(smi);
+					smi = new Object();
+					smi["label"] = RM('MenuServiceTypes');
+					smi["id"] = "ServiceTypes";
+					mac.addItem(smi);
+				dmenu.addItem(mi);
+
+				mi = new Object();
+				mi["label"] = RM('MenuUsers');
+				mi["id"] = "Users";
+					mac = new ArrayCollection ();
+					mi["children"] = mac;
+					smi = new Object();
+					smi["label"] = RM('MenuUserAccounts');
+					smi["id"] = "UserAccounts";
+					mac.addItem(smi);
+				dmenu.addItem(mi);
+
+				mi = new Object();
+				mi["label"] = RM('MenuReports');
+				mi["id"] = "Reports";
+					mac = new ArrayCollection ();
+					mi["children"] = mac;
+					smi = new Object();
+					smi["label"] = RM('MenuSessions');
+					smi["id"] = "Sessions";
+					mac.addItem(smi);
+				dmenu.addItem(mi);
+				MainMenuBar.dataProvider = dmenu;
+				MainMenuBar.visible = true;
+				MainMenuBar.addEventListener(MenuEvent.ITEM_CLICK, onMenuClick);
+            }
+/*-----------------------------------------------------------------------------------------------------------------------*/		
+/* Вызов модулей главного меню                                                                                           */
+			private function onMenuClick (e:MenuEvent):void
+			{
+				var menuitem:String = e.item.id;
+				if (menuitem == "UserAccounts")	SAUserAdmin ();
+				if (menuitem == "DBs")	runDBs ();
+				if (menuitem == "ServiceTypes")	runServiceTypes ();
+				if (menuitem == "Services")	runServices ();
+				if (menuitem == "Sessions")	runSessions ();
+			}
+			public function OnCloseTab (e:Event):void
+			{
+				tn.removeChild(e.target as VBox);
+			}
+			public function SAUserAdmin ():void
+			{
+				var o:UserAdmin = new UserAdmin ();
+  				tn.addChild(o);
+				o.MyUsers.visible = false;
+				o.MyUsers.selected = false;
+				o.MyUsers.width = 0;
+				o.selService.basetype = "SERVICE";
+				o.Initialize (ViewOnly, servicepath, ContextId );
+				tn.selectedChild = o;
+			}
+            public function UpdateProfile(aContextId:String, isNew:Boolean, isReadOnly:Boolean, UserName:String):void 
+			{
+				var o:UserProfile = new UserProfile ();
+				var newVBox:VBox = o.addUserProfileTab (true, isNew, isReadOnly, servicepath, aContextId, UserName );
+				o.isbanned.mouseEnabled = !ViewOnly;
+  				tn.addChild(newVBox);
+				tn.selectedChild = newVBox;
+			} 
+			private function runDBs ():void
+			{
+				var o:DBs = new DBs ();
+  				tn.addChild(o);
+				o.Initialize (ViewOnly, servicepath, ContextId );
+				tn.selectedChild = o;
+			}
+			private function runServiceTypes ():void
+			{
+				var o:ServiceTypes = new ServiceTypes ();
+  				tn.addChild(o);
+				o.Initialize (ViewOnly, servicepath, ContextId );
+				tn.selectedChild = o;
+			}
+			private function runServices ():void
+			{
+				var o:Services = new Services ();
+  				tn.addChild(o);
+				o.Initialize (ViewOnly, servicepath, ContextId );
+				tn.selectedChild = o;
+			}
+			private function runSessions ():void
+			{
+				var o:Sessions = new Sessions ();
+  				tn.addChild(o);
+				o.Initialize (ViewOnly, servicepath, ContextId );
+				tn.selectedChild = o;
+			}
+
+
+/*-----------------------------------------------------------------------------------------------------------------------*/		
+			private function aboutservice ():void
+            {
+            	Alert.show (RM('Copyright'));
+            }
+
+]]>
+    </mx:Script>
+    <mx:Metadata>
+        [ResourceBundle("SystemAdmin")]
+        [ResourceBundle("Console")]
+        [ResourceBundle("CommonLibs")]
+    </mx:Metadata> 
+ 
+    <mx:HTTPService id="Oblsrv" url="../OblikParams.xml"
+           result="init2(event)" fault="faultHandler(event)"/>
+	<mx:ApplicationControlBar  dock="true" paddingTop="1" paddingBottom="1" paddingLeft="1" paddingRight="1" fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]"> 
+        <mx:Spacer width="0"/>
+        <mx:MenuBar id="MainMenuBar" labelField="label" visible="false">
+        </mx:MenuBar>	    
+    	<mx:HBox paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%"  
+    		verticalAlign="middle"   horizontalAlign="right" >
+            <mx:Label id="title" fontSize="16"/>
+            <mx:Image id="ServImage" visible="false"  scaleX="0.5" scaleY="0.5"/>
+		   	<mx:Button  id="aboutBtn" fontSize="10" label="{RM('About')}" enabled="true"  textAlign="left" click="aboutservice()"/>
+     	</mx:HBox>
+	</mx:ApplicationControlBar>
+	<flexlib:SuperTabNavigator id="tn" scrollSpeed="25" dropShadowEnabled="true" 
+			horizontalGap="0" paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0" width="100%" height="100%"> 
+	</flexlib:SuperTabNavigator>		
+	
+</mx:Application>

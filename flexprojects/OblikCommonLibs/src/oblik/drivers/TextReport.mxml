@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="org.print.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="595" height="842" xmlns:demo="templates.demo.*">
+	<!-- REPORT LAYOUT -->
+	<Body width="100%" height="100%">
+		<PrintTextArea id="printTextArea1" width="100%" fontSize="10" textAlign="justify"/>
+	</Body>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			public override function loadData() : void
+			{
+				var estfont:int;
+				printTextArea1.text = dataProvider.text;
+				if (FontSize != 0) printTextArea1.setStyle("fontSize", FontSize);
+				else
+				{
+					estfont = this.width / dataProvider.maxwidth * 1.30;
+					if (estfont > 10) estfont = 10; 
+					printTextArea1.setStyle("fontSize", estfont);
+				}
+			}
+		]]>
+	</mx:Script>
+</Report>

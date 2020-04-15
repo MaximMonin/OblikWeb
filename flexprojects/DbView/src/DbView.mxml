@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:flexlib="flexlib.containers.*"
+	xmlns:classes="oblik.basetype.*"
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    backgroundGradientColors="[0xFFFFFF,0xFFFFFF]"	paddingTop="5" paddingRight="5" paddingBottom="5" paddingLeft="5" 
+    layout="vertical" creationComplete="init()" pageTitle="DB View" historyManagementEnabled="false"> 
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+        	import mx.utils.StringUtil;
+	        import mx.managers.BrowserManager;
+    	    import mx.managers.IBrowserManager;
+        	import mx.utils.URLUtil;
+        	import mx.collections.XMLListCollection;
+			import mx.rpc.xml.SimpleXMLDecoder;
+			import mx.rpc.soap.Operation;
+			import mx.rpc.soap.WebService;
+	    	import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.utils.ObjectUtil;    
+            import flash.net.navigateToURL;
+			import flexlib.controls.SuperTabBar;
+			import flexlib.events.TabReorderEvent;
+			import flexlib.controls.tabBarClasses.SuperTab;
+
+            import oblik.basetype.OblikInteger;
+            import oblik.basetype.OblikDateBr;      
+            import oblik.basetype.OblikCharacterBr;      
+            import oblik.basetype.OblikLogicalBr;      
+           [Bindable]
+           
+            private var tables:ArrayCollection;
+            private var fields:ArrayCollection;
+            private var indexes:ArrayCollection;
+            private var triggers:ArrayCollection;
+            private var TableInfo:ArrayCollection;
+            private var TableRelation:ArrayCollection;
+            private var TableDataResult:ArrayCollection;
+            private var selectedtable:Object;
+            private var selectedtrigger:Object;
+            private var ti:Object;
+            private var ColumnInfo:Array;
+    		private	var aColumnsNew:Array; 
+    		private	var iTotalDGWidth:int;
+    		private var sortByDP:ArrayCollection;
+    		private var TableDataCash:XMLListCollection = new XMLListCollection();
+            
+            private var jsResponse:String;
+            private var srv:WebService; 
+            private var oper:Operation;
+            private var oper2:Operation;
+ 	        private var oper3:Operation;
+ 	        private var GetDataoper:Operation;
+ 	        private var t1:uint;
+ 	        private var t2:uint;
+ 	        private var t3:uint;
+ 	        private var infoready:Boolean = true;
+ 	        private var lastselectedtable:String;
+ 	        private var t4:uint;
+ 	        private var dataready:Boolean = true;
+ 	        private var lastQtable:String;
+
+/*---------------------------------------------------------------------------------------------------------------------*/
+/* Прием входных параметров в модуль через процедуры init1, init2 c запуском затем процедуры init3, отрисовка меню     */
+			public  var ContextId:String;
+			public  var servicepath:String;
+			public  var servicelogo:String;
+			private var ViewOnly:Boolean = false;
+			private var lang:String = "ru_RU";
+			private var bm:IBrowserManager;
+			
+            private function init():void
+            {
+                bm = BrowserManager.getInstance();
+                bm.init("", RM('ServiceTitle'));
+                var o:Object = URLUtil.stringToObject(bm.fragment, "&");
+                ContextId = o.ContextId;
+            	Oblsrv.send();
+            }
+			private function initNonClosableTab():void 
+			{
+            	tn.stopScrollingEvent="MouseEvent.MOUSE_UP";
+            	tn.startScrollingEvent="MouseEvent.MOUSE_DOWN";
+            	tn.closePolicy="SuperTab.CLOSE_NEVER";
+				tn.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
+				tn.setClosePolicyForTab(1, SuperTab.CLOSE_NEVER);
+				tn.setClosePolicyForTab(2, SuperTab.CLOSE_NEVER);
+				tn.setClosePolicyForTab(3, SuperTab.CLOSE_NEVER);
+				tn.setClosePolicyForTab(4, SuperTab.CLOSE_NEVER);
+			}
+			private function faultHandler(event:FaultEvent):void
+            {
+                Alert.show(RM('FaultParamFile'));
+            }
+            private function Onfault(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultString, RM('ConnectionError'));
+				infoready = true;
+				dataready = true;
+            }
+			private function RM (messname:String):String
+			{
+				return resourceManager.getString('DBView',messname);
+			}
+            private function init2(event:ResultEvent):void
+            {
+            	var servicepath:String = event.result.OblikParams.RootEndPoint;
+            	servicelogo = event.result.OblikParams.ApplicationLogo;
+            	ServImage.source = "../" + servicelogo;
+            	ServImage.visible = true;
+           		servicepath += "/wsdl?targetURI=webdb";
+            	
+            	var srv:WebService = new WebService();
+				srv.wsdl = servicepath;
+				var InputParams:Operation = new Operation(null, "InputParams");
+				InputParams.addEventListener(ResultEvent.RESULT, init3, false, 0, true);
+				InputParams.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [InputParams];
+				srv.loadWSDL();
+
+	            InputParams.send(ContextId);
+            }
+            private function init3(event:ResultEvent):void
+            {
+				ContextId = event.result.ContextId;
+				ViewOnly = event.result.ViewOnly;
+            	servicepath = event.result.EndPoint;
+            	lang = event.result.lang;
+            	
+            	if (servicepath == "")
+            	{
+            		return;
+            	} 
+            	servicepath += "/wsdl?targetURI=Oblik_DBView";
+            	ChangeLang (lang);
+            	
+            	/* Динамиское создание объекта связи с WebServices с 4 функциями (операциями). Кждая имеет свою процедуру callback */
+            	srv = new WebService();
+				srv.wsdl = servicepath;
+				oper = new Operation(null, "GetTableList");
+				oper.addEventListener(ResultEvent.RESULT, Onresult, false, 0, true);
+				oper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				oper2 = new Operation(null, "dbinfo");
+				oper2.addEventListener(ResultEvent.RESULT, OnDbVersion, false, 0, true);
+				oper2.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				oper3 = new Operation(null, "TableInfo");
+				oper3.addEventListener(ResultEvent.RESULT, OnInfo, false, 0, true);
+				oper3.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				GetDataoper = new Operation(null, "GetTableData");
+				GetDataoper.addEventListener(ResultEvent.RESULT, OnData, false, 0, true);
+				GetDataoper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				GetDataoper.resultFormat = "e4x";
+				srv.operations = [oper,oper2,oper3,GetDataoper];
+
+				srv.loadWSDL();
+				/* Сразу на загрузке модуля считываем список таблиц и получает информацию по БД */
+				TestArea.text = RM('QueryTables');
+				t1 = getTimer();
+				oper.send(ContextId, tables);   
+				TestArea.text = TestArea.text + RM('QueryDBName');
+				t2 = getTimer();
+				oper2.send(ContextId);  /* srv.dbinfo () */
+            }
+            private function ChangeLang (l:String):void
+            {
+            	lang = l;
+            	resourceManager.localeChain = [lang];
+	            RedrawInterface ();
+            }
+            private function RedrawInterface ():void
+            {
+           		currentState = "InitState";
+            	
+           		callLater(initNonClosableTab);
+            	tablesellabel.text = RM('TableSelect') + ":";
+				tablesel.SetWebService(servicepath);
+				tablesel.ContextId = ContextId;
+				tablesel.visible = true;
+				tablesel.addEventListener("ValueSelect", OnTableSelect);
+            	aboutBtn.label = RM('About');
+            	title.text = RM('ServiceTitle');
+               	bm.init("", RM('ServiceTitle'));
+            }
+            
+            /* Callback процедуры. Реализована технология контроля времени асинхронного ответа
+               Кроме того по операциям TableInfo + GetTableData идет контроль завершения предыдущей операции
+               не позволяя спамить запросы пока не получен предыдущий ответ. Следующий запрос идет только в момент
+               прихода предудущего.
+            */
+            /* Получить и отобразить список таблиц */   
+            private function Onresult(event:ResultEvent):void
+            {
+            	var exectime:uint;
+            	exectime = getTimer() - t1;
+             	tables = event.result.TableList as ArrayCollection;
+				TestArea.text = TestArea.text + RM('AnswerTables') + ' ' + exectime + " ms";             	
+            }
+            /* Получить и отобразить информацию по БД */
+            private function OnDbVersion(event:ResultEvent):void
+            {
+            	var exectime:uint;
+            	exectime = getTimer() - t2;
+				TestArea.text = TestArea.text + RM('AnswerDBName') + ' ' + exectime + " ms";             	
+              	db_name.text = event.result.db_name;
+             	oblikversion.text = event.result.db_version;
+            }
+			/* Получить и отобразить данные по таблице */
+            private function OnInfo(event:ResultEvent):void
+            {
+            	var tn:String;
+              	fields = event.result.TFields;
+             	indexes = event.result.TIndexes;
+             	triggers = event.result.TTriggers;
+             	TableInfo = event.result.TableInfo;
+             	TableRelation = event.result.TRelation;
+             	tn = event.result.TableName;
+             	
+             	ti = event.result.TableInfo.list.source[0];
+             	ColumnInfo = event.result.TFields.list.source;
+             	CreateDataGrid();    
+             	CreateSortList();     
+          	
+				UpdateGrid();
+            	var exectime:uint;
+            	exectime = getTimer() - t3;
+				TestArea.text = TestArea.text + RM('AnswerTable') + " (" + tn + ") " + RM('AnswerTable2') + " " + exectime + " ms";
+				infoready = true;
+				if (lastselectedtable != tn && lastselectedtable != null)
+				{
+					GetTableInfo2 (lastselectedtable);
+				}
+            }
+            
+            /* Получить результат запроса по таблице БД */
+            private function OnData(event:ResultEvent):void
+            {
+            	var exectime:uint;
+            	var tn:String;
+            	
+            	/* Flex не понимает ответ, когда приходит в ответ в виде динамической таблицы
+            	   OUTPUT TABLE-HANDLE. Приходиться расшифровать пришедший пакет вручную.
+            	   Для этого resultFormat запроса указан e4x, чтобы получить тело пришедшего ответа.
+            	   Остальной код вычленяет ответ из тега
+            	   <TableData> <DataSet> <Data> <Item> нужный ответ </Item> </Data> </DataSet> </TableData>
+				   ObjectUtil.toString(event.result);            	   
+            	*/   
+            	
+                var xmlStr:String = event.result.toString();
+                var xmlDoc:XMLDocument = new XMLDocument(xmlStr);
+                var decoder:SimpleXMLDecoder = new SimpleXMLDecoder(true);
+                var resultObj:Object = decoder.decodeXML(xmlDoc);
+/*                
+                TestArea.text = ObjectUtil.toString(resultObj);
+*/                 
+
+				if (resultObj.GetTableDataResponse.TableData.DataSet.Data != null) // Пришло > 0 записей
+    			{
+    				if (resultObj.GetTableDataResponse.TableData.DataSet.Data.Item.source != null) // Пришло > 1 записи
+    				{
+	    				TableDataResult = resultObj.GetTableDataResponse.TableData.DataSet.Data.Item;
+	    			}	
+	    			else  // Пришла 1 запись - формат ответа нестандартный 
+	    			{
+	    				TableDataResult = new ArrayCollection();
+	    				TableDataResult.addItem(resultObj.GetTableDataResponse.TableData.DataSet.Data.Item);
+	    			}
+    			}
+    			else
+    			{
+    				TableDataResult = null;
+    			}
+             	tn = resultObj.GetTableDataResponse.TableName;
+/*             	
+            	var n:String = "tn";
+				var a:String = "data";
+				var newitem:Object
+				newitem = new Object();
+				newitem[n] = tn;
+				newitem[a] = TableDataResult;
+				TableDataCash.addItem(newitem);
+*/
+             	tDataGrid.dataProvider = TableDataResult;
+             	lastQtable = tn;
+            	exectime = getTimer() - t4;
+				TestArea.text = TestArea.text + RM('AnswerTableData') + " (" + tn + ") " + RM('AnswerTableData2') + " " + exectime + " ms";
+				dataready = true;
+            }
+
+            /* Обновить данные закладок. Замечу что проверяется текущая закладка, чтобы не обратиться к объекту,
+               который еще ни разу не прорисовывался, чтобы не полуить Exception */
+            private function UpdateGrid ():void
+            {
+           	    if (tn.selectedChild == fd) 
+	          	{
+	           		fieldsdg.dataProvider = fields;
+	           	}	 
+	           	if (tn.selectedChild == idd) 
+	           	{
+	           		indexsdg.dataProvider = indexes;
+	           	}	 
+	           	if (tn.selectedChild == trd) 
+	           	{
+	           		trelatdg.dataProvider = TableRelation;
+	           	}	 
+	           	if (tn.selectedChild == td) 
+	           	{
+	           		triggersdg.dataProvider = triggers;
+	           		if (ti != null)
+	           		{
+	           			table_name.text = ti.table_name;
+	           			table_label.text = ti.table_label;
+	           			table_desc.text = ti.table_desc;
+	           			dump_name.text = ti.dump_name;
+	           			valexp.text = ti.valexp;
+	           			valmsg.text = ti.valmsg;
+	           		}
+	           	}
+	            if (tn.selectedChild == dd) 
+	           	{
+	           		MaxRecCount.SetFormat (">>>9");
+	           		if (aColumnsNew != null)
+	           		{
+		    			tDataGrid.columns = aColumnsNew;                                      
+    					tDataGrid.editable = false;
+//    					tDataGrid.width = iTotalDGWidth;
+	           		}
+    				if (sortByDP != null)
+    				{
+    					sortby.dataProvider = sortByDP;
+    				}
+    				if (lastQtable != lastselectedtable)
+    				{
+    					tDataGrid.dataProvider = null;
+    				}
+/*    				TableDataCash. */
+	           	}
+            }
+			/* Дать запрос по таблице при прямом клике на нее */
+            private function GetTableInfo ():void
+            {
+            	selectedtable=dg.selectedItem;
+            	GetTableInfo2 (selectedtable.table_name); 
+			}
+			private function OnTableSelect (e:Event):void
+			{
+            	dg.findString(tablesel.InternalValueStr);
+            	GetTableInfo2 (tablesel.InternalValueStr); 		
+			}
+            public function OnTableLink (tn:String):void
+            {
+            	dg.findString(tn);
+            	GetTableInfo2 (tn); 
+            }
+            private function GetTableInfo2 (tn:String):void
+            {
+            	lastselectedtable = tn;
+            	if (infoready == false) /* Предудущий запрос еще не выполнен */
+            	{
+            		return;
+            	}
+            	t3 = getTimer(); 
+            	TestArea.text = RM('QueryTable') + " (" + tn + ") ...";
+            	infoready = false;
+            	oper3.send(ContextId, tn) /* TableInfo(имя таблицы) */ ;
+			}
+            /* Функция динамического создания броузера таблицы по описанию столбцов */
+            private function CreateDataGrid ():void
+            {
+                var aColumnDef:Array = ColumnInfo;            
+    			var oColumnDef:Object;
+    			var dgc:DataGridColumn;
+    			aColumnsNew = new Array; 
+    			iTotalDGWidth = 0;
+    			for (var i:int=0;i<aColumnDef.length;i++)  
+    			{                  
+      				oColumnDef = aColumnDef[i];
+      				dgc = new DataGridColumn();                                  
+      				dgc.dataField = oColumnDef.field_name;     
+      				if (oColumnDef.field_label == null)
+      				{                   
+      					dgc.headerText = oColumnDef.field_name;
+      				}   
+      				else
+      				{
+      					dgc.headerText = oColumnDef.field_label;
+      				}    
+      				dgc.width = oColumnDef.field_width * 10;
+   					if (oColumnDef.dt == "date")
+	  					dgc.itemRenderer= new ClassFactory(OblikDateBr);
+      				else 
+      				{
+	   					if (oColumnDef.dt == "logical")
+	   					{
+	  						dgc.itemRenderer= new ClassFactory(OblikLogicalBr);
+	  						dgc.setStyle("textAlign", "center");
+	   					}
+						else
+						{
+							var cf:ClassFactory = new ClassFactory(OblikCharacterBr);
+	   						dgc.itemRenderer = cf;
+	   					}
+   					}
+      				
+      				iTotalDGWidth += dgc.width;                                  //add up the column widths
+      				dgc.editable = false;
+      				dgc.sortable = true;
+      				dgc.visible = true;
+      				dgc.wordWrap = false;
+      				aColumnsNew.push(dgc)                                        //push the new dataGridColumn onto the array
+    			}
+ 			}
+ 			/* Функция заполнения списка выбора для сортировки выборки */
+ 			private function CreateSortList ():void
+            {
+                var aColumnDef:Array = ColumnInfo;            
+    			var oColumnDef:Object;
+				var sortitem:Object;
+				var n:String = "label";
+				var a:String = "data";
+				sortitem = new Object();
+				sortitem[n] = "";
+				sortitem[a] = 0;
+				sortByDP = new ArrayCollection();
+				sortByDP.addItem(sortitem);    			      			                              
+    			for (var i:int=0;i<aColumnDef.length;i++)  
+    			{                  
+      				oColumnDef = aColumnDef[i];
+      				sortitem = new Object();
+      				sortitem[a] = i + 1.
+      				sortitem[n] = oColumnDef.field_name;     
+      				sortByDP.addItem(sortitem);                                        
+    			}
+ 			}
+ 			/* Выполнить запрос по таблице */
+			private function GetData ():void
+			{
+				if (dataready == false)
+				{
+					Alert.show (RM('WaitMessage'));
+					return;
+				}
+				selectedtable=dg.selectedItem;
+				if (selectedtable != null)
+				{
+/*					Alert.show (selectedtable.table_name + "!" + MaxRecCount.text + "!" + sortby.selectedItem.label + "!" + FilterText.text); */
+	            	TestArea.text = RM('QueryTableData') + " (" + selectedtable.table_name + ") ...";
+	            	t4 = getTimer();
+					dataready = false;
+					GetDataoper.send(ContextId, selectedtable.table_name, MaxRecCount.text, sortby.selectedItem.label, FilterText.text);  
+				}
+			}
+ 			
+			private function aboutservice ():void
+            {
+                Alert.show(RM('Copyright'));
+            }
+            private function newBrowserWin(url:String):void 
+            {
+                var urlRequest:URLRequest = new URLRequest(url);
+                navigateToURL(urlRequest, "_blank");
+            }
+            private function sameBrowserWin(url:String):void 
+            {
+                var urlRequest:URLRequest = new URLRequest(url);
+                navigateToURL(urlRequest, "_top");
+            }
+]]>
+    </mx:Script>
+    <mx:Metadata>
+        [ResourceBundle("DBView")]
+        [ResourceBundle("CommonLibs")]
+    </mx:Metadata> 
+ 
+    <mx:HTTPService id="Oblsrv" url="../OblikParams.xml"
+        result="init2(event)" fault="faultHandler(event)"/>
+	<mx:ApplicationControlBar  dock="true" paddingTop="1" paddingBottom="1" paddingLeft="1" paddingRight="1" fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]"> 
+        <mx:Spacer width="0"/>
+        <mx:Label id="tablesellabel"/>
+        <classes:OblikBasetype id="tablesel" basetype = "TABLES" width="400" visible="false"/>
+    	<mx:HBox paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%"  
+    		verticalAlign="middle"   horizontalAlign="right" >
+            <mx:Label id="title" fontSize="16"/>
+            <mx:Image id="ServImage" visible="false"  scaleX="0.5" scaleY="0.5"/>
+		   	<mx:Button  id="aboutBtn" fontSize="10" label="{RM('About')}" enabled="true"  textAlign="left" click="aboutservice()"/>
+     	</mx:HBox>
+	</mx:ApplicationControlBar>
+	<mx:VBox id="mainframe" width="100%" height="100%"/>		
+	
+	<mx:states>
+		<mx:State name="InitState">
+            <mx:AddChild relativeTo="{mainframe}" position="FirstChild">
+			    <mx:HBox paddingBottom="0" paddingLeft="0" paddingRight="0" width="100%"  verticalAlign="middle">
+   					<mx:Label  text="{RM('DBName') + ':'}"/>
+					<mx:TextInput id="db_name" width="300" editable="false"/>
+   					<mx:Label  text="{RM('DBVersion') + ':'}"/>
+   					<mx:TextInput id="oblikversion" width="300" editable="false"/>
+    			</mx:HBox>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{mainframe}">
+    			<mx:HDividedBox width="100%" horizontalGap="6" height="75%">
+        			<mx:Canvas width="40%" height="100%"  minWidth="50" maxWidth="500">
+		    			<mx:DataGrid id="dg" dataProvider="{tables}" width="100%" height="100%" editable="false"
+		    				itemClick="GetTableInfo()">
+        					<mx:columns>
+            					<mx:DataGridColumn dataField="table_name" headerText="{RM('TableListName')}" width="100"/>
+            					<mx:DataGridColumn dataField="table_label" headerText="{RM('TableListLabel')}" width="200"/>
+            					<mx:DataGridColumn dataField="sys" headerText="{RM('TableListSys')}" width ="80"
+            						itemRenderer="oblik.basetype.OblikLogicalBr" textAlign="center" />
+        					</mx:columns>
+    					</mx:DataGrid>
+	        		</mx:Canvas>
+		    		<mx:Canvas width="60%" height="100%" >
+				     	<flexlib:SuperTabNavigator id="tn" scrollSpeed="25" dropShadowEnabled="true" change="UpdateGrid()" width="100%" height="100%"
+							horizontalGap="0" paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0" > 
+		            		<mx:VBox id="td" label="{RM('TableInfoHeader')}" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+				        		<mx:Form color="0x323232" paddingTop="10" paddingBottom="10" paddingLeft="5" paddingRight="5" >
+            						<mx:FormItem label="{RM('TableInfoName')}">
+                						<mx:TextInput id="table_name" width="350" editable="false"/>
+            						</mx:FormItem>
+
+				            		<mx:FormItem label="{RM('TableInfoLabel')}">
+                						<mx:TextInput id="table_label" width="350" editable="false"/>
+            						</mx:FormItem>
+
+            						<mx:FormItem label="{RM('TableInfoDescr')}">
+                						<mx:TextArea id="table_desc" width="350" height="45" editable="false"/>
+            						</mx:FormItem>
+
+				            		<mx:FormItem label="{RM('TableInfoDumpName')}">
+                						<mx:TextInput id="dump_name" width="350" editable="false"/>
+            						</mx:FormItem>
+
+            						<mx:FormItem label="{RM('TableInfoValExp')}">
+                						<mx:TextArea id="valexp" width="350" height="45" editable="false"/>
+            						</mx:FormItem>
+
+		            				<mx:FormItem label="{RM('TableInfoValMes')}">
+        		        				<mx:TextArea id="valmsg" width="350" height="45" editable="false"/>
+            						</mx:FormItem>
+				        		    <mx:FormHeading fontSize="10"  label="{RM('TriggersHeader')}" paddingTop="5" />
+						    		<mx:DataGrid id="triggersdg" width="467" height="91"
+		    							itemClick="{selectedtrigger=triggersdg.selectedItem; TestArea.text = selectedtrigger.ttext}">
+        								<mx:columns>
+            								<mx:DataGridColumn dataField="event" headerText="{RM('TriggersEvent')}" width="50"/>
+             								<mx:DataGridColumn dataField="proc_name" headerText="{RM('TriggersProc')}" width="200"/>
+            								<mx:DataGridColumn dataField="override" headerText="{RM('TriggersOverride')}"  width ="50" 
+            									itemRenderer="oblik.basetype.OblikLogicalBr" textAlign="center"/>
+	           								<mx:DataGridColumn dataField="checkcrc" headerText="{RM('TriggersCheckCRC')}" width ="60"
+            									itemRenderer="oblik.basetype.OblikLogicalBr" textAlign="center"/>
+        								</mx:columns>
+    								</mx:DataGrid>
+        						</mx:Form>          
+          					</mx:VBox>
+		            		<mx:VBox id="fd" label="{RM('FieldsHeader')}" width="100%" height="100%">
+		            			<mx:DataGrid id="fieldsdg" width="100%" height="100%" horizontalScrollPolicy = "auto" verticalScrollPolicy = "auto">
+		            				<mx:columns>
+		            					<mx:DataGridColumn headerText="{RM('FieldsName')}" dataField="field_name" width="100"/>
+		            					<mx:DataGridColumn headerText="{RM('FieldsLabel')}" dataField="field_label" width="150"/>
+		            					<mx:DataGridColumn headerText="{RM('FieldsType')}" dataField="dt" width="100"/>
+		            					<mx:DataGridColumn headerText="{RM('FieldsFormat')}" dataField="field_format" width="60"/>
+		            					<mx:DataGridColumn headerText="{RM('FieldsInitial')}" dataField="initial" width="60"/>
+		            					<mx:DataGridColumn headerText="{RM('FieldsFlags')}" dataField="flags" width="60"/>
+		            				</mx:columns>
+		            			</mx:DataGrid>
+            				</mx:VBox>
+            				<mx:VBox id="idd" label="{RM('IndexesHeader')}" width="100%" height="100%">
+		            			<mx:DataGrid id="indexsdg" width="100%" height="100%" horizontalScrollPolicy = "auto" verticalScrollPolicy = "auto">
+		            				<mx:columns>
+		            					<mx:DataGridColumn headerText="{RM('IndexesName')}" dataField="name" width="100"/>
+		            					<mx:DataGridColumn headerText="{RM('IndexesDesc')}" dataField="idesc" width="100"/>
+		            					<mx:DataGridColumn headerText="{RM('IndexesNumFields')}" dataField="num_fields" width="60"/>
+		            					<mx:DataGridColumn headerText="{RM('IndexesFlags')}" dataField="flags" width="60"/>
+		            					<mx:DataGridColumn headerText="{RM('IndexesFields')}" dataField="fields_name" width="200"/>
+		            				</mx:columns>
+		            			</mx:DataGrid>
+            				</mx:VBox>
+		            		<mx:VBox id="trd" label="{RM('RelatHeader')}" width="100%" height="100%">
+			    				<mx:DataGrid id="trelatdg" width="100%" height="100%" horizontalScrollPolicy = "auto" verticalScrollPolicy = "auto" >
+    	    						<mx:columns>
+        	    						<mx:DataGridColumn dataField="owner" headerText="{RM('RelatTable1')}" width="100">
+       							   			<mx:itemRenderer>
+						                   		<mx:Component>
+								                       	<mx:LinkButton label="{data.owner}" textAlign="left" click="outerDocument.OnTableLink(data.owner)"/>
+								                </mx:Component>
+                							</mx:itemRenderer>
+								        </mx:DataGridColumn>
+            							<mx:DataGridColumn dataField="ref_table" headerText="{RM('RelatTable2')}" width="100">
+       						    			<mx:itemRenderer>
+                    	               			<mx:Component>
+														<mx:LinkButton label="{data.ref_table}" textAlign="left" click="outerDocument.OnTableLink(data.ref_table)" />
+							                   	</mx:Component>
+                							</mx:itemRenderer>
+            							</mx:DataGridColumn>
+            							<mx:DataGridColumn dataField="field_name" headerText="{RM('RelatField')}" width="200"/>
+        							</mx:columns>
+    							</mx:DataGrid>
+            				</mx:VBox>
+            				<mx:VBox id = "dd" label="{RM('DataHeader')}" paddingRight="5" paddingLeft="5" paddingTop= "10" paddingBottom="5" width="100%" height="100%">
+                				<mx:HBox verticalAlign="middle" width="100%">
+						   			<mx:Button color="#000000" label="{RM('DataQuery')}" enabled="true"  textAlign="left" click="GetData()"/>
+   									<mx:Label  text="{RM('DataCountRecords')}" color="#000000"/>
+									<classes:OblikInteger id="MaxRecCount" width="60" text="1000"/>
+									<mx:Label text="{RM('DataSortBy')}"/>
+									<mx:ComboBox id="sortby" width="100" editable="true"></mx:ComboBox>
+					    		</mx:HBox>
+                				<mx:HBox verticalAlign="middle" width="100%">
+   									<mx:Label  text="{RM('DataFilter')}" color="#000000"/>
+           							<mx:TextInput id="FilterText" width="400" editable="true"/>
+					    		</mx:HBox>
+                				<mx:DataGrid id="tDataGrid" width="100%" height="100%" horizontalScrollPolicy = "auto" verticalScrollPolicy = "auto">
+                 				</mx:DataGrid>
+            				</mx:VBox>
+	        			</flexlib:SuperTabNavigator>		
+				    </mx:Canvas>
+    			</mx:HDividedBox>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{mainframe}" >
+	    		<mx:TextArea width="100%" height="20%" id="TestArea" editable="false"/>
+            </mx:AddChild>
+		</mx:State>
+	</mx:states>
+</mx:Application>

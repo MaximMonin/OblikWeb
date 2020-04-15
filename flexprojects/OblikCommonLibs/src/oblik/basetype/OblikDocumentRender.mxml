@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="50" borderStyle="solid"
+	  verticalScrollPolicy="off" horizontalScrollPolicy="off">
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+		import mx.resources.ResourceManager;
+
+		private function RM (messname:String):String
+		{
+			return ResourceManager.getInstance().getString('CommonLibs',messname);
+		}
+        ]]>
+    </mx:Script>
+	<mx:HBox width="100%" horizontalAlign="left" verticalAlign="middle"
+		     backgroundColor="#FFFFFF" verticalScrollPolicy="off" horizontalScrollPolicy="off" >
+		<mx:Text text="{RM('OblikDocRenderDate') + ' ' + data.DateDoc1}" width="150" selectable="false"/>
+		<mx:Text text="{RM('OblikDocRenderNumber') + ' ' + data.IdDoc}" width="100" selectable="false"/>
+		<mx:Text text="{RM('OblikDocRenderSum') + ' ' + data.SumDoc}" width="200" selectable="false"/>
+	</mx:HBox>
+	<mx:HBox width="100%" horizontalAlign="left" verticalAlign="middle"
+		     backgroundColor="#FFFFFF" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+		<mx:Text text="{data.Descr}" width="100%" selectable="false"/>
+	</mx:HBox>
+</mx:VBox>

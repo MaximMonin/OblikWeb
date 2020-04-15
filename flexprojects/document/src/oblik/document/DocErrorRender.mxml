@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="30" height="20"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"  >
+	<mx:Script>
+		<![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+		import mx.resources.ResourceManager;
+
+		private function RM (messname:String):String
+		{
+			return resourceManager.getString('Document',messname);
+		}
+		override public function set data(value:Object):void
+		{
+			super.data = value;
+			if (!data) return;
+			if (data.Error == true)
+			{
+			  lb.label = "X";
+			  lb.enabled = true;
+			}
+			else
+			{
+			  lb.label = "";
+			  lb.enabled = false;
+			}
+		}
+		
+		]]>
+	</mx:Script>
+	<mx:LinkButton id="lb" toolTip="{RM('DocErrorTip')}" fontWeight="normal" color = "0xFF0000"
+		 textAlign="center" click="parentApplication.OnDocItemMenu ('ViewError', data, '', lb.parent.parent.parent);" />
+</mx:VBox>

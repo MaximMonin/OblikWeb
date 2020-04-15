@@ -1,0 +1,1870 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:flexlib="flexlib.containers.*"
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    backgroundGradientColors="[0xFFFFFF,0xFFFFFF]"	paddingTop="0" paddingRight="0" paddingBottom="0" paddingLeft="0" 
+    layout="vertical" creationComplete="init()" pageTitle="Работа с документами" historyManagementEnabled="false" >
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+        	import mx.controls.TileList;
+        	import mx.controls.ProgressBar;
+        	import mx.controls.CheckBox;
+        	import mx.containers.HBox;
+        	import mx.messaging.AbstractConsumer;
+        	import mx.formatters.DateFormatter;
+        	import mx.controls.DataGrid;
+        	import mx.controls.dataGridClasses.DataGridColumn;
+        	import mx.controls.Label;
+        	import mx.controls.LinkButton;
+        	import mx.controls.Button;
+        	import mx.controls.DateField;
+        	import mx.controls.TextArea;
+        	import mx.controls.TextInput;
+            import mx.containers.VBox;  
+            import mx.containers.Canvas;
+            import mx.events.ListEvent; 
+
+            import mx.managers.PopUpManager;
+	        import mx.managers.BrowserManager;
+    	    import mx.managers.IBrowserManager;
+        	import mx.utils.URLUtil;
+			import mx.rpc.xml.SimpleXMLDecoder;
+			import mx.rpc.soap.Operation;
+			import mx.rpc.soap.WebService;
+	    	import mx.collections.ArrayCollection;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.controls.Alert;
+            import mx.utils.ObjectUtil;
+             
+			import flexlib.controls.SuperTabBar;
+			import flexlib.events.TabReorderEvent;
+			import flexlib.controls.tabBarClasses.SuperTab;
+        	import oblik.document.OblikDocs;
+        	import oblik.document.OblikDocument;
+        	import oblik.document.OblikDocInfo;
+        	import oblik.document.DocItemMenu;
+        	import oblik.document.RelDocRender;
+        	import oblik.document.DocErrorRender;
+        	import oblik.document.DocHeader;
+	       	import oblik.basetype.OblikDate;
+	       	import oblik.basetype.OblikDateBr;
+	       	import oblik.basetype.OblikDateTimeBr;
+	       	import oblik.basetype.OblikInteger;
+        	import oblik.basetype.OblikDecimal;
+        	import oblik.basetype.OblikDecimalBr;
+        	import oblik.basetype.OblikLogical;
+        	import oblik.basetype.OblikLogicalBr;
+        	import oblik.basetype.OblikSelList;
+        	import oblik.basetype.OblikCharacter;
+        	import oblik.basetype.OblikBasetype;
+        	import oblik.basetype.OblikTime;
+        	import oblik.controls.OblikDeleteRow;
+        	import oblik.basetype.OblikButton;
+         	import oblik.drivers.LoadAreaRender;
+        	import oblik.drivers.FileTransfer;
+        	import oblik.drivers.DocFileTransfer;
+        	import oblik.drivers.PrintPreview;
+
+			[Embed(source="zoom_in.png")]
+			private var morefilter_icon:Class;
+			[Embed(source="zoom_out.png")]
+			private var lessfilter_icon:Class;
+ 			[Embed(source="newdoc.png")]
+			private var newdoc_icon:Class;
+ 			[Embed(source="update.png")]
+			private var update_icon:Class;
+          	[Bindable]
+            private var servicelogo:String = "";
+           	[Bindable]
+
+            private var DocsRunCount:int = 0;   
+            private var Docs:Array = new Array();          
+            private var DocEditCount:int = 0;   
+            private var DocsEdit:Array = new Array();          
+  			private var GetDocList:Operation;
+  			private var CheckDocView:Operation;
+  			private var DocForm:Operation;
+  			private var DocData:Operation;
+  			private var DocTableData:Operation;
+  			private var DocFileDel:Operation;
+  			private var DocInfo:Operation;
+  			private var PrintDoc:Operation;
+  			private var DefRecCount:int = 500;
+
+            private	var srvEdit:WebService;
+  			private var ReleaseRemoteObject:Operation;
+
+			/* Прием входных параметров в модуль через процедуры init1, init2 c запуском затем процедуры init3 */
+			public  var ContextId:String;
+			private var ViewOnly:Boolean = false;
+			private var MenuParams:String;
+			private var ModuleName:String;
+			private var RidMenu:int;
+			public  var servicepath:String;
+			public  var editservicepath:String;
+			private var lang:String = "ru_RU";
+			private var bm:IBrowserManager;
+
+            private function init():void
+            {
+                bm = BrowserManager.getInstance();
+                bm.init("", RM('ServiceTitle'));
+                var o:Object = URLUtil.stringToObject(bm.fragment, "&");
+                ContextId = o.ContextId;
+            	Oblsrv.send();
+
+            	tn.stopScrollingEvent="MouseEvent.MOUSE_UP";
+            	tn.startScrollingEvent="MouseEvent.MOUSE_DOWN";
+            	tn.closePolicy="SuperTab.CLOSE_ALWAYS";
+            }
+			private function faultHandler(event:FaultEvent):void
+            {
+                Alert.show(RM('FaultParamFile'));
+            }
+            private function Onfault(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultString, RM('ConnectionError'));
+            }
+			private function RM (messname:String):String
+			{
+				return resourceManager.getString('Document',messname);
+			}
+            private function init2(event:ResultEvent):void
+            {
+            	var servicepath:String = event.result.OblikParams.RootEndPoint;
+            	servicelogo = event.result.OblikParams.ApplicationLogo;
+            	ServImage.source = "../" + servicelogo;
+            	ServImage.visible = true;
+           		servicepath += "/wsdl?targetURI=webdb";
+            	
+            	var srv:WebService = new WebService();
+				srv.wsdl = servicepath;
+				var InputParams:Operation = new Operation(null, "InputParams");
+				InputParams.addEventListener(ResultEvent.RESULT, init3, false, 0, true);
+				InputParams.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [InputParams];
+				srv.loadWSDL();
+
+	            InputParams.send(ContextId);
+            }
+            /* /Прием входных параметров */
+            
+            private function init3(event:ResultEvent):void
+            {
+				ContextId = event.result.ContextId;
+				ViewOnly = event.result.ViewOnly;
+				MenuParams = event.result.MenuParams;
+				ModuleName = event.result.ModuleName;
+				RidMenu = event.result.RidMenu;
+            	servicepath = event.result.EndPoint;
+            	lang = event.result.lang;
+            	var servicepath2:String = event.result.EndPoint;
+            	
+            	if (servicepath == "")
+            	{
+            		return;
+            	} 
+            	ChangeLang (lang);
+
+           		editservicepath = servicepath + "/wsdl?targetURI=Oblik_DocEditor";
+           		servicepath += "/wsdl?targetURI=Oblik_Document";
+           		servicepath2 += "/wsdl?targetURI=Oblik_Main";
+            	
+            	var srv:WebService = new WebService();
+				srv.wsdl = servicepath;
+            	var srv2:WebService = new WebService();
+				srv2.wsdl = servicepath2;
+				var AppContextoper:Operation = new Operation(null, "AppContext");
+				AppContextoper.addEventListener(ResultEvent.RESULT, OnAppContext, false, 0, true);
+				AppContextoper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv2.operations = [AppContextoper];
+
+				srv2.loadWSDL();
+				AppContextoper.send(ContextId);
+				
+				var AppDocMenuoper:Operation = new Operation(null, "AppDocMenu");
+				AppDocMenuoper.addEventListener(ResultEvent.RESULT, OnDocMenu, false, 0, true);
+				AppDocMenuoper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				GetDocList = new Operation(null, "GetDocList");
+				GetDocList.addEventListener(ResultEvent.RESULT, OnDocList, false, 0, true);
+				GetDocList.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				DocForm = new Operation(null, "DocForm");
+				DocForm.addEventListener(ResultEvent.RESULT, OnDocForm, false, 0, true);
+				DocForm.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				CheckDocView = new Operation(null, "CheckDocView");
+				CheckDocView.addEventListener(ResultEvent.RESULT, OnCheckDocView, false, 0, true);
+				CheckDocView.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				DocData = new Operation(null, "DocData");
+				DocData.addEventListener(ResultEvent.RESULT, OnDocData, false, 0, true);
+				DocData.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				DocTableData = new Operation(null, "DocTableData");
+				DocTableData.addEventListener(ResultEvent.RESULT, OnDocTableData, false, 0, true);
+				DocTableData.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				DocFileDel = new Operation(null, "DocFileDel");
+				DocFileDel.addEventListener(ResultEvent.RESULT, OnDocFileDel, false, 0, true);
+				DocFileDel.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				DocInfo = new Operation(null, "DocInfo");
+				DocInfo.addEventListener(ResultEvent.RESULT, OnDocInfo, false, 0, true);
+				DocInfo.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				PrintDoc = new Operation(null, "PrintDoc");
+				PrintDoc.addEventListener(ResultEvent.RESULT, OnPrintDoc, false, 0, true);
+				PrintDoc.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+
+				GetDocList.resultFormat = "e4x";
+				DocTableData.resultFormat = "e4x";
+				DocInfo.resultFormat = "e4x";
+				srv.operations = [AppDocMenuoper,GetDocList,DocForm,CheckDocView,DocData,DocTableData,DocFileDel,DocInfo,PrintDoc];
+
+				srv.loadWSDL();
+				AppDocMenuoper.send(ContextId);
+				
+            	srvEdit = new WebService();
+				srvEdit.wsdl = editservicepath;
+				srvEdit.port = "DocEditorObj";
+				ReleaseRemoteObject = new Operation(null, "Release_DocEditor");
+				ReleaseRemoteObject.addEventListener(ResultEvent.RESULT, OnReleaseObject);
+				ReleaseRemoteObject.addEventListener(FaultEvent.FAULT, Onfault2);
+				srvEdit.operations = [ReleaseRemoteObject];
+				srvEdit.loadWSDL();
+	        }
+            private function ChangeLang (l:String):void
+            {
+            	lang = l;
+            	resourceManager.localeChain = [lang];
+	            RedrawInterface ();
+            }
+            private function RedrawInterface ():void
+            {
+            	aboutBtn.label = RM('About');
+            	title.text = RM('ServiceTitle');
+               	bm.init("", RM('ServiceTitle'));
+            	seldoclabel.text = RM('TitleSelDoc') + ':';
+            	seldoclabel.visible = true;
+            	appdocs.visible = true;
+            }
+            
+            private function OnAppContext(event:ResultEvent):void
+            {
+            	title2.text = RM('TitleApplication') + ": " + event.result.AppName + ", " + RM('TitleDB') + ": " + event.result.Db_Name;
+            	title2.text += ", " + RM('TitleUser') + ": " + event.result.UserName;
+            }
+            private function OnDocMenu(event:ResultEvent):void
+            {
+            	MainFrame.visible = true;
+    			appdocs.labelField = "MenuItem";
+    			appdocs.dataProvider = event.result.AppDocMenu; 
+    			appdocs.selectedItem = null;
+		        var ln2:uint = event.result.AppDocMenu.length;
+				for(var j:uint; j < ln2; j++) 
+				{
+					if (event.result.AppDocMenu.list.source[j].RidMenu == RidMenu)
+					{
+						appdocs.selectedItem = event.result.AppDocMenu.list.source[j];
+						CreateDocTab (appdocs.selectedItem);
+					}
+				}
+            }
+            private function OnDocList(event:ResultEvent):void
+            {
+            	var exectime:uint;
+            	var tn:String;
+            	
+            	/* Flex не понимает ответ, когда приходит в ответ в виде динамической таблицы
+            	   OUTPUT TABLE-HANDLE. Приходиться расшифровать пришедший пакет вручную.
+            	   Для этого resultFormat запроса указан e4x, чтобы получить тело пришедшего ответа.
+            	   Остальной код вычленяет ответ из тега
+            	   <DataSet> <Data> <Item> нужный ответ </Item> </Data> </DataSet>
+				   ObjectUtil.toString(event.result);            	   
+            	*/   
+            	
+                var xmlStr:String = event.result.toString();
+                var xmlDoc:XMLDocument = new XMLDocument(xmlStr);
+                var decoder:SimpleXMLDecoder = new SimpleXMLDecoder(true);
+                var resultObj:Object = decoder.decodeXML(xmlDoc);
+                
+                var DocsId:int = resultObj.GetDocListResponse.DocsId;
+                ContextId = resultObj.GetDocListResponse.ContextId;
+            	var ln:uint = Docs.length;
+				for(var i:uint; i < ln; i++) 
+				{
+					if (Docs[i] is OblikDocs)
+					{
+    				if (OblikDocs(Docs[i]).DocsId == DocsId)
+    				{
+    					var o:OblikDocs = OblikDocs(Docs[i]);
+
+    					
+    					o.DocInfo = resultObj.GetDocListResponse.CollumnData.CollumnDataRow.list.source;
+    					if (resultObj.GetDocListResponse.DocumentData.DataSet.Data != null) // Пришло > 0 записей
+    					{
+    						if (resultObj.GetDocListResponse.DocumentData.DataSet.Data.Item.source != null) // Пришло > 1 записи
+    						{
+	    						o.DocData = resultObj.GetDocListResponse.DocumentData.DataSet.Data.Item;
+	    					}	
+	    					else  // Пришла 1 запись - формат ответа нестандартный 
+	    					{
+	    						o.DocData = new ArrayCollection();
+	    						o.DocData.addItem(resultObj.GetDocListResponse.DocumentData.DataSet.Data.Item);
+	    					}
+    					}
+    					else
+    					{
+    						o.DocData = null;
+    					}
+/*   					
+    					o.MessageArea.text = ObjectUtil.toString(resultObj.GetDocListResponse);
+    					o.MessageArea.height = 300;
+*/    					
+ 
+    					if (o.DocData == null)
+    					{
+							o.MessageArea.text = RM('SearchDocNotFound');
+    					}
+    					else
+    					{
+ 							o.MessageArea.text = RM('SearchDocFound');
+    					}
+    					
+    					o.dg.dataProvider = null;
+    					CreateDataGrid (o);
+    					o.dg.dataProvider = o.DocData;
+    				}
+    				}
+    			}
+            }
+
+           
+            private function CreateDocTab(si:Object):void 
+            {
+				var o:OblikDocs = new OblikDocs();
+				DocsRunCount += 1;
+				Docs.push (o); 
+				o.DocsId = DocsRunCount;
+				o.ViewOnly = si.ViewOnly;
+				tn.selectedChild = addDocTab (si, o);
+				tn.setClosePolicyForTab(tn.selectedIndex, SuperTab.CLOSE_ALWAYS);
+				runDocQuery (o);
+            }
+
+            private function addDocTab(si:Object, o:OblikDocs):VBox 
+            {	
+  				var newVBox:VBox = new VBox();
+  				var newHBox:HBox = new HBox();
+  				var newVBox2:VBox = new VBox();
+  				var newHBox2:HBox = new HBox();
+  				var newHBox3:HBox = new HBox();
+  				var newHBox4:HBox = new HBox();
+  				
+            	newHBox.setStyle("verticalAlign", "middle");
+            	
+            	o.morefilter = new LinkButton ();
+            	o.morefilter.toolTip = RM('ListMoreFilterTip');
+            	o.morefilter.setStyle ("icon", morefilter_icon);
+            	o.morefilter.width = 20;
+            	o.morefilter.data = o;
+            	o.morefilter.addEventListener(MouseEvent.CLICK, ChangeFilterArea );
+  				newHBox.addChild(o.morefilter);
+            	o.newdoc = new LinkButton ();
+            	o.newdoc.toolTip = RM('ListNewDoc');
+            	o.newdoc.setStyle ("icon", newdoc_icon);
+            	o.newdoc.width = 20;
+            	o.newdoc.data = o;
+            	o.newdoc.addEventListener(MouseEvent.CLICK, OnNewDoc );
+  				newHBox.addChild(o.newdoc);
+  				
+  				var l:Label = new Label();
+  				l.text = RM('ListTypedoc')+ ":";
+  				newHBox.addChild(l);
+  				o.idtypedoc = new OblikBasetype ();
+  				o.idtypedoc.width = 250;
+  				o.idtypedoc.SetValue (si.MenuItem, String(si.RidTypedoc));
+  				o.idtypedoc.SetWebService(servicepath);
+  				o.idtypedoc.basetype = "TYPEDOC";
+   				o.idtypedoc.ContextId = ContextId;
+				o.idtypedoc.addEventListener("ValueCommit", OnTypedocChange);
+				o.idtypedoc.addEventListener("ValueSelect", OnTypedocChange);
+  				o.ridtypedoc = si.RidTypedoc;
+  				if (o.ridtypedoc != 0)
+  				{
+  					o.idtypedoc.enabled = false;
+  					GetFields (o);
+  				} 
+  				o.ridapp = si.RidApp;
+  				newHBox.addChild(o.idtypedoc);
+  				
+  				o.scope = new OblikSelList ();
+  				o.scope.width = 100;
+  				o.scope.setStyle("fontWeight", "normal");
+  				var scope:String = "";
+  				for (var i:int=0;i < String(si.ScopeList).length; i = i + 2)
+  				{
+  					if (i == 0) scope = RM("SCOPE" + String(si.ScopeList).substr(0,1));
+  					else scope += "," + RM("SCOPE" + String(si.ScopeList).substr(i,1))
+  				}
+  				o.scope.SetItems(scope);
+  				o.scope.SetValue (RM(si.Scope));
+  				newHBox.addChild(o.scope);
+  				
+  				var l2:Label = new Label();
+  				l2.text = RM('ListDateFrom') + ":";
+  				newHBox.addChild(l2);
+  				o.datefrom = new OblikDate ();
+				o.datefrom.dv.required = true;
+  				o.datefrom.SetValue(si.DateFrom);
+  				newHBox.addChild(o.datefrom);
+  				var l3:Label = new Label();
+  				l3.text = RM('ListDateTo') + ":";
+  				newHBox.addChild(l3);
+  				o.dateto = new OblikDate ();
+				o.dateto.dv.required = true;
+  				o.dateto.SetValue(si.DateTo);
+  				newHBox.addChild(o.dateto);
+  				
+  				var l4:Label = new Label();
+  				l4.text = RM('ListRecords') + ":";
+  				newHBox.addChild(l4);
+  				o.MaxRecCount = new OblikInteger ();
+  				o.MaxRecCount.toolTip = RM('ListRecordsTip');
+  				o.MaxRecCount.width = 60;
+  				o.MaxRecCount.SetFormat(">>>9");
+  				o.MaxRecCount.nv.minValue=1;
+    			o.MaxRecCount.nv.lowerThanMinError=RM('ListRecordsRestr');
+  				o.MaxRecCount.SetValue (DefRecCount);
+  				newHBox.addChild(o.MaxRecCount);
+
+  				var l5:Label = new Label();
+  				l5.text = RM('ListState') + ":";
+  				newHBox2.addChild(l5);
+  				o.putoff = si.PutOff;
+  				o.PutOff = new OblikSelList ();
+  				o.PutOff.SetItems (RM("ListStateTrue") + "," + RM("ListStateFalse"));
+  				if (! o.putoff)
+  				{
+  					o.PutOff.SetValue (RM("ListStateTrue"));
+  				}
+  				else
+  				{
+  					o.PutOff.SetValue (RM("ListStateFalse"));
+  				}
+  				if (o.ridtypedoc == 0)
+  				{
+  					o.PutOff.enabled = false;
+  				}
+  				o.PutOff.width = 120;
+  				newHBox2.addChild(o.PutOff);
+
+  				var l6:Label = new Label();
+  				l6.text = "№:";
+  				newHBox2.addChild(l6);
+  				o.IdDoc = new OblikInteger ();
+  				o.IdDoc.width = 100;
+  				o.IdDoc.toolTip = RM("ListNumberTip");
+  				o.IdDoc.nv.required = false;
+  				newHBox2.addChild(o.IdDoc);
+  				var l7:Label = new Label();
+  				l7.text = RM("ListInternalNumber") + ":";
+  				newHBox2.addChild(l7);
+  				o.RidDoc = new OblikInteger ();
+  				o.RidDoc.toolTip = RM("ListInternalNumberTip");
+  				o.RidDoc.width = 100;
+  				o.RidDoc.nv.required = false;
+  				newHBox2.addChild(o.RidDoc);
+
+  				var l8:Label = new Label();
+  				l8.text = RM("ListFieldFilter") + ":";
+  				newHBox3.addChild(l8);
+  				o.FieldsSel = new ComboBox ();
+  				o.FieldsSel.width = 200;
+  				o.FieldsSel.toolTip = RM("ListFieldSelector");
+  				o.FieldsSel.labelField = "FieldLabel";
+  				o.FieldsSel.setStyle("fontWeight", "normal");
+  				o.FieldsSel.data = o;
+  				o.FieldsSel.addEventListener(ListEvent.CHANGE, DataFieldSelected);
+  				newHBox3.addChild(o.FieldsSel);
+  				o.ClearFilter = new Button ();
+  				o.ClearFilter.width = 100;
+  				o.ClearFilter.label = RM("ListClearFilter");
+  				o.ClearFilter.toolTip = RM("ListClearFilterTip");
+  				o.ClearFilter.data = o;
+  				o.ClearFilter.addEventListener(MouseEvent.CLICK, ClearFilterClicked);
+  				newHBox3.addChild(o.ClearFilter);
+  				o.AddFilter = new Button ();
+  				o.AddFilter.width = 100;
+  				o.AddFilter.label = RM("ListAddFilter");
+  				o.AddFilter.toolTip = RM("ListAddFilterTip");
+  				o.AddFilter.data = o;
+  				o.AddFilter.addEventListener(MouseEvent.CLICK, AddFilterClicked);
+  				newHBox3.addChild(o.AddFilter);
+  				var l9:Label = new Label();
+  				l9.text = RM("ListFieldValue") + ":";
+  				newHBox3.addChild(l9);
+  				o.FieldValue = new OblikCharacter ();
+  				o.FieldValue.percentWidth = 100;
+  				o.FieldValue.enabled = false;
+  				o.FieldValue.toolTip = RM("ListFieldValueTip");
+  				newHBox3.addChild(DisplayObject(o.FieldValue));
+  				
+  				o.FilterGrid = new DataGrid ();
+  				o.FilterGrid.percentHeight = 100;
+  				o.FilterGrid.percentWidth = 100;
+
+    			var dgc:DataGridColumn;
+    			var aColumnsNew:Array = new Array; 
+   				dgc = new DataGridColumn();                                  
+      			dgc.width = 20;
+				dgc.itemRenderer= new ClassFactory(OblikDeleteRow);
+   				aColumnsNew.push(dgc);
+   				dgc = new DataGridColumn();                                  
+   				dgc.dataField = "FieldName";     
+   				dgc.headerText = RM("ListTableField");
+      			dgc.width = 200;
+   				dgc.editable = false;
+   				dgc.setStyle("textAlign","left");
+   				aColumnsNew.push(dgc);
+   				dgc = new DataGridColumn();                                  
+   				dgc.dataField = "FieldValue";     
+   				dgc.headerText = RM("ListTableValue");
+      			dgc.width = 500;
+   				dgc.editable = false;
+   				dgc.setStyle("textAlign","left");
+   				aColumnsNew.push(dgc);
+	    		o.FilterGrid.columns = aColumnsNew;                                      
+   				o.FilterGrid.editable = false;
+  				o.FilterGrid.horizontalScrollPolicy = "auto"; 
+                o.FilterGrid.addEventListener("deleteRow", OnDeleteFilterRow);
+  				
+  				newHBox4.addChild(o.FilterGrid);
+  				newHBox4.height = 100;
+  				newHBox4.percentWidth = 100;
+  				newHBox3.percentWidth = 100;
+  				
+            	o.gobutton = new LinkButton ();
+            	o.gobutton.width = 16;
+            	o.gobutton.height = 16;
+            	o.gobutton.setStyle("icon", update_icon);
+            	o.gobutton.toolTip = RM("ListUpdateTip");
+            	o.gobutton.addEventListener(MouseEvent.CLICK, SearchData );
+            	o.gobutton.data = o;
+  				newHBox.addChild(o.gobutton);
+  				
+  				o.dg = new DataGrid ();
+  				o.dg.percentHeight = 100;
+  				o.dg.percentWidth = 100;
+  				o.dg.doubleClickEnabled = true;
+  				o.dg.data = o;
+				o.dg.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, OnDocsDoubleClick);
+  				o.MessageArea = new TextArea ();
+  				o.MessageArea.height = 20;
+  				o.MessageArea.percentWidth = 100;
+  				o.LoadArea = new TileList ();
+  				o.LoadArea.height = 0;
+  				o.LoadArea.percentWidth = 100;
+  				o.LoadArea.setStyle("borderStyle", "solid");
+  				o.LoadArea.itemRenderer = new ClassFactory (oblik.drivers.LoadAreaRender);
+  				o.LoadArea.dataProvider = o.LoadList;
+
+     			newVBox.label = si.MenuItem; 
+  				newVBox.addChild(newHBox);
+  				newVBox2.addChild(newHBox2);
+  				newVBox2.addChild(newHBox3);
+  				newVBox2.addChild(newHBox4);
+  				newVBox2.visible = false;
+  				newVBox2.height = 0;
+  				newVBox2.percentWidth = 100;
+  				o.AddFilterArea = newVBox2;
+  				newVBox.addChild(newVBox2);
+  				newVBox.addChild(o.dg);
+  				newVBox.addChild(o.MessageArea);
+  				newVBox.addChild(o.LoadArea);
+  				newVBox.setStyle("horizontalGap", 0);
+  				newVBox.setStyle("paddingBottom", 0);
+  				newVBox.setStyle("paddingLeft", 5);
+  				newVBox.setStyle("paddingRight", 5);
+  				newVBox.data = o; 
+
+  				tn.addChild(newVBox);
+  				return newVBox;
+            }
+            private function ChangeFilterArea (e:Event):void
+            {
+            	var o:OblikDocs = OblikDocs(e.target.data);
+            	if (o.AddFilterArea.visible == false)
+            	{
+            		o.AddFilterArea.visible = true;
+            		o.AddFilterArea.height = 160;
+            		o.morefilter.toolTip = RM("ListHideFilterTip");
+            		o.morefilter.setStyle ("icon", lessfilter_icon);
+            	}
+            	else
+            	{
+            		o.AddFilterArea.visible = false;
+            		o.AddFilterArea.height = 0;
+            		o.morefilter.toolTip = RM("ListMoreFilterTip");
+            		o.morefilter.setStyle ("icon", morefilter_icon);
+            	}
+            }
+            private function SearchData (e:Event):void
+            {
+            	var o:OblikDocs = OblikDocs(e.target.data);
+            	runDocQuery (o);
+            }	
+            private function runDocQuery(o:OblikDocs):void 
+            {
+            	var addfilter:String = "";
+            	var fieldsfilter:String = "";
+            	var sortby:String = "";
+            	if (o.idtypedoc.enabled == true)
+            	{
+            		if (o.ridtypedoc != int(o.idtypedoc.InternalValue))
+            		{
+            			o.ridtypedoc = int(o.idtypedoc.InternalValue);
+            			GetFields (o);
+            		}
+            	}
+            	if (o.PutOff.InternalValue == RM("ListStateTrue"))
+            	{
+            		o.putoff = false;
+            	}
+            	else
+            	{
+            		o.putoff = true;
+            	}
+           	
+            	for (var i:int=0;i<o.DataFilter.length;i++)
+ 				{
+ 					if (i == 0) addfilter = o.DataFilter.getItemAt(i).FieldRid.toString();
+ 					else addfilter += "," + o.DataFilter.getItemAt(i).FieldRid.toString();
+ 					if (i == 0) fieldsfilter = o.DataFilter.getItemAt(i).InternalValue;
+ 					else fieldsfilter += "," + o.DataFilter.getItemAt(i).InternalValue;
+ 				} 
+ 				addfilter += "^" + fieldsfilter;
+            	var scope:String = o.scope.InternalValue;
+            	for (i=0; i<4;i++)
+            	{
+            		if (scope == RM("SCOPE" + String(i)))
+            			scope = String(i);	
+            	}
+				
+ 				fieldsfilter = "";
+
+            	GetDocList.send (o.DocsId, ContextId, 
+            	 o.putoff, o.ridapp, o.ridtypedoc, o.datefrom.InternalValue, o.dateto.InternalValue, scope,
+            	 o.IdDoc.InternalValue, o.RidDoc.InternalValue, o.MaxRecCount.InternalValue,
+            	 addfilter, fieldsfilter, sortby);
+/*            	Alert.show(ContextId);   */ 
+            	o.MessageArea.text = RM("SearchRun"); 
+            }
+            private function OnTypedocChange (e:Event):void
+            {
+            	var o:OblikDocs = e.target.parent.parent.data;
+          		if (o.ridtypedoc != int(o.idtypedoc.InternalValue))
+           		{
+           			o.ridtypedoc = int(o.idtypedoc.InternalValue);
+           			GetFields (o);
+           		}
+            }
+
+            /* Функция динамического создания броузера таблицы по описанию столбцов */
+            private function CreateDataGrid (o:OblikDocs):void
+            {
+                var aColumnDef:Array = o.DocInfo;            
+    			var oColumnDef:Object;
+    			var dgc:DataGridColumn;
+    			var aColumnsNew:Array = new Array; 
+    			var iTotalDGWidth:int = 0;
+
+   				dgc = new DataGridColumn();                                  
+     			dgc.headerText = RM("MenuMain");
+      			dgc.setStyle("textAlign","center");
+      			dgc.width = 53;
+				dgc.itemRenderer= new ClassFactory(DocItemMenu);
+   				aColumnsNew.push(dgc);
+
+    			for (var i:int=0;i<aColumnDef.length;i++)  
+    			{                  
+      				oColumnDef = aColumnDef[i];
+      				dgc = new DataGridColumn();                                  
+      				dgc.dataField = oColumnDef.fName;     
+     				dgc.headerText = oColumnDef.fLabel;
+      				dgc.width = oColumnDef.fWidth * 10;
+      				iTotalDGWidth += dgc.width;                                  
+      				if (oColumnDef.fType == "box")
+      				{
+	      				if (oColumnDef.fName == "Error")
+  							dgc.itemRenderer = new ClassFactory (oblik.document.DocErrorRender);
+      					else
+	  						dgc.itemRenderer= new ClassFactory(OblikLogicalBr);
+      				}
+      				else
+      				{
+      					if (oColumnDef.fType == "date")
+	  						dgc.itemRenderer= new ClassFactory(OblikDateBr);
+      					if (oColumnDef.fName == "SumDoc")
+      					{
+							var cf:ClassFactory = new ClassFactory(OblikDecimalBr);
+ 							var or:Object = new Object ();
+   							or["Format"] = "->>>,>>>,>>>,>>9.99";
+	     					cf.properties = or;
+		   					dgc.itemRenderer = cf;
+      					}
+      				}
+      				
+      				dgc.editable = false;
+      				dgc.sortable = true;
+      				dgc.visible = true;
+      				dgc.wordWrap = false;
+      				dgc.setStyle("textAlign",oColumnDef.fAlign);
+
+      				aColumnsNew.push(dgc)                                       
+    			}
+	           	if (aColumnsNew != null)
+	           	{
+		    		o.dg.columns = aColumnsNew;                                      
+    				o.dg.editable = false;
+
+     				o.dg.horizontalScrollPolicy = "auto"; 
+    				o.dg.percentWidth = 100;
+	           	}
+ 			}
+ 			private function GetFields (o:OblikDocs):void
+ 			{
+ 				if (o.ridtypedoc != 0)
+ 				{
+            		DocForm.send (o.DocsId, ContextId, o.ridtypedoc);
+     			}
+     			else
+     			{
+     				ClearFieldsFilter (o);
+     			}
+ 			}
+ 			private function ClearFieldsFilter (o:OblikDocs):void
+ 			{
+ 				o.DataFilter.removeAll();
+ 				o.FilterGrid.dataProvider = o.DataFilter;
+ 			}
+ 			private function DataFieldSelected (e:Event):void
+ 			{
+ 				var o:OblikDocs = OblikDocs(e.target.data);
+ 				var sf:Object = o.FieldsSel.selectedItem;
+ 				var newfield:Object;
+ 				if (sf == null) return;
+ 				
+/* 				Alert.show(ObjectUtil.toString(sf)); */
+ 				if (sf.IsSelect == true)
+ 				{
+ 					if (sf.BaseType == "SELLIST")
+ 					{
+ 						newfield = new OblikSelList();
+ 						newfield.SetItems (sf.AppendParam);
+						newfield.percentWidth = 100;
+ 					}
+ 					else
+ 					{
+ 						newfield = new OblikBasetype ();
+  						newfield.SetWebService(servicepath);
+  						newfield.basetype = sf.BaseType;
+   						newfield.ContextId = ContextId;
+   						newfield.AppendParam = sf.AppendParam;
+						newfield.percentWidth = 100;
+						newfield.CanEdit (sf.FreeEdit);
+						if (newfield.basetype == "DOCUMENT" || newfield.basetype == "DOC_W_SEL")
+						{
+							newfield.dropDownItemRenderer = new ClassFactory(oblik.basetype.OblikDocumentRender);
+/*							newfield.allowMultipleSelection = true; */
+						}
+ 					}
+ 				}
+ 				else
+ 				{ 
+ 					if (sf.ProgressType == "DATE")
+ 					{
+ 						newfield = new OblikDate ();
+						newfield.dv.required = true;
+ 					}
+ 					else if (sf.ProgressType == "LOGICAL")
+ 					{
+ 						newfield = new OblikLogical ();
+ 					}
+ 					else if (sf.ProgressType == "DECIMAL")
+ 					{
+ 						newfield = new OblikDecimal ();
+ 						newfield.SetFormat(sf.FieldFormat);
+ 						newfield.width = sf.FieldWidth * 10;
+ 					}
+ 					else if (sf.ProgressType == "INTEGER")
+ 					{
+ 						newfield = new OblikInteger ();
+ 						newfield.SetFormat(sf.FieldFormat);
+ 						newfield.width = sf.FieldWidth * 10;
+ 					}
+ 					else
+ 					{
+ 						if (sf.BaseType == "TIME")
+ 						{
+ 							newfield = new OblikTime ();
+ 						} 
+ 						else 
+ 						{
+ 							newfield = new OblikCharacter ();
+ 							newfield.percentWidth = 100;
+ 						}
+ 					}
+ 				}
+				newfield.toolTip = sf.HelpString;
+
+				var hbox:HBox = HBox(o.FieldValue.parent);
+				hbox.removeChild(DisplayObject(o.FieldValue));
+				o.FieldValue = newfield;
+				hbox.addChild(DisplayObject(o.FieldValue));
+ 			}
+ 			private function ClearFilterClicked (e:Event):void
+ 			{
+ 				var o:OblikDocs = OblikDocs(e.target.data);
+ 				ClearFieldsFilter (o);
+ 			}
+ 			private function AddFilterClicked (e:Event):void
+ 			{
+ 				var o:OblikDocs = OblikDocs(e.target.data);
+ 				if (o.FieldsSel.selectedItem == null) return;
+ 				
+ 				var fo:Object = new Object ();
+ 				fo["FieldName"] = o.FieldsSel.text;
+ 				fo["FieldRid"] = o.FieldsSel.selectedItem.RidFF;
+				fo["FieldValue"] = o.FieldValue.FormValue;
+ 				fo["InternalValue"] = o.FieldValue.InternalValueStr;
+ 				
+ 				var found:Boolean = false;
+ 				for (var i:int=0;i<o.DataFilter.length;i++)
+ 				{
+ 					if (o.DataFilter.getItemAt(i).FieldRid == fo.FieldRid) 
+ 					{
+ 						o.DataFilter.setItemAt(fo, i);
+ 						found = true;
+ 					}
+ 				} 
+				if (found == false)
+ 					o.DataFilter.addItem(fo);
+ 				o.FilterGrid.dataProvider = o.DataFilter;
+ 			}
+ 			private function OnDeleteFilterRow (e:Event):void
+ 			{
+ 				var dg:DataGrid = e.target.parent.parent; 
+				dg.dataProvider.removeItemAt(dg.selectedIndex);			    
+ 			}
+ 			
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Контексное меню 																										 */
+ 			
+ 			private function OnDocsDoubleClick (event:ListEvent):void
+			{
+    			var selectedRow:Object = event.currentTarget.selectedItem;
+    			var RidDoc:int = selectedRow.RidDocument;
+    			var RidTypedoc:int = selectedRow.RidTypedoc;
+    			var o:Object = event.currentTarget.data /* o:OblikDocs = OblikDocs(event.currentTarget.data) */;
+				CreateDocViewTab (RidDoc, RidTypedoc, o.ViewOnly, o.putoff, selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+ 			}
+ 			public function OnDocItemMenu (SelectedMenu:String, selectedRow:Object, AppendParam:String, t:Object):void
+ 			{
+/* 				Alert.show (t.data.toString()); */
+    			var RidDoc:int = selectedRow.RidDocument;
+    			var RidTypedoc:int = selectedRow.RidTypedoc;
+    			var o:Object = t.data /* o:OblikDocs = OblikDocs(t.data) */;
+    			if (SelectedMenu == "DocView")
+					CreateDocViewTab (RidDoc, RidTypedoc, o.ViewOnly, o.putoff, selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "DocEdit")
+					DocEdit (ContextId, RidDoc, RidTypedoc, o.ViewOnly, o.putoff, false, 0, "");
+    			if (SelectedMenu == "CopyDoc")
+					DocEdit (ContextId, 0, RidTypedoc, o.ViewOnly, o.putoff, true, RidDoc, "COPY");
+    			if (SelectedMenu == "NewDoc")
+					DocEdit (ContextId, 0, RidTypedoc, o.ViewOnly, o.putoff, true, 0, "");
+    			if (SelectedMenu == "NewRelDoc")
+    			{
+    				RidTypedoc = int(AppendParam);
+					DocEdit (ContextId, 0, RidTypedoc, o.ViewOnly, o.putoff, true, RidDoc, "");
+    			}
+    			
+    			if (SelectedMenu == "AddFile")    UploadFile (ContextId, RidDoc, o );
+    			if (SelectedMenu == "ViewFile")	  DownloadDocFile (ContextId, int(AppendParam), o );
+    			if (SelectedMenu == "DeleteFile") DeleteDocFile (ContextId, int(AppendParam));
+    			
+    			if (SelectedMenu == "ViewOperat")
+					CreateDocInfoTab ("OPERAT", RidDoc, o.ViewOnly, o.putoff, RM('InfoOperat') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewWhOperat")
+					CreateDocInfoTab ("WHOPERAT", RidDoc, o.ViewOnly, o.putoff, RM('InfoWhOperat') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewPlanWhOperat")
+					CreateDocInfoTab ("PLANWHOPERAT", RidDoc, o.ViewOnly, o.putoff, RM('InfoPlanWhOperat') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewMrOperat")
+					CreateDocInfoTab ("MROPERAT", RidDoc, o.ViewOnly, o.putoff, RM('InfoMrOperat') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewRelation")
+					CreateDocInfoTab ("DOCRELATION", RidDoc, o.ViewOnly, o.putoff, RM('InfoRelation') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewWage")
+					CreateDocInfoTab ("WAGE", RidDoc, o.ViewOnly, o.putoff, RM('InfoWage') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewReserv")
+					CreateDocInfoTab ("RESERV", RidDoc, o.ViewOnly, o.putoff, RM('InfoReserv') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewParam")
+					CreateDocInfoTab ("PARAM", RidDoc, o.ViewOnly, o.putoff, RM('InfoParams') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "DocHistory")
+					CreateDocInfoTab ("HISTORY", RidDoc, o.ViewOnly, o.putoff, RM('InfoHistory') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewAudit")
+					CreateDocInfoTab ("AUDIT", RidDoc, o.ViewOnly, o.putoff, RM('InfoAudit') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "ViewError")
+					CreateDocInfoTab ("ERRORS", RidDoc, o.ViewOnly, o.putoff, RM('InfoErrors') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+    			if (SelectedMenu == "DocHeader")
+					CreateDocHeaderTab (RidDoc, o.ViewOnly, RM('InfoHeader') + ": " + selectedRow.TypedocName + " " + int(selectedRow.IdDoc).toString());
+ 			}
+ 			private function OnNewDoc (e:Event):void
+ 			{
+ 				var o:OblikDocs = OblikDocs(e.target.data)
+ 				if (o.ridtypedoc == 0)
+ 					Alert.show(RM('NewDocError'));
+ 				else	
+					DocEdit (ContextId, 0, o.ridtypedoc, o.ViewOnly, o.putoff, true, 0, "");
+ 			}
+			private function CreateDocHeaderTab (RidDoc:int, ViewOnly:Boolean, title:String):void
+			{
+				var o:DocHeader = new DocHeader ();
+  				tn.addChild(o);
+				o.Initialize (ViewOnly, servicepath, ContextId, RidDoc, title );
+				tn.selectedChild = o;
+			}
+ 			
+ 			
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Просмотр сожержимоего документов 																					 */
+            private function CreateDocViewTab(RidDoc:int, RidTypedoc:int, ViewOnly:Boolean, putoff:Boolean, tablabel:String):void 
+            {
+				var o:OblikDocument = new OblikDocument();
+				DocsRunCount += 1;
+				Docs.push (o); 
+				o.DocsId = DocsRunCount;
+				o.RidDoc = RidDoc;
+				o.RidTypedoc = RidTypedoc;
+				o.DG = new ArrayCollection();
+				o.DF = new ArrayCollection();
+				o.ViewOnly = ViewOnly;
+				o.putoff = putoff;
+				o.loadedFrames = 0;
+				tn.selectedChild = addDocViewTab (o, tablabel);
+				tn.setClosePolicyForTab(tn.selectedIndex, SuperTab.CLOSE_ALWAYS);
+				CheckDocViewQuery (o);
+            }
+			public function addDocViewTab (o:OblikDocument, tablabel:String):VBox
+			{
+				var newVBox:VBox = new VBox();
+				var frame:HBox = new HBox();
+    			frame.percentWidth = 100;
+  				
+  				var EditButton:Button = new Button();
+  				EditButton.width = 150;
+  				EditButton.label = RM('ViewEditButton');
+  				EditButton.toolTip = RM('ViewEditButtonTip');
+				EditButton.addEventListener(MouseEvent.CLICK, EditDocument);
+				EditButton.data = o;
+				o.EditButton = EditButton;
+  				frame.addChild(EditButton);
+  				var PrintButton:Button = new Button();
+  				PrintButton.width = 150;
+  				PrintButton.label = RM('ViewPrintButton');
+  				PrintButton.toolTip = RM('ViewPrintButtonTip');
+				PrintButton.addEventListener(MouseEvent.CLICK, PrintDocument, false, 0, true);
+  				PrintButton.data = o;
+  				o.PrintButton = PrintButton;
+  				frame.addChild(PrintButton);
+  				
+  				o.pb = new ProgressBar ();
+  				o.pb.width = 150;
+  				o.pb.labelPlacement = "left";
+  				o.pb.maximum = 1;
+  				o.pb.mode = "manual";
+  				o.pb.label = RM('ViewProcessBar') + ":";
+  				frame.addChild(o.pb);
+
+  				newVBox.addChild(frame);
+     			o.rootframe = newVBox;
+     			newVBox.label = tablabel; 
+  				newVBox.setStyle("paddingBottom", 5);
+  				newVBox.setStyle("paddingLeft", 5);
+  				newVBox.setStyle("paddingRight", 5);
+  				tn.addChild(newVBox);
+				return newVBox;
+			}
+		
+			private function CheckDocViewQuery (o:OblikDocument):void
+			{
+            	CheckDocView.send (o.DocsId, ContextId, o.RidDoc);
+			}
+			private function OnCheckDocView (event:ResultEvent):void
+			{
+            	var DocsId:int = event.result.DocsId;
+                ContextId = event.result.ContextId;
+
+            	var ln:uint = Docs.length;
+				for(var i:uint; i < ln; i++) 
+				{
+					if (Docs[i] is OblikDocument)
+					{
+    					if (OblikDocument(Docs[i]).DocsId == DocsId)
+    					{
+    						var o:OblikDocument = OblikDocument(Docs[i]);
+			                if (event.result.OutMessage != "")
+            			    {
+                				Alert.show (event.result.OutMessage);
+                				o.PrintButton.enabled = false;
+                				o.EditButton.enabled = false;
+                				return;
+                			}
+                			if (event.result.DocRight < 2 || o.ViewOnly == true)
+                				o.EditButton.enabled = false;
+							runDocViewQuery (o);
+    					}
+    				}
+    			}
+			}
+			public function runDocViewQuery (o:OblikDocument):void
+			{
+            	DocForm.send (o.DocsId, ContextId, o.RidTypedoc);
+			}
+            private function OnDocForm(event:ResultEvent):void
+            {
+/*            	
+            	Alert.show(ObjectUtil.toString(event.result));
+*/            	
+            	var DocsId:int = event.result.DocsId;
+                ContextId = event.result.ContextId;
+            	var ln:uint = Docs.length;
+            	
+				for(var i:uint; i < ln; i++) 
+				{
+					if (Docs[i] is OblikDocument)
+					{
+    					if (OblikDocument(Docs[i]).DocsId == DocsId)
+    					{
+    						var o:OblikDocument = OblikDocument(Docs[i]);
+    						o.Frames = event.result.Frames;
+    						o.Fields = event.result.FrameFields.list.source;
+    						CreateForm (o);
+    						
+					        var ln2:uint = o.Frames.length;
+					        if (ln2 <= 0)
+					        {
+					        	o.pb.visible = false;
+					        } 
+    						for (var j:int=0;j<ln2;j++)  
+    						{      
+    							var framedata:Object = o.Frames.list.getItemAt(j);
+			    				if (framedata.IsTable == true)
+    							{
+    								DocTableData.send(o.DocsId, ContextId, o.RidDoc, framedata.FrameKey);
+    							}
+    							else
+    							{
+    								DocData.send(o.DocsId, ContextId, o.RidDoc, framedata.FrameKey);
+    							}
+    						}
+   						
+    					}
+    				}
+					if (Docs[i] is OblikDocs)
+					{
+    					if (OblikDocs(Docs[i]).DocsId == DocsId)
+    					{
+    						var od:OblikDocs = OblikDocs(Docs[i]);
+    						var fields:ArrayCollection = new ArrayCollection ();
+    						var FieldDef:Object;
+    						fields = event.result.FrameFields;
+    						od.Fields = new ArrayCollection();
+							for (var k:int = 0; k < fields.length; k++) 
+							{
+								FieldDef = fields.getItemAt(k);
+		      					if (FieldDef.ObjectType == "Текст" || FieldDef.ObjectType == "Кнопка") {}
+		      					else
+		      					{
+	    							od.Fields.addItem(fields.getItemAt(k));
+		      					}
+							}
+    						od.FieldsSel.dataProvider = od.Fields;
+    						od.FieldsSel.selectedItem = null;
+    						ClearFieldsFilter (od);
+    					}
+    				}
+    				
+    			}
+            }
+            private function CreateForm (o:OblikDocument):void
+            {
+            	var newVBox:VBox = o.rootframe;
+            	var newHBox:HBox;
+            	var frame:Canvas;
+            	var framelabel:Label;
+            	var framedata:Object;
+		        var ln:uint = o.Frames.length;
+    			for (var i:int=0;i<ln;i++)  
+    			{      
+    				framedata = o.Frames.list.getItemAt(i);
+    				if (framedata.FrameTitle != "")
+    				{
+    					newHBox = new HBox ();
+    					framelabel = new Label ();
+    					framelabel.text = framedata.FrameTitle;
+  						framelabel.setStyle("fontWeight", "bold");
+    					newHBox.addChild(framelabel);
+						newHBox.setStyle("verticalAlign","bottom");    					
+	    				newHBox.percentWidth = 100;
+	    				o.rootframe.addChild(newHBox);
+    				}
+    				frame = new Canvas();
+    				frame.percentWidth = 100;
+    				if (framedata.IsTable == true)
+    				{
+    					if (frame.height < 250)
+    					{
+    						frame.height = 250;
+    					}
+    					if (frame.height > 600)
+    					{
+    						frame.height = 600;
+    					}
+    					var dg:DataGrid = new DataGrid();
+    					dg.percentHeight = 100;
+  						dg.percentWidth = 100;
+  						dg.editable = false;
+     					dg.horizontalScrollPolicy = "auto"; 
+  						CreateTableFrame (dg, o, framedata.FrameKey);
+						frame.addChild(dg);
+    				}
+    				else
+    				{
+    					frame.height = framedata.FrameHeight * 25 + 10;
+						frame.setStyle("borderStyle", "solid");
+  						CreateHeaderFrame (frame, o, framedata.FrameKey);
+    				}
+    				o.rootframe.addChild(frame);
+    			}
+            }
+            private function CreateTableFrame (dg:DataGrid, o:OblikDocument, fk:String):void
+            {
+                var aColumnDef:Array = o.Fields;         
+    			var oColumnDef:Object;
+    			var dgc:DataGridColumn;
+    			var aColumnsNew:Array = new Array; 
+    			for (var i:int=0;i<aColumnDef.length;i++)  
+    			{                  
+      				oColumnDef = aColumnDef[i];
+      				if (oColumnDef.FrameKey == fk)
+      				{
+      					dgc = new DataGridColumn();                                  
+      					dgc.dataField = "Field" + oColumnDef.RidFF;     
+     					dgc.headerText = oColumnDef.FieldLabel;
+      					dgc.width = oColumnDef.FieldWidth * 10;
+      					if (oColumnDef.ProgressType == "LOGICAL")
+      					{
+  							dgc.itemRenderer= new ClassFactory(OblikLogicalBr);
+      					}
+      					if (oColumnDef.ProgressType == "DATE")
+      					{
+  							dgc.itemRenderer= new ClassFactory(OblikDateBr);
+      					}
+	      				dgc.editable = false;
+    	  				dgc.sortable = false;
+      					dgc.visible = true;
+      					dgc.wordWrap = false;
+      					dgc.setStyle("textAlign",oColumnDef.FieldAlign);
+	      				aColumnsNew.push(dgc)
+	      			}                                       
+    			}
+    			if (aColumnsNew != null)
+	           	{
+		    		dg.columns = aColumnsNew;      
+		    		var listitem:Object = new Object();
+      				listitem["fk"] = fk;
+      				listitem["Grid"] = dg;     
+      				o.DG.addItem(listitem);
+	           	}
+            }
+            private function CreateHeaderFrame (frame:Canvas, o:OblikDocument, fk:String):void
+            {
+            	var FieldsDef:Array = o.Fields;         
+            	var FieldDef:Object;  
+            	var ti:TextInput;    
+            	var bt:Button;   
+            	var cb:CheckBox;
+            	var lb:Label;       
+		    	var listitem:Object;
+    			for (var i:int=0;i<FieldsDef.length;i++)  
+    			{                  
+      				FieldDef = FieldsDef[i];
+      				if (FieldDef.FrameKey == fk)
+      				{
+      					if (FieldDef.ObjectType == "Текст")
+      					{
+      						lb = new Label();
+      						lb.width = (String(FieldDef.FieldLabel).length) * 10;
+      						lb.text = FieldDef.FieldLabel;
+      						lb.setStyle("textAlign","right");
+     						
+      						lb.x = FieldDef.FieldCol * 10;
+	      					lb.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						
+		      				frame.addChild(lb);
+      					}
+      					else if (FieldDef.ObjectType == "Кнопка")
+      					{
+      						bt = new Button ();
+      						bt.width = (FieldDef.FieldWidth + + String(FieldDef.FieldLabel).length + 2) * 10;
+      						bt.x = FieldDef.FieldCol * 10;
+      						bt.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						bt.label = FieldDef.FieldLabel;
+	      					bt.mouseEnabled = false;
+	      					bt.data = FieldDef.RidFF;
+      						frame.addChild(bt);
+      					}
+      					else if (FieldDef.ObjectType == "Переключатель")
+      					{
+       						cb = new CheckBox ();
+      						cb.width = (FieldDef.FieldWidth + String(FieldDef.FieldLabel).length) * 10;
+      						cb.x = FieldDef.FieldCol * 10;
+      						cb.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						cb.label = FieldDef.FieldLabel;
+	      					cb.mouseEnabled = false;
+	      					cb.data = FieldDef.RidFF;
+	      					cb.selected = false;
+	      					listitem = new Object();
+		      				listitem["fk"] = fk;
+      						listitem["RidFF"] = FieldDef.RidFF;     
+      						listitem["type"] = "CheckBox";     
+      						listitem["field"] = cb;     
+      						o.DF.addItem(listitem);
+	      					
+      						frame.addChild(cb);
+      					}
+      					else
+      					{
+	      					if (FieldDef.FieldLabel != "")
+    	  					{
+      							lb = new Label();
+      							lb.width = (String(FieldDef.FieldLabel).length + 1) * 10;
+      							lb.text = FieldDef.FieldLabel + ":";
+      							lb.setStyle("textAlign","right");
+     						
+      							lb.x = FieldDef.FieldCol * 10 - lb.width;
+      							if (lb.x < 0) lb.x = 0;
+	      						lb.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						
+		      					frame.addChild(lb);
+      						}
+      						ti = new TextInput ();
+      						ti.width = FieldDef.FieldWidth * 10;
+      						if (ti.width < 20) ti.width = 20;
+      						ti.x = FieldDef.FieldCol * 10;
+      						ti.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						ti.height = FieldDef.FieldHeight * 25 - 2;
+	      					ti.setStyle("textAlign",FieldDef.FieldAlign);
+/*	      					ti.data = FieldDef.RidFF;  */
+	      					ti.text = "";
+     	  					ti.editable = false;
+	      					listitem = new Object();
+		      				listitem["fk"] = fk;
+      						listitem["RidFF"] = FieldDef.RidFF;   
+      						if (FieldDef.ProgressType == "DATE")  
+	      						listitem["type"] = "date";
+	      					else     
+      							listitem["type"] = "FillIn";     
+      						listitem["field"] = ti;
+      						o.DF.addItem(listitem);
+      						frame.addChild(ti);
+      					}
+      				}
+    			}
+            }
+            private function OnDocData(event:ResultEvent):void
+            {
+/*            	
+            	Alert.show(ObjectUtil.toString(event.result));
+*/            	
+            	var framedata:ArrayCollection = event.result.FrameData;
+            	var fk:String = event.result.FrameKey;
+            	var DocsId:int = event.result.DocsId;
+            	ContextId = event.result.ContextId;
+            	var ln3:uint = Docs.length;
+            	var o:OblikDocument;
+				for(var k:uint; k < ln3; k++) 
+				{
+					if (Docs[k] is OblikDocument)
+					{
+    					if (OblikDocument(Docs[k]).DocsId == DocsId)
+    					{
+    						o = OblikDocument(Docs[k]);
+    					}
+    				}
+    			}
+    			if (o == null) return;
+/*
+    			Alert.show(ObjectUtil.toString(framedata));
+*/
+				o.loadedFrames += 1;
+				if (o.Frames.length == o.loadedFrames)
+				{
+					o.pb.visible = false;
+				}
+				else
+				{
+					o.pb.setProgress(o.loadedFrames / o.Frames.length, 1);
+				}
+            	var ln:int = framedata.length;
+				for(var i:int; i < ln; i++)
+				{ 
+    				var fielddata:Object = framedata.list.getItemAt(i);
+    				var RidFF:int = fielddata.RidFF;
+    				var fieldvalue:String = fielddata.FormValue;
+    				var intvalue:String = fielddata.InternalValue;
+
+	            	var ln2:int = o.DF.length;
+    				for (var j:int=0;j<ln2;j++)  
+    				{      
+    					var field:Object = o.DF.list.getItemAt(j);
+    					if (field.fk == fk && field.RidFF == RidFF)
+    					{
+    						if (field.type == "FillIn" || field.type == "date")
+    						{
+    							if (field.type == "date")
+    							{
+    								var d:OblikDateBr = new OblikDateBr ();
+    								d.ParseDate(fieldvalue);
+    								fieldvalue = d.text;
+    							}
+    							TextInput(field.field).text = fieldvalue;
+    						}
+    						else
+    						{
+    							if (intvalue == "true" || intvalue == "Да" || intvalue == "yes") 
+	    							CheckBox(field.field).selected = true;
+	    						else
+	    							CheckBox(field.field).selected = false;
+    						}
+    					}
+    				}
+    			}
+    			
+            }
+            private function OnDocTableData(event:ResultEvent):void
+            {
+                var xmlStr:String = event.result.toString();
+                var xmlDoc:XMLDocument = new XMLDocument(xmlStr);
+                var decoder:SimpleXMLDecoder = new SimpleXMLDecoder(true);
+                var resultObj:Object = decoder.decodeXML(xmlDoc);
+                
+                var DocsId:int = resultObj.DocTableDataResponse.DocsId;
+                ContextId = resultObj.DocTableDataResponse.ContextId;
+                var fk:String = resultObj.DocTableDataResponse.FrameKey;
+
+                var DocData:ArrayCollection;
+                var dg:DataGrid;
+            	var ln:uint = Docs.length;
+				for(var i:uint; i < ln; i++) 
+				{
+					if (Docs[i] is OblikDocument)
+					{
+    				if (OblikDocument(Docs[i]).DocsId == DocsId)
+    				{
+    					var o:OblikDocument = OblikDocument(Docs[i]);
+    					if (resultObj.DocTableDataResponse.DocTableData.DataSet.Data != null) // Пришло > 0 записей
+    					{
+    						if (resultObj.DocTableDataResponse.DocTableData.DataSet.Data.Item.source != null) // Пришло > 1 записи
+    						{
+	    						DocData = resultObj.DocTableDataResponse.DocTableData.DataSet.Data.Item;
+	    					}	
+	    					else  // Пришла 1 запись - формат ответа нестандартный 
+	    					{
+	    						DocData = new ArrayCollection();
+	    						DocData.addItem(resultObj.DocTableDataResponse.DocTableData.DataSet.Data.Item);
+	    					}
+    					}
+    					else
+    					{
+    						DocData = null;
+    					}
+    					DisplayDocTable (o, fk, DocData);
+						
+						o.loadedFrames += 1;
+						if (o.Frames.length == o.loadedFrames)
+						{
+							o.pb.visible = false;
+						}
+						else
+						{
+							o.pb.setProgress(o.loadedFrames / o.Frames.length, 1);
+						}
+    					
+    				}
+    				}
+    			}
+            }
+            private function DisplayDocTable (o:OblikDocument,fk:String, DocData:ArrayCollection):void
+            {
+            	var dg:DataGrid;
+            	var ln:int = o.DG.length;
+    			for (var i:int=0;i<ln;i++)  
+    			{      
+    				var griddata:Object = o.DG.list.getItemAt(i);
+    				if (griddata.fk == fk)
+    				{             
+       					dg = DataGrid (griddata.Grid);
+       					dg.dataProvider = DocData;
+       					if (DocData != null)
+       					{
+       						if (DocData.length < 400)
+       						{
+       							dg.parent.height = DocData.length * 22 + 60;
+       						}
+       					}	 
+       					else
+       					{
+       						dg.parent.height = 60;
+       					}	
+      				}
+      			}                                        
+            }
+            private function EditDocument (e:Event):void
+            {
+            	var o:OblikDocument = OblikDocument(e.target.data);
+				DocEdit (ContextId, o.RidDoc, o.RidTypedoc, o.ViewOnly, o.putoff, false, 0, "");
+            }	
+            private function PrintDocument (e:Event):void
+            {
+            	var o:OblikDocument = OblikDocument(e.target.data);
+				PrintDoc.send (ContextId, o.RidDoc);
+            }	
+            private function OnPrintDoc(event:ResultEvent):void
+            {
+    			if (event.result.OutMessage != "") Alert.show(event.result.OutMessage);
+    			var PO:ArrayCollection = event.result.PrintOpers;
+            	var ln:int = PO.length;
+				for(var i:int = 0; i < ln; i++)
+				{
+					CreatePreviewTab (PO.list.getItemAt(i));
+				}
+            }
+			private function CreatePreviewTab (printObj:Object):void
+			{
+				var o:PrintPreview = new PrintPreview ();
+  				tn.addChild(o);
+				o.Initialize (true, servicepath, ContextId, printObj );
+				tn.selectedChild = o;
+			}
+            
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Операции с файлами																									 */
+			private function UploadFile (ContextId:String, RidDoc:int, o:Object /* o:OblikDocs */):void
+			{
+				var upfile:DocFileTransfer = new DocFileTransfer ();
+				upfile.o = o;
+				upfile.RidDoc = RidDoc;
+				upfile.addEventListener("UploadError", LoadError);
+				upfile.addEventListener("UploadBegin", LoadBegin);
+				upfile.addEventListener("UploadProgress", LoadProgress);
+				upfile.addEventListener("UploadComplete", LoadComplete);
+				upfile.addEventListener("UploadCanceled", LoadCanceled);
+				upfile.addEventListener("DocUploadComplete", DocLoadComplete);
+				upfile.UploadFile(ContextId, servicepath, null);
+				o.AllLoadList.addItem(upfile);
+			}			
+			private function LoadError (e:Event):void
+			{
+				var fileref:DocFileTransfer = DocFileTransfer (e.target);
+				var o:Object /* o:OblikDocs = OblikDocs(fileref.o) */ = fileref.o;
+				Alert.show (fileref.ErrorMessage);
+				LoadDeleteItem ( fileref, o );
+			}
+			private function LoadBegin (e:Event):void
+			{
+				var fileref:DocFileTransfer = DocFileTransfer (e.target);
+				var o:Object /* o:OblikDocs = OblikDocs(fileref.o) */ = fileref.o;
+				o.LoadArea.height = 35;
+				var of:Object = new Object ();
+				of["File"] = fileref;
+				o.LoadList.addItemAt (of, 0);
+			}
+			private function LoadProgress (e:Event):void
+			{
+				var fileref:DocFileTransfer = DocFileTransfer (e.target);
+				var o:Object /* o:OblikDocs = OblikDocs(fileref.o) */ = fileref.o;
+				o.LoadArea.invalidateList();
+			}
+			private function LoadComplete (e:Event):void
+			{
+				var fileref:DocFileTransfer = DocFileTransfer (e.target);
+				var o:Object /* o:OblikDocs = OblikDocs(fileref.o) */ = fileref.o;
+				o.LoadArea.invalidateList();
+				if (fileref.Mode == "Upload")
+				{
+					fileref.DocFileAdd();
+				}	
+			}
+			private function DocLoadComplete (e:Event):void
+			{
+				var fileref:DocFileTransfer = DocFileTransfer (e.target);
+				var o:Object /* o:OblikDocs = OblikDocs(fileref.o) */ = fileref.o;
+				LoadDeleteItem ( fileref, o );
+			}
+			
+			private function LoadCanceled (e:Event):void
+			{
+				var fileref:DocFileTransfer = DocFileTransfer (e.target);
+				var o:Object /* o:OblikDocs = OblikDocs(fileref.o) */ = fileref.o;
+				LoadDeleteItem ( fileref, o );
+			}
+			public function LoadDeleteItem (fileref:DocFileTransfer, o:Object /* o:OblikDocs */):void
+			{
+ 				for (var i:int=0;i<o.LoadList.length;i++)
+ 				{
+ 					if (o.LoadList.getItemAt(i).File == fileref) 
+ 					{
+ 						o.LoadList.removeItemAt(i);
+ 					}
+ 				}
+ 				for (i=0;i<o.AllLoadList.length;i++)
+ 				{
+ 					if (o.AllLoadList.getItemAt(i) == fileref) 
+ 					{
+ 						o.AllLoadList.removeItemAt(i);
+ 					}
+ 				}
+ 				if (o.LoadList.length == 0) o.LoadArea.height = 0;
+			}
+			private function DownloadDocFile (ContextId:String, RidFileDoc:int, o:Object /* o:OblikDocs */):void
+			{
+				var downfile:DocFileTransfer = new DocFileTransfer ();
+				downfile.o = o;
+				downfile.addEventListener("DownloadError", LoadError);
+			    downfile.addEventListener("DownloadBegin", LoadBegin);
+				downfile.addEventListener("DownloadProgress", LoadProgress);
+				downfile.addEventListener("DownloadComplete", LoadComplete);
+				downfile.addEventListener("DownloadSaved", LoadSaved);
+				downfile.DocFileView(ContextId, servicepath, RidFileDoc);
+				o.AllLoadList.addItem(downfile);
+			}			
+			private function LoadSaved (e:Event):void
+			{
+				var fileref:DocFileTransfer = DocFileTransfer (e.target);
+				var o:Object /* o:OblikDocs = OblikDocs(fileref.o) */ = fileref.o;
+				LoadDeleteItem ( fileref, o );
+			}
+			
+			private function DeleteDocFile (ContextId:String, RidFileDoc:int):void
+			{
+				DocFileDel.send ( ContextId, RidFileDoc );
+			}
+	        private function OnDocFileDel(e:ResultEvent):void
+    	    {
+	            if (e.result.OutMessage != "")
+       				Alert.show (e.result.OutMessage);
+       			else
+       				Alert.show (RM('FileDeleted'));
+        	}
+			
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Просмотр дополнительной информации по документу																		 */
+
+            private function CreateDocInfoTab(InfoType:String, RidDoc:int, ViewOnly:Boolean, putoff:Boolean, tablabel:String):void 
+            {
+				var o:OblikDocInfo = new OblikDocInfo();
+				DocsRunCount += 1;
+				Docs.push (o); 
+				o.DocsId = DocsRunCount;
+				o.RidDoc = RidDoc;
+				o.InfoType = InfoType;
+				o.ViewOnly = ViewOnly;
+				o.putoff = putoff;
+				tn.selectedChild = addDocInfoTab (o, tablabel);
+				tn.setClosePolicyForTab(tn.selectedIndex, SuperTab.CLOSE_ALWAYS);
+				runDocInfoQuery (o);
+            }
+			public function addDocInfoTab (o:OblikDocInfo, tablabel:String):VBox
+			{
+				var newVBox:VBox = new VBox();
+
+  				o.dg = new DataGrid ();
+  				o.dg.percentHeight = 100;
+  				o.dg.percentWidth = 100;
+  				o.dg.doubleClickEnabled = true;
+  				o.dg.data = o;
+  				if (o.InfoType == "DOCRELATION")
+					o.dg.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, OnDocsDoubleClick); 
+  				o.MessageArea = new TextArea ();
+  				o.MessageArea.height = 20;
+  				o.MessageArea.percentWidth = 100;
+  				o.LoadArea = new TileList ();
+  				o.LoadArea.height = 0;
+  				o.LoadArea.percentWidth = 100;
+  				o.LoadArea.setStyle("borderStyle", "solid");
+  				o.LoadArea.itemRenderer = new ClassFactory (oblik.drivers.LoadAreaRender);
+  				o.LoadArea.dataProvider = o.LoadList;
+
+  				newVBox.addChild(o.dg);
+  				newVBox.addChild(o.MessageArea);
+  				newVBox.addChild(o.LoadArea);
+
+     			newVBox.label = tablabel; 
+  				newVBox.setStyle("paddingBottom", 5);
+  				newVBox.setStyle("paddingLeft", 5);
+  				newVBox.setStyle("paddingRight", 5);
+  				tn.addChild(newVBox);
+				return newVBox;
+			}
+            private function runDocInfoQuery(o:OblikDocInfo):void 
+            {
+            	DocInfo.send (o.DocsId, ContextId, o.InfoType, o.RidDoc ); 
+            	o.MessageArea.text = RM('InfoSearch'); 
+            }
+            private function OnDocInfo(event:ResultEvent):void
+            {
+                var xmlStr:String = event.result.toString();
+                var xmlDoc:XMLDocument = new XMLDocument(xmlStr);
+                var decoder:SimpleXMLDecoder = new SimpleXMLDecoder(true);
+                var resultObj:Object = decoder.decodeXML(xmlDoc);
+                
+                var DocsId:int = resultObj.DocInfoResponse.DocsId;
+                ContextId = resultObj.DocInfoResponse.ContextId;
+            	var ln:uint = Docs.length;
+				for(var i:uint; i < ln; i++) 
+				{
+					if (Docs[i] is OblikDocInfo)
+					{
+    				if (OblikDocInfo(Docs[i]).DocsId == DocsId)
+    				{
+    					var o:OblikDocInfo = OblikDocInfo(Docs[i]);
+    					
+    					o.DocInfo = resultObj.DocInfoResponse.CollumnData.CollumnDataRow.list.source;
+    					if (resultObj.DocInfoResponse.DocumentData.DataSet.Data != null) // Пришло > 0 записей
+    					{
+    						if (resultObj.DocInfoResponse.DocumentData.DataSet.Data.Item.source != null) // Пришло > 1 записи
+    						{
+	    						o.DocData = resultObj.DocInfoResponse.DocumentData.DataSet.Data.Item;
+	    					}	
+	    					else  // Пришла 1 запись - формат ответа нестандартный 
+	    					{
+	    						o.DocData = new ArrayCollection();
+	    						o.DocData.addItem(resultObj.DocInfoResponse.DocumentData.DataSet.Data.Item);
+	    					}
+    					}
+    					else
+    					{
+    						o.DocData = null;
+    					}
+    					if (o.DocData == null)
+							o.MessageArea.text = RM('InfoSearchNotFound');
+    					else
+ 							o.MessageArea.text = RM('InfoSearchFound');
+    					
+    					o.dg.dataProvider = null;
+    					CreateDataInfoGrid (o);
+    					o.dg.dataProvider = o.DocData;
+    				}
+    				}
+    			}
+            }
+            private function CreateDataInfoGrid (o:OblikDocInfo):void
+            {
+                var aColumnDef:Array = o.DocInfo;            
+    			var oColumnDef:Object;
+    			var dgc:DataGridColumn;
+    			var aColumnsNew:Array = new Array; 
+    			var iTotalDGWidth:int = 0;
+
+				if (o.InfoType == "DOCRELATION")
+				{
+   					dgc = new DataGridColumn();                                  
+     				dgc.headerText = "Меню";
+      				dgc.setStyle("textAlign","center");
+      				dgc.width = 53;
+					dgc.itemRenderer= new ClassFactory(DocItemMenu);
+   					aColumnsNew.push(dgc);
+   				}
+
+    			for (var i:int=0;i<aColumnDef.length;i++)  
+    			{                  
+      				oColumnDef = aColumnDef[i];
+      				dgc = new DataGridColumn();                                  
+      				dgc.dataField = oColumnDef.fName;     
+     				dgc.headerText = oColumnDef.fLabel;
+      				dgc.width = oColumnDef.fWidth * 10;
+      				iTotalDGWidth += dgc.width;                                  
+      				if (oColumnDef.fType == "box")	dgc.itemRenderer= new ClassFactory(OblikLogicalBr);
+  					if (oColumnDef.fType == "date")	dgc.itemRenderer= new ClassFactory(OblikDateBr);
+  					if (oColumnDef.fType == "datetime")	dgc.itemRenderer= new ClassFactory(OblikDateTimeBr); 
+      				if (o.InfoType == "DOCRELATION" && dgc.dataField == "Direction")
+      				{
+/*
+      					var ir:ClassFactory = new ClassFactory(LinkButton);
+      					var or:Object = new Object();
+      					or["label"] = oColumnDef.fName;
+      					ir.properties = or;
+  						dgc.itemRenderer = ir;
+*/  						
+  						dgc.itemRenderer = new ClassFactory (oblik.document.RelDocRender);
+      				}
+      				
+      				dgc.editable = false;
+      				dgc.sortable = true;
+      				dgc.visible = true;
+      				dgc.wordWrap = false;
+      				dgc.setStyle("textAlign",oColumnDef.fAlign);
+
+      				aColumnsNew.push(dgc)                                       
+    			}
+	           	if (aColumnsNew != null)
+	           	{
+		    		o.dg.columns = aColumnsNew;                                      
+    				o.dg.editable = false;
+
+     				o.dg.horizontalScrollPolicy = "auto"; 
+    				o.dg.percentWidth = 100;
+	           	}
+ 			}
+
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Редактирование документа 																							 */
+ 			private function DocEdit (ContextId:String, RidDoc:int, RidTypedoc:int,
+ 				ViewOnly:Boolean, putoff:Boolean, NewDoc:Boolean, RidMainDoc:int, EditMode:String):void
+ 			{
+            	var srv:WebService = new WebService();
+				srv.wsdl = servicepath;
+				var CopyContext:Operation = new Operation(null, "CopyContext");
+				CopyContext.addEventListener(ResultEvent.RESULT, OnCopyContext);
+				CopyContext.addEventListener(FaultEvent.FAULT, Onfault);
+				srv.operations = [CopyContext];
+				srv.loadWSDL();
+
+				DocEditCount += 1;
+				var o:Object = new Object();
+				o["KeyId"] = DocEditCount;
+				o["RidDoc"] = RidDoc;
+				o["RidTypedoc"] = RidTypedoc;
+				o["ViewOnly"] = ViewOnly;
+				o["putoff"] = putoff;
+				o["NewDoc"] = NewDoc;
+				o["RidMainDoc"] = RidMainDoc;
+				o["EditMode"] = EditMode;
+				DocsEdit.push (o); 
+				
+ 				CopyContext.send(DocEditCount, ContextId, "DocEditor");
+ 			}  
+            private function OnCopyContext(event:ResultEvent):void
+            {
+            	var EditContextId:String = event.result.NewContextId;
+            	var KeyId:int = event.result.KeyId;
+            	var ln:uint = DocsEdit.length;
+				for(var i:uint; i < ln; i++) 
+				{
+					var o:Object = DocsEdit[i];
+    				if (o.KeyId == KeyId)
+    				{
+    					DocEdit2 (EditContextId, ContextId, o.RidDoc, o.RidTypedoc, o.ViewOnly, o.putoff, o.NewDoc, o.RidMainDoc, o.EditMode);
+    				}
+        		}
+            }
+ 			private function DocEdit2 (EditContextId:String, ContextId:String, RidDoc:int, RidTypedoc:int,
+ 				ViewOnly:Boolean, putoff:Boolean, NewDoc:Boolean, RidMainDoc:int, EditMode:String):void
+ 			{
+            	var srv:WebService = new WebService();
+				srv.wsdl = editservicepath;
+				srv.port = "Oblik_DocEditorObj";
+				var CreateRemoteObject:Operation = new Operation(null, "CreatePO_DocEditor");
+				CreateRemoteObject.addEventListener(ResultEvent.RESULT, OnDocEditorObject);
+				CreateRemoteObject.addEventListener(FaultEvent.FAULT, Onfault2);
+				srv.operations = [CreateRemoteObject];
+				srv.loadWSDL();
+ 				CreateRemoteObject.send(EditContextId, RidDoc, ViewOnly, RidTypedoc, NewDoc, putoff, RidMainDoc, EditMode);
+ 			}  
+            private function Onfault2(event:FaultEvent):void
+            {
+/*            	
+            	Alert.show(ObjectUtil.toString(event.fault))
+*/            	
+                Alert.show(event.fault.faultString, RM('ConnectionError'));
+            }
+            private function OnDocEditorObject(event:ResultEvent):void
+            {
+                var xmlStr:String = event.headers.toString();
+                var xmlDoc:XMLDocument = new XMLDocument(xmlStr);
+                var decoder:SimpleXMLDecoder = new SimpleXMLDecoder(true);
+                var headerObj:Object = decoder.decodeXML(xmlDoc);
+/*            	
+				Alert.show(ObjectUtil.toString(headerObj));
+*/				            	   
+				var RemoteObjectId:String = headerObj.DocEditorID.UUID;
+
+				srvEdit.clearHeaders();
+            	srvEdit.addSimpleHeader("DocEditorID", "urn", "UUID", RemoteObjectId);
+ 
+            	if (event.result.OutMessage != "")
+            	{
+            		Alert.show ( event.result.OutMessage );
+	 				ReleaseRemoteObject.send();
+            	}
+            	else
+            	{
+          			var win:DocEditor = PopUpManager.createPopUp(this, DocEditor, true) as DocEditor;
+           			win.InitEditor(ContextId, servicepath, srvEdit, RemoteObjectId, event.result.RidDoc, event.result.RidTypedoc, event.result.ViewOnly);
+               		PopUpManager.centerPopUp(win);
+               		win.addEventListener("EditorClosed", OnEditorClose);
+
+            		if (event.result.ViewOnly == true)
+            		{
+            			Alert.show (event.result.ViewReason);
+            		}
+            	}
+            }
+			private function OnEditorClose (e:Event):void
+			{
+				ReleaseRemoteObject.send();
+			}
+            private function OnReleaseObject(event:ResultEvent):void
+            {
+/*            	
+         		Alert.show ("Документ разблокировал соединение");
+*/         		
+            }
+/*-----------------------------------------------------------------------------------------------------------------------*/		
+			private function aboutservice ():void
+            {
+            	Alert.show (RM('Copyright'));
+            }
+
+]]>
+    </mx:Script>
+    <mx:Metadata>
+        [ResourceBundle("Document")]
+        [ResourceBundle("DocumentEditor")]
+        [ResourceBundle("CommonLibs")]
+    </mx:Metadata> 
+ 
+    <mx:HTTPService id="Oblsrv" url="../OblikParams.xml"
+           result="init2(event)" fault="faultHandler(event)"/>
+	<mx:ApplicationControlBar  dock="true" paddingTop="1" paddingBottom="1" paddingLeft="1" paddingRight="1" fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]"> 
+        <mx:Spacer width="0"/>
+        <mx:Label id="seldoclabel" visible="false" />
+       	<mx:ComboBox id="appdocs" visible="false" width="300" rowCount="20"	close="{CreateDocTab(appdocs.selectedItem)}" />
+    	<mx:VBox paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%"  
+    		verticalAlign="middle"   horizontalAlign="right" >
+    		<mx:HBox paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%"  
+    			verticalAlign="middle"   horizontalAlign="right" >
+            	<mx:Label id="title" fontSize="16"/>
+            	<mx:Image id="ServImage" visible="false"  scaleX="0.5" scaleY="0.5"/>
+		   		<mx:Button  id="aboutBtn" fontSize="10" label="{RM('About')}" enabled="true"  textAlign="left" click="aboutservice()"/>
+     		</mx:HBox>
+     	</mx:VBox>
+	</mx:ApplicationControlBar>
+	<mx:VBox id="MainFrame" visible="false" width="100%" height="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="0" verticalGap="0" borderStyle="solid">
+		<mx:HBox id="header2" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%" horizontalAlign="right" height="16">
+       		<mx:Label id="title2" fontSize="10"/>
+		</mx:HBox>
+		<flexlib:SuperTabNavigator id="tn" scrollSpeed="25"  dropShadowEnabled="true"
+			horizontalGap="0" paddingLeft="0" paddingRight="0" paddingTop="5" paddingBottom="0" width="100%" height="100%"> 
+		</flexlib:SuperTabNavigator>		
+	</mx:VBox>
+</mx:Application>

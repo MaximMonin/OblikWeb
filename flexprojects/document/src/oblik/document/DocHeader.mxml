@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:flexlib="flexlib.containers.*"
+	xmlns:classes="oblik.basetype.*"
+	paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="0" 
+	width="100%" height="100%" label="{RM('DocHeaderTitle')}"  initialize="init()">
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import flash.events.Event;
+			import flash.events.KeyboardEvent;
+			import flash.events.MouseEvent;
+			import mx.resources.ResourceManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+    	   	import mx.rpc.soap.Operation;
+	       	import mx.rpc.soap.WebService;
+	       	import mx.controls.Alert;
+        	import mx.collections.ArrayCollection;
+        	
+        	import oblik.basetype.OblikDateTimeBr;
+        	import oblik.basetype.OblikCharacter;
+        	import oblik.basetype.OblikInteger;
+        	import oblik.basetype.OblikLogical;
+        	import oblik.basetype.OblikDecimal;
+
+			private var srv:WebService;
+			private var ReadOper:Operation;
+			private var ContextId:String;
+			private var ReadOnly:Boolean;
+			private var RidDoc:int;
+			private var _init:Boolean = false;
+			private var dp:ArrayCollection;
+			private var fc:ArrayCollection;
+			private var dpi:Object;
+			
+			private function init():void
+			{
+				if (_init == true) return;
+				srv = new WebService();
+				ReadOper = new Operation(null, "DocHeader");
+				ReadOper.addEventListener(ResultEvent.RESULT, OnHeader, false, 0, true);
+				ReadOper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [ReadOper];
+				_init = true;
+			}
+			public function Initialize ( iReadOnly:Boolean, servicepath:String, iContextId:String, iRidDoc:int, title:String):void 
+        	{
+				srv.wsdl = servicepath;
+				ContextId = iContextId;
+				ReadOnly = iReadOnly;
+				RidDoc = iRidDoc;
+				this.label = title;
+				if (ReadOnly == true)
+					this.label += " (" + RM('ReadOnly') + ")";
+
+				srv.loadWSDL();
+				UpdateData ();
+	       	}
+			private function RM (messname:String):String
+			{
+				return ResourceManager.getInstance().getString('Document',messname);
+			}
+        	private function Onfault(event:FaultEvent):void
+        	{
+            	Alert.show(event.fault.faultString, RM('ConnectionError'));
+        	}
+	        private function OnHeader(event:ResultEvent):void
+    	    {
+          		dp = event.result.DocHeader;
+          		fc = event.result.AttachedFiles;
+          		dpi = event.result.DocHeader.list.source[0];
+	  			dg.dataProvider = fc;
+				if (fc.length < 300)
+       				dg.height = fc.length * 26 + 48;
+				else
+					dg.height = 600;
+          		
+	          	if (dp.length > 0)
+    	      	{
+        	  		eTypedoc.InternalValueStr = dpi.Typedoc;
+        	  		eGroupDoc.InternalValueStr = dpi.GroupDoc;
+        	  		eDateDoc.InternalValueStr = dpi.DateDoc;
+        	  		eIdDoc.InternalValueStr = dpi.IdDoc;
+        	  		eRidDoc.InternalValueStr = dpi.RidDoc;
+        	  		
+	       	  		var dt:OblikDateTimeBr = new OblikDateTimeBr ();
+        	  		dt.ParseDate(dpi.CreationTime);      	  		
+        	  		eCreationTime.InternalValueStr = dt.text;
+        	  		
+        	  		eCreatedBy.InternalValueStr = dpi.CreatedBy;
+        	  		eSavedBy.InternalValueStr = dpi.SavedBy;
+        	  		eEnt.InternalValueStr = dpi.Ent;
+        	  		eDivis.InternalValueStr = dpi.Divis;
+        	  		eApplication.InternalValueStr = dpi.Application;
+        	  		eWorkCenter.InternalValueStr = dpi.Workcenter;
+        	  		eSum.InternalValueStr = dpi.Sum;
+        	  		eCurrency.InternalValueStr = dpi.Currency;
+        	  		eDocCommitted.InternalValueStr = dpi.DocCommitted;
+        	  		eRO.InternalValueStr = dpi.RO;
+        	  		eNeedCalc.InternalValueStr = dpi.NeedCalc;
+        	  		eFilled.InternalValueStr = dpi.Filled;
+        	  		eExecFlag.InternalValueStr = dpi.ExecFlag;
+        	  		eError.InternalValueStr = dpi.Error;
+        	  		eAuditEnabled.InternalValueStr = dpi.AuditEnabled;
+        	  		eDocStatus.InternalValueStr = dpi.DocStatus;
+        	  		eDescription.InternalValueStr = dpi.Description;
+        	  		eBlockedBy.InternalValueStr = dpi.BlockedBy;
+        	  	}
+        	}
+        	public function UpdateData ():void
+        	{
+				ReadOper.send (ContextId, RidDoc);
+        	}
+        ]]>
+    </mx:Script>
+    <mx:Form>
+		<mx:FormItem label="{RM('HeaderTypedoc')+':'}">
+       		<classes:OblikCharacter id="eTypedoc" width="500" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderGroupDoc')+':'}">
+       		<classes:OblikCharacter id="eGroupDoc" width="500" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderDateDoc')+':'}">
+       		<classes:OblikDate id="eDateDoc" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderIdDoc')+':'}">
+       		<classes:OblikInteger width="100" id="eIdDoc" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderRidDoc')+':'}">
+       		<classes:OblikInteger width="100" id="eRidDoc" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderCreationTime')+':'}">
+       		<classes:OblikCharacter width="500" id="eCreationTime" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderCreatedBy')+':'}">
+       		<classes:OblikCharacter width="500" id="eCreatedBy" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderSavedBy')+':'}">
+       		<classes:OblikCharacter width="500" id="eSavedBy" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderEnt')+':'}">
+       		<classes:OblikCharacter width="500" id="eEnt" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderDivis')+':'}">
+       		<classes:OblikCharacter width="500" id="eDivis" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderApplication')+':'}">
+       		<classes:OblikCharacter width="500" id="eApplication" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderWorkCenter')+':'}">
+       		<classes:OblikCharacter width="500" id="eWorkCenter" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderCurrency')+':'}">
+       		<classes:OblikCharacter width="500" id="eCurrency" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderSum')+':'}">
+       		<classes:OblikDecimal width="150" id="eSum" ReadOnly="true" Format="->>>,>>>,>>>,>>9.99"/>
+   		</mx:FormItem>
+		<mx:FormItem >
+   			<classes:OblikLogical id="eDocCommitted" label = "{RM('HeaderDocCommitted')}" ReadOnly="true"/>
+   			<classes:OblikLogical id="eRO" label = "{RM('HeaderRO')}" ReadOnly="true"/>
+   			<classes:OblikLogical id="eNeedCalc" label = "{RM('HeaderNeedCalc')}" ReadOnly="true"/>
+   			<classes:OblikLogical id="eFilled" label = "{RM('HeaderFilled')}" ReadOnly="true"/>
+   			<classes:OblikLogical id="eExecFlag" label = "{RM('HeaderExecFlag')}" ReadOnly="true"/>
+   			<classes:OblikLogical id="eError" label = "{RM('HeaderError')}" ReadOnly="true"/>
+   			<classes:OblikLogical id="eAuditEnabled" label = "{RM('HeaderAuditEnabled')}" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderDocStatus')+':'}">
+       		<classes:OblikCharacter width="500" id="eDocStatus" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderDescription')+':'}">
+       		<classes:OblikCharacter width="500" id="eDescription" ReadOnly="true"/>
+   		</mx:FormItem>
+		<mx:FormItem label="{RM('HeaderBlockedBy')+':'}">
+       		<classes:OblikCharacter width="500" id="eBlockedBy" ReadOnly="true"/>
+   		</mx:FormItem>
+    </mx:Form>
+	<mx:DataGrid width="100%" height="100" id="dg">
+    	<mx:columns>
+           	<mx:DataGridColumn headerText="{RM('AFNumber')}" dataField="FileNumber" textAlign="right" width="70" />
+           	<mx:DataGridColumn headerText="{RM('AFName')}" dataField="FileName" textAlign="left" width="250" />
+           	<mx:DataGridColumn headerText="{RM('AFSize')}" dataField="FileSize" textAlign="right" width="100" />
+           	<mx:DataGridColumn headerText="{RM('AFDate')}" dataField="FileDate" width="100" itemRenderer="oblik.basetype.OblikDateBr" />
+           	<mx:DataGridColumn headerText="{RM('AFAddedBy')}" dataField="AddedBy" textAlign="left" width="100" />
+           	<mx:DataGridColumn headerText="{RM('AFDescr')}" dataField="FileDescr" textAlign="left" width="250" />
+		</mx:columns>
+	</mx:DataGrid>
+</mx:VBox>

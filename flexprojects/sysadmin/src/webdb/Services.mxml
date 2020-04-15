@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:flexlib="flexlib.containers.*"
+	xmlns:classes="oblik.basetype.*"
+	paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="0" 
+	width="100%" height="100%" label="{RM('ServicesTitle')}"  initialize="init()">
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import flash.events.Event;
+			import flash.events.KeyboardEvent;
+			import flash.events.MouseEvent;
+			import mx.resources.ResourceManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+    	   	import mx.rpc.soap.Operation;
+	       	import mx.rpc.soap.WebService;
+	       	import mx.controls.Alert;
+        	import mx.collections.ArrayCollection;
+        	
+			import flexlib.controls.SuperTabBar;
+			import flexlib.events.TabReorderEvent;
+			import flexlib.controls.tabBarClasses.SuperTab;
+        	import oblik.basetype.OblikBasetype;
+        	import oblik.basetype.OblikCharacter;
+        	import oblik.basetype.OblikInteger;
+
+			private var srv:WebService;
+			private var ReadOper:Operation;
+			private var SaveOper:Operation;
+			private var DeleteOper:Operation;
+			private var ContextId:String;
+			private var ReadOnly:Boolean;
+			private var _init:Boolean = false;
+			private var dp:ArrayCollection;
+			private var savedp:ArrayCollection;
+			
+			private var curService:int;
+
+			private function init():void
+			{
+				if (_init == true) return;
+				srv = new WebService();
+				ReadOper = new Operation(null, "ReadServices");
+				ReadOper.addEventListener(ResultEvent.RESULT, OnList, false, 0, true);
+				ReadOper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				SaveOper = new Operation(null, "SaveServices");
+				SaveOper.addEventListener(ResultEvent.RESULT, OnSave, false, 0, true);
+				SaveOper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				DeleteOper = new Operation(null, "DeleteService");
+				DeleteOper.addEventListener(ResultEvent.RESULT, OnDelete, false, 0, true);
+				DeleteOper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [ReadOper,SaveOper, DeleteOper];
+           		callLater(initNonClosableTab);
+				_init = true;
+			}
+			public function Initialize ( iReadOnly:Boolean, servicepath:String, iContextId:String):void 
+        	{
+				srv.wsdl = servicepath;
+				ContextId = iContextId;
+				ReadOnly = iReadOnly;
+				newButton.enabled = !ReadOnly;
+				deleteButton.enabled = !ReadOnly;
+				if (ReadOnly == true)
+					this.label += " (" + RM('ReadOnly') + ")";
+
+				srv.loadWSDL();
+				selDB.SetWebService(servicepath);
+				selDB.ContextId = ContextId;
+				selST.SetWebService(servicepath);
+				selST.ContextId = ContextId;
+				ControlArea.addEventListener("ValueCommit", OnValueCommit);
+				ControlArea.addEventListener("ValueSelect", OnValueSelect);
+				
+				UpdateData ();
+	       	}
+			private function initNonClosableTab():void 
+			{
+				tn.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
+				eServiceType.SetWebService(srv.wsdl);
+				eServiceType.ContextId = ContextId;
+				eDB.SetWebService(srv.wsdl);
+				eDB.ContextId = ContextId;
+				
+				eServiceName.ReadOnly = ReadOnly;
+				eServiceType.ReadOnly = ReadOnly;
+				eDB.ReadOnly = ReadOnly;
+				eEasyLogin.ReadOnly = ReadOnly;
+				saveButton.enabled = !ReadOnly;
+			}
+			private function RM (messname:String):String
+			{
+				return ResourceManager.getInstance().getString('SystemAdmin',messname);
+			}
+        	private function Onfault(event:FaultEvent):void
+        	{
+            	Alert.show(event.fault.faultString, RM('ConnectionError'));
+        	}
+	        private function OnList(event:ResultEvent):void
+    	    {
+          		dp = event.result.ServiceList;
+	  			dg.dataProvider = dp;
+        	}
+        	private function SaveService ():void
+        	{
+        		if (ReadOnly == true) return;
+        		if (eServiceType.InternalValue == "" || eDB.InternalValue == "" || eServiceName.InternalValue == "")
+        		{
+    	    		Alert.show(RM('ServicesBeforeSaveError'));
+					return;        			
+        		}
+				var savedp:ArrayCollection = new ArrayCollection();
+				var o:Object = new Object ();
+				o["ServiceRid"] = curService;
+				o["ServiceName"] = eServiceName.InternalValue;
+				o["STRid"] = eServiceType.InternalValue;
+				o["DBRid"] = eDB.InternalValue;
+				o["EasyLogin"] = eEasyLogin.InternalValue;
+				savedp.addItem(o);
+       			SaveOper.send (ContextId, savedp);
+
+/*				
+  field ServiceRid as integer
+  field ServiceName as character
+  field STRid as integer
+  field DBRid as integer
+  field EasyLogin as logical
+*/        		
+        	}
+        	private function NewService ():void
+        	{
+        		if (ReadOnly == false)
+        		{
+					curService = 0;
+					eServiceType.InternalValueStr = selST.InternalValueStr;
+					eServiceType.FormValueStr = selST.FormValue;
+					eDB.InternalValueStr = selDB.InternalValueStr;
+					eDB.FormValueStr = selDB.FormValue;
+					eServiceName.InternalValueStr = "";
+					eEasyLogin.InternalValueStr = String(false);       			
+        		}
+        	}
+        	private function EditService ():void
+        	{
+        		var si:Object = dg.selectedItem;
+        		if (si)
+        		{
+					curService = si.ServiceRid;
+					eServiceType.InternalValueStr = si.STRid;
+					eServiceType.FormValueStr = si.ServiceType;
+					eDB.InternalValueStr = si.DBRid;
+					eDB.FormValueStr = si.DB;
+					eServiceName.InternalValueStr = si.ServiceName;
+					eEasyLogin.InternalValueStr = String(si.EasyLogin);       			
+        		}
+        	}
+        	private function DeleteUser ():void
+        	{
+        		if (dg.selectedItem && ReadOnly == false)
+        			DeleteOper.send (ContextId, dg.selectedItem.ServiceRid);
+        	}
+        	public function UpdateData ():void
+        	{
+				ReadOper.send (ContextId, selDB.InternalValueStr, selST.InternalValueStr);
+        	}
+        	private function OnDelete(event:ResultEvent):void
+        	{
+	        	if (event.result.OutMessage == "Error")
+    	    		Alert.show(RM('ServicesDeleteError'));
+        		if (event.result.OutMessage == "CannotDelete")
+        			Alert.show(RM('ServicesCannotDelete'));
+        		if (event.result.OutMessage == "OK")
+        			UpdateData ();	
+        	}
+			private function OnValueCommit (e:Event):void
+			{
+				UpdateData (); 
+			}
+			private function OnValueSelect (e:Event):void
+			{
+				UpdateData (); 
+			}
+        	private function OnSave(event:ResultEvent):void
+        	{
+	        	if (event.result.OutMessage == "Error")
+	        	{
+    	    		Alert.show(RM('ServicesSaveError'));
+    	    	}
+   	    		UpdateData ();
+        	}
+        ]]>
+    </mx:Script>
+    <mx:HBox width="100%" height="30" verticalAlign="middle" horizontalAlign="left" id="ControlArea" borderStyle="solid" paddingLeft="5">
+        <mx:LinkButton toolTip="{RM('ServicesNew')}" id="newButton" icon="@Embed('new.png')" width="16" height="16" click="NewService()"/>
+       <mx:LinkButton toolTip="{RM('ServicesDelete')}" id="deleteButton" icon="@Embed('delete.png')" width="16" height="16" click="DeleteUser()"/>
+        <mx:Spacer width="15"/>
+        <mx:Label text="{RM('ServicesST')+':'}"/>
+        <classes:OblikBasetype width="200" id="selST" basetype="SERVICETYPE" dropDownWidth="300">
+        </classes:OblikBasetype>
+        <mx:Label text="{RM('ServicesDB')+':'}"/>
+        <classes:OblikBasetype width="200" id="selDB" basetype="DB" dropDownWidth="300">
+        </classes:OblikBasetype>
+        <mx:LinkButton toolTip="{RM('ServicesUpdate')}" id="updateButton" icon="@Embed('update.png')" width="16" height="16" click="UpdateData()"/>
+    </mx:HBox>
+  	<mx:VDividedBox width="100%" height="100%" verticalGap="6" backgroundColor="0x777777">
+        <mx:Canvas width="100%" height="100%" backgroundColor="0xFFFFFF">
+    		<mx:VBox height="100%" width="100%">
+        		<mx:DataGrid width="100%" height="100%" id="dg" click="EditService()">
+            	<mx:columns>
+                	<mx:DataGridColumn headerText="{RM('ServicesName')}" dataField="ServiceName" width="200" />
+                	<mx:DataGridColumn headerText="{RM('ServicesST')}" dataField="ServiceType" width="200"/>
+                	<mx:DataGridColumn headerText="{RM('ServicesDB')}" dataField="DB" width="200"/>
+                	<mx:DataGridColumn headerText="{RM('ServicesEasyLogin')}" dataField="EasyLogin" width="200" itemRenderer="oblik.basetype.OblikLogicalBr" textAlign="center"/>
+                	<mx:DataGridColumn headerText="{RM('ServicesNumUsers')}" dataField="NumUsers" textAlign="right" />
+				</mx:columns>
+        		</mx:DataGrid>
+    		</mx:VBox>
+    	</mx:Canvas>
+		<mx:Canvas width="100%" height="100%" backgroundColor="0xFFFFFF" >
+			<flexlib:SuperTabNavigator id="tn" scrollSpeed="25" dropShadowEnabled="true" 
+				horizontalGap="0" width="100%" height="100%"> 
+	        <mx:VBox id="EditForm" label="{RM('ServicesEditForm')}">
+	        <mx:Form>
+   				<mx:FormItem id="lServicesName" label="{RM('ServicesName')+':'}">
+       				<classes:OblikCharacter id="eServiceName" width="500"/>
+   				</mx:FormItem>
+   				<mx:FormItem  id="lServicesST" label="{RM('ServicesST')+':'}">
+       				<classes:OblikBasetype id="eServiceType" basetype = "SERVICETYPE" width="500"/>
+   				</mx:FormItem>
+   				<mx:FormItem  id="lServicesDB" label="{RM('ServicesDB')+':'}">
+       				<classes:OblikBasetype id="eDB" basetype = "DB" width="500"/>
+   				</mx:FormItem>
+   				<mx:FormItem  id="lServicesEasyLogin">
+       				<classes:OblikLogical id="eEasyLogin"  label="{RM('ServicesEasyLogin')}" toolTip="{RM('ServicesEasyLoginTip')}"/>
+   				</mx:FormItem>
+   				<mx:FormItem >
+			        <mx:Button  label="{RM('ServicesSave')}" id="saveButton" icon="@Embed('save.png')" click="SaveService()"/>
+   				</mx:FormItem>
+	        </mx:Form>
+	        </mx:VBox>
+			</flexlib:SuperTabNavigator>		
+		</mx:Canvas>
+   	</mx:VDividedBox>
+</mx:VBox>

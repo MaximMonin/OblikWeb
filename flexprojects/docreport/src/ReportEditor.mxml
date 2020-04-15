@@ -1,0 +1,1213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:flexlib="flexlib.containers.*"
+	paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="0" 
+	width="100%" height="100%" initialize="init()" >
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+            import mx.managers.PopUpManager;
+			import mx.rpc.soap.Operation;
+			import mx.rpc.soap.WebService;
+	    	import mx.collections.ArrayCollection;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.controls.Alert;
+        	import mx.controls.DataGrid;
+        	import mx.controls.dataGridClasses.DataGridColumn;
+        	import mx.controls.CheckBox;
+        	import mx.controls.Label;
+        	import mx.controls.LinkButton;
+        	import mx.controls.TextInput;
+        	import mx.controls.Button;
+        	import mx.controls.ProgressBar;
+            import mx.containers.Canvas;
+        	import mx.containers.HBox;
+        	import mx.containers.VBox;
+            import mx.utils.ObjectUtil;
+			import mx.rpc.xml.SimpleXMLDecoder;
+			import flash.utils.Timer;
+
+			import flexlib.controls.SuperTabBar;
+			import flexlib.events.TabReorderEvent;
+			import flexlib.controls.tabBarClasses.SuperTab;
+
+	       	import oblik.basetype.DocDataGridColumn;
+	       	import oblik.basetype.OblikDate;
+        	import oblik.basetype.OblikInteger;
+        	import oblik.basetype.OblikDecimal;
+        	import oblik.basetype.OblikLogical;
+        	import oblik.basetype.OblikLogicalBr;
+        	import oblik.basetype.OblikSelList;
+        	import oblik.basetype.OblikCharacter;
+        	import oblik.basetype.OblikBasetype;
+        	import oblik.basetype.OblikTime;
+        	import oblik.basetype.OblikButton;
+        	import oblik.drivers.PrintPreview;
+            
+			[Embed(source="row_add.png")]
+			private var rowadd_icon:Class;
+			[Embed(source="row_delete.png")]
+			private var rowdelete_icon:Class;
+			[Embed(source="row_ins.png")]
+			private var rowinsert_icon:Class;
+           [Bindable]
+
+            private var servicepath:String;
+            private var editservicepath:String;
+			private	var RemoteObjectId:String = "";
+			private var Mode:String;
+            
+            private var srv:WebService = new WebService ();
+            private var srvEdit:WebService = new WebService ();
+            private var RidDoc:int;
+            private var RidTypedoc:int;
+  			private var ReleaseRemoteObject:Operation;
+  			private var DocForm:Operation;
+  			private var DocData:Operation;
+  			private var DocTableData:Operation;
+  			private var DumpCache:Operation;
+  			private var DumpFile:String;
+  			private var SendEvent:Operation;
+  			private var SendEvent2:Operation;
+            private var ContextId:String;
+            private var ViewOnly:Boolean;
+            private var pingTimer:Timer;
+            private var execTimer:Timer;
+            private var begintime:Date;
+
+	        private var Frames:ArrayCollection;
+    	    private var Fields:Array;
+        	private var DG:ArrayCollection = new ArrayCollection();
+        	private var DF:ArrayCollection = new ArrayCollection ();
+        	private var DisabledFields:ArrayCollection = new ArrayCollection ();
+        	private var loadedFrames:int = 0;
+        	
+            private var QueryCount:int = 0;   
+            private var Queries:ArrayCollection = new ArrayCollection();          
+
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Инициализация, закрытие окна и Ping для проверки связи с удаленным серверным объектом								 */
+            public function InitEditor (Id:String, Iservicepath:String, Ieditservicepath:String, Title:String, IRidTypedoc:int, IViewOnly:Boolean, iMode:String):void
+            {
+            	ContextId = Id;
+            	servicepath = Iservicepath;
+            	editservicepath = Ieditservicepath;
+            	RidTypedoc = IRidTypedoc;
+            	ViewOnly = IViewOnly;
+            	Mode = iMode;
+            	this.label = Title;
+
+            	var srvEditInit:WebService = new WebService();
+				srvEditInit.wsdl = editservicepath;
+				srvEditInit.port = "Oblik_DocEditorObj";
+				var CreateRemoteObject:Operation = new Operation(null, "CreatePO_DocEditor");
+				CreateRemoteObject.addEventListener(ResultEvent.RESULT, OnDocEditorObject);
+				CreateRemoteObject.addEventListener(FaultEvent.FAULT, Onfault2);
+				srvEditInit.operations = [CreateRemoteObject];
+				srvEditInit.loadWSDL();
+ 				CreateRemoteObject.send(ContextId, 0, ViewOnly, RidTypedoc, true, false, 0, iMode);
+
+            	srv.wsdl = servicepath;
+				DocForm = new Operation(null, "DocForm");
+				DocForm.addEventListener(ResultEvent.RESULT, OnDocForm);
+				DocForm.addEventListener(FaultEvent.FAULT, Onfault);
+            	srvEdit.wsdl = editservicepath;
+            	srvEdit.port = "DocEditorObj";
+				ReleaseRemoteObject = new Operation(null, "Release_DocEditor");
+				ReleaseRemoteObject.addEventListener(ResultEvent.RESULT, OnReleaseObject);
+				ReleaseRemoteObject.addEventListener(FaultEvent.FAULT, Onfault);
+				DocData = new Operation(null, "DocHeaderData");
+				DocData.addEventListener(ResultEvent.RESULT, OnDocData);
+				DocData.addEventListener(FaultEvent.FAULT, Onfault);
+				DocTableData = new Operation(null, "DocTableData");
+				DocTableData.addEventListener(ResultEvent.RESULT, OnDocTableData);
+				DocTableData.addEventListener(FaultEvent.FAULT, Onfault);
+				DocTableData.resultFormat = "e4x";
+				
+				SendEvent = new Operation(null, "SendEvent");
+				SendEvent.addEventListener(ResultEvent.RESULT, OnSendEvent);
+				SendEvent.addEventListener(FaultEvent.FAULT, Onfault);
+				SendEvent2 = new Operation(null, "SendEvent");
+				SendEvent2.addEventListener(ResultEvent.RESULT, OnSendEvent);
+				SendEvent2.addEventListener(FaultEvent.FAULT, Onfault);
+				DumpCache = new Operation(null, "DumpCache");
+				DumpCache.addEventListener(ResultEvent.RESULT, OnDumpCache);
+				DumpCache.addEventListener(FaultEvent.FAULT, Onfault);
+				
+				srv.operations = [DocForm,SendEvent2];
+				srv.loadWSDL();            	
+				srvEdit.operations = [ReleaseRemoteObject,DocData,DocTableData,DumpCache,SendEvent];
+				srvEdit.loadWSDL();
+				this.addEventListener("EditorClosed", WindowClose);
+            }
+            private function Onfault2(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultString, RM('ConnectionError'));
+            }
+            private function OnDocEditorObject(event:ResultEvent):void
+            {
+                var xmlStr:String = event.headers.toString();
+                var xmlDoc:XMLDocument = new XMLDocument(xmlStr);
+                var decoder:SimpleXMLDecoder = new SimpleXMLDecoder(true);
+                var headerObj:Object = decoder.decodeXML(xmlDoc);
+				RemoteObjectId = headerObj.DocEditorID.UUID;
+				srvEdit.clearHeaders();
+            	srvEdit.addSimpleHeader("DocEditorID", "urn", "UUID", RemoteObjectId);
+ 
+            	if (event.result.OutMessage != "")
+            	{
+            		Alert.show ( event.result.OutMessage );
+	 				ReleaseRemoteObject.send();
+	 				RemoteObjectId = "";
+            	}
+            	else
+            	{
+            		if (Mode != "REPORT")
+            		{
+	            		if (event.result.ViewOnly == true)
+    	        		{
+        	    			Alert.show (event.result.ViewReason);
+			 				ReleaseRemoteObject.send();
+			 				RemoteObjectId = "";
+			 				return;
+            			}
+            			
+            		}
+           			InitEditor2 (event.result.RidDoc, false);
+            	}
+            }
+            private function InitEditor2 (IRidDoc:int, iViewOnly:Boolean):void
+			{
+            	RidDoc = IRidDoc;
+            	ViewOnly = iViewOnly;
+            	DocForm.send (1, ContextId, RidTypedoc);
+           		callLater(initNonClosableTab);
+            }
+            private function OnReleaseObject(event:ResultEvent):void
+            {
+/*            	
+         		Alert.show ("Документ разблокировал соединение");
+*/         		
+            }
+
+            private function OnTabClose(event:Event):void
+            {
+            	if (tn.selectedChild == TopArea) WindowClose (event);
+            	if (tn.contains(TopArea) == false) WindowClose (event);
+            } 
+            private function WindowClose(event:Event):void 
+            {
+				/* Перед закрытием окна выполним некоторые проверки/заключительные процедуры */
+				DocEvent2 ( "WindowClose"); 
+				WindowClose2();
+            }
+            /* Окончательно закрыть окно */
+            private function WindowClose2():void
+            { 
+            	if (RemoteObjectId != "")
+ 					ReleaseRemoteObject.send();
+ 				parent.removeChild(this);
+            }
+            private function Onfault(event:FaultEvent):void
+            {
+                Alert.show(event.fault.faultString, RM('ConnectionError'));
+            }
+			private function RM (messname:String):String
+			{
+				return resourceManager.getString('DocumentEditor',messname);
+			}
+			private function initNonClosableTab():void 
+			{
+/*				
+				tn.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
+*/				
+			}
+
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Создание формы редактирования документа и первоначальное чтение данных документа										 */
+            
+            private function OnDocForm(event:ResultEvent):void
+            {
+				Frames = event.result.Frames;
+				Fields = event.result.FrameFields.list.source;
+				CreateForm ();
+		        var ln2:uint = Frames.length;
+		        if (ln2 <= 0)
+		        {
+		        	pb.visible = false;
+		        } 
+				for (var j:int=0;j<ln2;j++)  
+				{      
+					var framedata:Object = Frames.list.getItemAt(j);
+	   				if (framedata.IsTable == true)
+					{
+						DocTableData.send(framedata.FrameKey); 
+					}
+					else
+					{
+						DocData.send(framedata.FrameKey);
+					}
+				}
+            }
+            private function CreateForm ():void
+            {
+            	var newVBox:VBox = rootframe;
+            	var newHBox:HBox;
+            	var frame:Canvas;
+            	var framelabel:Label;
+            	var framedata:Object;
+		        var ln:uint = Frames.length;
+    			for (var i:int=0;i<ln;i++)  
+    			{      
+    				framedata = Frames.list.getItemAt(i);
+    				if (framedata.FrameTitle != "" || framedata.IsTable == true)
+    				{
+    					newHBox = new HBox ();
+    					if (framedata.FrameTitle != "")
+    					{
+    						framelabel = new Label ();
+    						framelabel.text = framedata.FrameTitle;
+  							framelabel.setStyle("fontWeight", "bold");
+    						newHBox.addChild(framelabel);
+    					}
+    					if (framedata.IsTable == true && ViewOnly == false)
+    					{
+			            	var tb:LinkButton 
+			            	tb = new LinkButton ();
+            				tb.toolTip = RM('AddRowTip');
+            				tb.setStyle ("icon", rowadd_icon);
+            				tb.width = 18;
+            				tb.height = 18;
+            				tb.data = framedata.RidFrame;
+            				tb.addEventListener(MouseEvent.CLICK, OnRowAdd );
+  							newHBox.addChild(tb);
+			            	tb = new LinkButton ();
+            				tb.toolTip = RM('InsertRowTip');
+            				tb.setStyle ("icon", rowinsert_icon);
+            				tb.width = 18;
+            				tb.height = 18;
+            				tb.data = framedata.RidFrame;
+            				tb.addEventListener(MouseEvent.CLICK, OnRowInsert );
+  							newHBox.addChild(tb);
+			            	tb = new LinkButton ();
+            				tb.toolTip = RM('DeleteRowTip');
+            				tb.setStyle ("icon", rowdelete_icon);
+            				tb.width = 18;
+            				tb.height = 18;
+	           				tb.data = framedata.RidFrame;
+            				tb.addEventListener(MouseEvent.CLICK, OnRowDelete );
+  							newHBox.addChild(tb);
+    					}
+						newHBox.setStyle("verticalAlign","bottom");    					
+	    				newHBox.percentWidth = 100;
+	    				rootframe.addChild(newHBox);
+    				}
+    				frame = new Canvas();
+    				frame.percentWidth = 100;
+    				if (framedata.IsTable == true)
+    				{
+    					if (frame.height < 250)
+    					{
+    						frame.height = 250;
+    					}
+    					if (frame.height > 600)
+    					{
+    						frame.height = 600;
+    					}
+    					var dg:DataGrid = new DataGrid();
+    					dg.percentHeight = 100;
+  						dg.percentWidth = 100;
+  						dg.editable = false;
+     					dg.horizontalScrollPolicy = "auto"; 
+     					dg.rowHeight = 26;
+  						CreateTableFrame (dg, framedata.FrameKey, framedata.RidFrame);
+						frame.addChild(dg);
+    				}
+    				else
+    				{
+    					frame.height = framedata.FrameHeight * 25 + 10;
+						frame.setStyle("borderStyle", "solid");
+  						CreateHeaderFrame (frame, framedata.FrameKey);
+    				}
+    				rootframe.addChild(frame);
+    			}
+            }
+            private function CreateTableFrame (dg:DataGrid, fk:String, RidFrame:int):void
+            {
+                var aColumnDef:Array = Fields;         
+    			var oColumnDef:Object;
+    			var sf:Object;
+    			var dgc:DocDataGridColumn;
+    			var aColumnsNew:Array = new Array; 
+    			var cf:ClassFactory;
+				var or:Object;
+				var ro:Boolean;
+				dg.addEventListener("ValueCommit", OnValueCommit);
+				dg.addEventListener("ValueSelect", OnValueSelect);
+				dg.addEventListener("ButtonClick", OnButtonClick);
+				dg.addEventListener("GetContext", OnGetContext);
+				dg.addEventListener("OnFocus", OnFocus);
+    			for (var i:int=0;i<aColumnDef.length;i++)  
+    			{                  
+      				oColumnDef = aColumnDef[i];
+      				sf = oColumnDef;
+      				ro = false;
+      				if (ViewOnly == true || sf.ViewOnly == true || sf.isLim == true) ro = true;
+      				if (oColumnDef.FrameKey == fk)
+      				{
+      					dgc = new DocDataGridColumn();                                  
+      					dgc.dataField = "Field" + oColumnDef.RidFF;     
+      					dgc.InternalDataField = "Data" + oColumnDef.RidFF;     
+     					dgc.headerText = oColumnDef.FieldLabel;
+     					if (oColumnDef.IsMandatory == true)
+     					dgc.headerText += "*";
+      					dgc.width = oColumnDef.FieldWidth * 10;
+			 			if (sf.IsSelect == true)
+ 						{
+ 							if (sf.BaseType == "SELLIST")
+ 							{
+	  							cf = new ClassFactory(OblikSelList);
+	  							or = new Object ();
+      							or["Items"] = sf.AppendParam;
+	 						}
+			 				else
+ 							{
+	  							cf = new ClassFactory(OblikBasetype);
+	  							or = new Object ();
+      							or["webservice"] = servicepath;
+      							or["basetype"] = sf.BaseType;
+      							or["ContextId"] = ContextId;
+      							or["AppendParam"] = sf.AppendParam;
+      							or["canedit"] = sf.FreeEdit;
+      							or["AskContext"] = true;
+      							or["dropDownWidth"] = 600;
+      							if (sf.BaseType == "DOCUMENT" || sf.BaseType == "DOC_W_SEL")
+      							{
+      								or["dropDownItemRenderer"] = new ClassFactory(oblik.basetype.OblikDocumentRender);
+      								or["dropDownRowCount"] = 5;
+      							}
+							}
+		 				}
+		 				else
+		 				{
+		 					if (sf.ProgressType == "DATE")
+		 					{
+	  							cf = new ClassFactory(OblikDate);
+	  							or = new Object ();
+	   		 				}	
+							else if (sf.ProgressType == "LOGICAL" || sf.ObjectType == "Переключатель")
+							{
+	  							cf = new ClassFactory(OblikLogical);
+	  							or = new Object ();
+  							}
+							else if (sf.ProgressType == "DECIMAL")
+							{
+  								cf = new ClassFactory(OblikDecimal);
+	  							or = new Object ();
+      							or["Format"] = sf.FieldFormat;
+      							or["Required"] = false;
+							}
+							else if (sf.ProgressType == "INTEGER")
+							{
+  								cf = new ClassFactory(OblikInteger);
+	  							or = new Object ();
+      							or["Format"] = sf.FieldFormat;
+      							or["Required"] = false;
+							}
+							else
+							{
+								if (sf.BaseType == "TIME")
+	  								cf = new ClassFactory(OblikTime);
+								else 
+	  								cf = new ClassFactory(OblikCharacter);
+	  							or = new Object ();
+							}
+		 				}
+						or["FormField"] = oColumnDef.RidFF;
+    					or["ReadOnly"] = ro;
+    					or["toolTip"] = oColumnDef.HelpString;
+     					cf.properties = or;
+	   					dgc.itemRenderer = cf;
+		 				
+    	  				dgc.sortable = false;
+      					dgc.visible = true;
+      					dgc.wordWrap = false;
+      					dgc.setStyle("textAlign",oColumnDef.FieldAlign);
+	      				aColumnsNew.push(dgc)
+		      			listitem = new Object();
+			      		listitem["fk"] = fk;
+      					listitem["RidFF"] = oColumnDef.RidFF;     
+      					listitem["RidFrame"] = RidFrame;     
+						listitem["ReadOnly"] = ro;
+						DF.addItem(listitem);
+	      			}                                       
+    			}
+    			if (aColumnsNew != null)
+	           	{
+		    		dg.columns = aColumnsNew;      
+		    		var listitem:Object = new Object();
+      				listitem["fk"] = fk;
+      				listitem["RidFrame"] = RidFrame;
+      				listitem["Grid"] = dg;    
+      				listitem["Data"] = null; 
+      				DG.addItem(listitem);
+	           	}
+            }
+            private function CreateHeaderFrame (frame:Canvas, fk:String):void
+            {
+            	var FieldsDef:Array = Fields;         
+            	var FieldDef:Object;  
+            	var sf:Object;  
+            	var bt:OblikButton;   
+            	var cb:OblikLogical;
+            	var lb:Label;       
+		    	var listitem:Object;
+ 				var newfield:Object;
+				var ro:Boolean;
+				frame.addEventListener("ValueCommit", OnValueCommit);
+				frame.addEventListener("ValueSelect", OnValueSelect);
+				frame.addEventListener("ButtonClick", OnButtonClick);
+				frame.addEventListener("GetContext", OnGetContext);
+    			for (var i:int=0;i<FieldsDef.length;i++)  
+    			{                  
+      				FieldDef = FieldsDef[i];
+      				sf = FieldDef;
+      				ro = false;
+      				if (ViewOnly == true || sf.ViewOnly == true || sf.isLim == true) ro = true;      				
+      				if (sf.FrameKey == fk)
+      				{
+      					if (FieldDef.ObjectType == "Текст")
+      					{
+      						lb = new Label();
+      						lb.width = (String(FieldDef.FieldLabel).length) * 10;
+      						lb.text = FieldDef.FieldLabel;
+      						lb.setStyle("textAlign","right");
+     						
+      						lb.x = FieldDef.FieldCol * 10;
+	      					lb.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						
+		      				frame.addChild(lb);
+      					}
+      					else if (FieldDef.ObjectType == "Кнопка")
+      					{
+      						bt = new OblikButton ();
+      						bt.width = (FieldDef.FieldWidth + + String(FieldDef.FieldLabel).length + 2) * 10;
+      						bt.x = FieldDef.FieldCol * 10;
+      						bt.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						bt.label = FieldDef.FieldLabel;
+       						bt.FormField = FieldDef.RidFF;
+       						bt.ReadOnly = ro;
+       						bt.toolTip = FieldDef.HelpString;
+     						frame.addChild(bt);
+      					}
+      					else if (FieldDef.ObjectType == "Переключатель" || FieldDef.ProgressType == "LOGICAL")
+      					{
+       						cb = new OblikLogical ();
+      						cb.width = (FieldDef.FieldWidth + String(FieldDef.FieldLabel).length) * 10;
+      						cb.x = FieldDef.FieldCol * 10;
+      						cb.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						cb.label = FieldDef.FieldLabel;
+	      					cb.FormField = FieldDef.RidFF;
+	      					cb.ReadOnly = ro;
+	      					cb.toolTip = FieldDef.HelpString;
+	      					listitem = new Object();
+		      				listitem["fk"] = fk;
+      						listitem["RidFF"] = FieldDef.RidFF;     
+      						listitem["RidFrame"] = FieldDef.RidFrame;     
+      						listitem["type"] = "CheckBox";     
+      						listitem["field"] = cb;     
+      						listitem["ReadOnly"] = ro;
+      						DF.addItem(listitem);
+	      					
+      						frame.addChild(cb);
+      					}
+      					else
+      					{
+			 				if (sf.IsSelect == true)
+ 							{
+ 								if (sf.BaseType == "SELLIST")
+ 								{
+		 							newfield = new OblikSelList();
+ 									newfield.SetItems (sf.AppendParam);
+	 							}
+			 					else
+ 								{
+ 									newfield = new OblikBasetype ();
+		  							newfield.SetWebService(servicepath);
+  									newfield.basetype = sf.BaseType;
+   									newfield.ContextId = ContextId;
+   									newfield.AppendParam = sf.AppendParam;
+									newfield.CanEdit (sf.FreeEdit);
+									newfield.AskContext = true;
+									newfield.dropDownWidth = 600;
+									if (newfield.basetype == "DOCUMENT" || newfield.basetype == "DOC_W_SEL")
+									{
+										newfield.dropDownItemRenderer = new ClassFactory(oblik.basetype.OblikDocumentRender);
+										newfield.dropDownRowCount = 5;
+			/*							newfield.allowMultipleSelection = true; */
+									}
+ 								}
+			 				}
+			 				else
+ 							{ 
+			 					if (sf.ProgressType == "DATE")
+ 								{
+ 									newfield = new OblikDate ();
+/*									newfield.dv.required = true; */
+ 								}
+ 								else if (sf.ProgressType == "DECIMAL")
+ 								{
+ 									newfield = new OblikDecimal ();
+ 									newfield.SetFormat(sf.FieldFormat);
+ 									newfield.Required = false;
+ 								}
+ 								else if (sf.ProgressType == "INTEGER")
+ 								{
+ 									newfield = new OblikInteger ();
+ 									newfield.SetFormat(sf.FieldFormat);
+ 									newfield.Required = false;
+ 								}
+ 								else
+ 								{
+ 									if (sf.BaseType == "TIME")
+ 									{
+ 										newfield = new OblikTime ();
+ 									} 
+ 									else 
+ 									{
+ 										newfield = new OblikCharacter ();
+ 									}
+ 								}
+ 							}
+	      					if (FieldDef.FieldLabel != "")
+    	  					{
+      							lb = new Label();
+      							lb.width = (String(FieldDef.FieldLabel).length + 1) * 10;
+		      					if (FieldDef.IsMandatory == true)
+		      						lb.setStyle("fontWeight", "bold");
+      							lb.text = FieldDef.FieldLabel + ":";
+      							lb.setStyle("textAlign","right");
+     						
+      							lb.x = FieldDef.FieldCol * 10 - lb.width;
+      							if (lb.x < 0) lb.x = 0;
+	      						lb.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						
+		      					frame.addChild(lb);
+      						}
+							newfield.width = sf.FieldWidth * 10;
+      						if (newfield.width < 20) newfield.width = 20;
+      						newfield.x = FieldDef.FieldCol * 10;
+      						newfield.y = (FieldDef.FieldRow - 1) * 25 + 5;
+      						newfield.height = FieldDef.FieldHeight * 25 - 2;
+	      					newfield.setStyle("textAlign",FieldDef.FieldAlign);
+	      					newfield.FormField = FieldDef.RidFF;
+	      					newfield.ReadOnly = ro;
+	      					newfield.toolTip = FieldDef.HelpString;
+	      					listitem = new Object();
+		      				listitem["fk"] = fk;
+      						listitem["RidFF"] = FieldDef.RidFF;     
+      						listitem["RidFrame"] = FieldDef.RidFrame;     
+      						listitem["type"] = "FillIn";     
+      						listitem["field"] = newfield;
+      						listitem["ReadOnly"] = ro;
+      						DF.addItem(listitem);
+      						frame.addChild(DisplayObject(newfield));
+      					}
+      				}
+    			}
+            }
+            private function OnDocData(event:ResultEvent):void
+            {
+/*            	
+            	Alert.show(ObjectUtil.toString(event.result));
+*/            	
+            	var framedata:ArrayCollection = event.result.FrameData;
+            	var fk:String = event.result.FrameKey;
+				loadedFrames += 1;
+				if (Frames.length == loadedFrames)
+				{
+					pb.visible = false;
+					LastInit ();
+				}
+				else
+				{
+					pb.setProgress(loadedFrames / Frames.length, 1);
+				}
+            	var ln:int = framedata.length;
+				for(var i:int; i < ln; i++)
+				{ 
+    				var fielddata:Object = framedata.list.getItemAt(i);
+    				var RidFF:int = fielddata.RidFF;
+    				var fieldvalue:String = fielddata.FormValue;
+    				var intvalue:String = fielddata.InternalValue;
+    				var enflag:Boolean = !fielddata.Disabled;
+    				var roflag:Boolean = fielddata.ReadOnly
+
+	            	var ln2:int = DF.length;
+    				for (var j:int=0;j<ln2;j++)  
+    				{      
+    					var field:Object = DF.list.getItemAt(j);
+    					if (field.fk == fk && field.RidFF == RidFF)
+    					{
+    						field.field.InternalValueStr = intvalue;
+    						field.field.FormValueStr = fieldvalue;
+    						field.field.enabled = enflag;
+    						field.field.ReadOnly = field.ReadOnly || roflag;
+    					}
+    				}
+    			}
+    			
+            }
+            private function OnDocTableData(event:ResultEvent):void
+            {
+/*
+				Alert.show(ObjectUtil.toString(event.result));
+*/				                
+                var xmlStr:String = event.result.toString();
+/*              Alert.show (xmlStr); */
+                var xmlDoc:XMLDocument = new XMLDocument(xmlStr);
+                var decoder:SimpleXMLDecoder = new SimpleXMLDecoder(true);
+                var resultObj:Object = decoder.decodeXML(xmlDoc);
+/*				TestArea.text = ObjectUtil.toString(resultObj); */
+
+                var fk:String = resultObj.DocTableDataResponse.FrameKey;
+                if (resultObj.DocTableDataResponse.DisabledFields != null)
+                {
+					var df:ArrayCollection;
+					if (resultObj.DocTableDataResponse.DisabledFields.DisabledFieldsRow is ArrayCollection)
+						df = resultObj.DocTableDataResponse.DisabledFields.DisabledFieldsRow;
+					else
+					{
+						df = new ArrayCollection();
+						df.addItem(resultObj.DocTableDataResponse.DisabledFields.DisabledFieldsRow);
+					}
+/*					Alert.show(ObjectUtil.toString(df)); */	
+					UpdateDisabledFields (df);
+                }
+
+                var DocData:ArrayCollection;
+                var dg:DataGrid;
+				if (resultObj.DocTableDataResponse.DocTableData.DataSet.Data != null) // Пришло > 0 записей
+				{
+					if (resultObj.DocTableDataResponse.DocTableData.DataSet.Data.Item.source != null) // Пришло > 1 записи
+					{
+  						DocData = resultObj.DocTableDataResponse.DocTableData.DataSet.Data.Item;
+   					}	
+   					else  // Пришла 1 запись - формат ответа нестандартный 
+   					{
+   						DocData = new ArrayCollection();
+   						DocData.addItem(resultObj.DocTableDataResponse.DocTableData.DataSet.Data.Item);
+   					}
+/*   					Alert.show(ObjectUtil.toString(DocData)); */
+				}
+				else
+				{
+					DocData = new ArrayCollection();;
+				}
+				DisplayDocTable (fk, DocData);
+						
+				loadedFrames += 1;
+				if (Frames.length == loadedFrames)
+				{
+					pb.visible = false;
+					LastInit ();
+				}
+				else
+				{
+					pb.setProgress(loadedFrames / Frames.length, 1);
+				}
+            }
+            private function DisplayDocTable (fk:String, DocData:ArrayCollection):void
+            {
+            	var dg:DataGrid;
+            	var ln:int = DG.length;
+    			for (var i:int=0;i<ln;i++)  
+    			{      
+    				var griddata:Object = DG.list.getItemAt(i);
+    				if (griddata.fk == fk)
+    				{             
+       					dg = DataGrid (griddata.Grid);
+       					dg.dataProvider = DocData;
+       					griddata.Data = DocData;
+      				}
+      			}       
+				dg.invalidateList();      			                                 
+            }
+            private function UpdateDisabledFields (df:ArrayCollection):void
+            {
+            	if (!df) return;
+            	var i:int;
+   				for(i = 0; i < df.length; i++)
+				{ 
+    				var fielddata:Object = df.list.getItemAt(i);
+    				var RidFF:int = fielddata.RidFF;
+    				var RidFrame:int = fielddata.RidFrame;
+    				var roflag:Boolean = fielddata.ReadOnly;
+    				var diflag:Boolean = fielddata.Disabled;
+    				var trow:int = fielddata.TRow;
+
+	            	var ln2:int = DisabledFields.length;
+	            	var j:int;
+	            	var found:Boolean;
+	            	found = false;
+    				for (j=0;j<ln2;j++)  
+    				{      
+    					var field:Object = DisabledFields.list.getItemAt(j);
+    					if (field.RidFF == RidFF && field.Row == trow)
+    					{
+    						found = true;
+    						field.Disabled = diflag;
+    						field.ReadOnly = roflag;
+    						if (field.Disabled == false && field.ReadOnly == false)
+    							DisabledFields.removeItemAt(j);
+    					}
+    				}
+    				if (found == false && !(diflag == false && roflag == false))
+    				{
+    					var o:Object = new Object ();
+    					o["RidFF"] = RidFF;
+    					o["Row"] = trow;
+    					o["RidFrame"] = RidFrame;
+    					o["Disabled"] = diflag;
+    					o["ReadOnly"] = roflag;
+  						DisabledFields.addItem(o);
+    					
+    				}
+				}
+            }
+
+/* Вместо того чтобы держать постоянное соединение с БД для отчетов удобно сбросить содержимое всех временных таблиц
+   в dumpfile, чтобы потом просто инициализировать среду и восстанавливать содержимое временных таблиц из сохраненного файла.
+   Это позволит не гонять данные с сервера на клиент и в тоже время востанавливать предыдущее состояние после посылки события
+   сравнительно легко и быстро на уровне сервера */
+            private function LastInit ():void
+            {
+            	DumpCache.send();
+            }
+            private function OnDumpCache (event:ResultEvent):void
+            {
+            	DumpFile = event.result.DumpFile;
+/* Сбрасываем постоянное соединение с сервером и удаляем Persistent Remote Object */
+            	ReleaseRemoteObject.send();
+ 				RemoteObjectId = "";
+            }
+            
+/*-----------------------------------------------------------------------------------------------------------------------*/
+/* Триггеры на события формы																							 */
+
+			private function OnValueCommit (e:Event):void
+			{
+				var o:Object = e.target;
+				DocEvent ( o, "ValueCommit") 
+			}
+			private function OnValueSelect (e:Event):void
+			{
+				var o:Object = e.target;
+				DocEvent ( o, "ValueSelect") 
+			}
+			private function OnButtonClick (e:Event):void
+			{
+				var o:Object = e.target;
+				DocEvent ( o, "ButtonClick") 
+			}
+			private function OnGetContext (e:Event):void
+			{
+				var o:Object = e.target;
+				DocEvent ( o, "GetContext") 
+			}
+			private function OnRun (e:Event):void
+			{
+				pb.setProgress(0.5, 1);
+				pb.visible = true;
+				execTime.visible = true;
+				execTimeValue.text = "0" + " " + RM("Seconds");
+				execTimeValue.visible = true;
+            	execTimer = new Timer( 1000, 0 );
+				execTimer.addEventListener(TimerEvent.TIMER, OnExecTime);
+				execTimer.start();
+				begintime = new Date ();
+				DocEvent2 ( "SaveDocument"); 
+			}
+			private function OnExecTime (e:Event):void
+			{
+				var now:Date = new Date ();
+				var seconds:int = now.getTime() - begintime.getTime();
+				seconds = seconds / 1000;
+				if (seconds < 60) 
+					execTimeValue.text = seconds.toString() + " " + RM("Seconds");
+				else
+				{
+					var minutes:int = (seconds - seconds % 60) / 60;
+					seconds = seconds % 60;
+					execTimeValue.text = minutes.toString() + " " + RM("Minutes") + " " + seconds.toString() + " " + RM("Seconds");
+				}
+					
+			}
+			
+			private function OnPrintDocument (e:Event):void
+			{
+				DocEvent2 ( "PrintDocument"); 
+			}		
+			private function OnDeleteDocument (e:Event):void
+			{
+				DocEvent2 ( "DeleteDocument"); 
+			}		
+			private function OnRowAdd (e:Event):void
+			{
+				var RidFrame:int = e.target.data;
+				DocEvent3 ( RidFrame, "TableRowAdd"); 
+			}
+			private function OnRowInsert (e:Event):void
+			{
+				var RidFrame:int = e.target.data;
+				DocEvent3 ( RidFrame, "TableRowInsert"); 
+			}
+			private function OnRowDelete (e:Event):void
+			{
+				var RidFrame:int = e.target.data;
+				DocEvent3 ( RidFrame, "TableRowDelete"); 
+			}
+			private function DocEvent (o:Object, EventName:String):void
+			{
+				var RidFF:int;
+				var selectedRow:int = 1;
+				if (o.FormField == 0 || !o.FormField) return;
+				RidFF = o.FormField;
+				if (o.parent.parent is DataGrid)
+					selectedRow = (o.parent.parent as DataGrid).selectedIndex + 1;
+/*				TestArea.text += EventName + " " + o.toString()  + " " + o.InternalValueStr + '\n'; */
+/*				TestArea.text += EventName + " " + RidFF.toString() + "(" + selectedRow.toString() + ")" + " " + o.FormValue + "(" + o.InternalValueStr + ")" + '\n'; */
+
+				QueryCount += 1;
+				var eo:Object = new Object ();
+				eo["QueryId"] = QueryCount;
+				eo["EventTarget"] = o;
+				eo["EventName"] = EventName;
+				Queries.addItem(eo); 
+
+				if (RemoteObjectId != "")
+				{
+					if (EventName == "ButtonClick")								
+						SendEvent.send(QueryCount, EventName, RidFF, selectedRow, "");
+					else
+						SendEvent.send(QueryCount, EventName, RidFF, selectedRow, o.InternalValueStr);
+				}
+				else
+				{
+					if (EventName == "ButtonClick")								
+						SendEvent2.send(ContextId, RidDoc, ViewOnly, RidTypedoc, true, Mode, DumpFile, QueryCount, EventName, RidFF, selectedRow, "");
+					else
+						SendEvent2.send(ContextId, RidDoc, ViewOnly, RidTypedoc, true, Mode, DumpFile, QueryCount, EventName, RidFF, selectedRow, o.InternalValueStr);
+				}
+			}
+			private function DocEvent2 (EventName:String):void
+			{
+				QueryCount += 1;
+				var eo:Object = new Object ();
+				eo["QueryId"] = QueryCount;
+				eo["EventTarget"] = null;
+				eo["EventName"] = EventName;
+				Queries.addItem(eo); 
+				if (RemoteObjectId != "")
+					SendEvent.send(QueryCount, EventName, 0, 1, "");
+				else
+					SendEvent2.send(ContextId, RidDoc, ViewOnly, RidTypedoc, true, Mode, DumpFile, QueryCount, EventName, 0, 1, "");
+			}
+			private function DocEvent3 (RidFrame:int, EventName:String):void
+			{
+	           	var ln2:int = DG.length;
+				var selectedRow:int = 1;
+   				for (var j:int=0;j<ln2;j++)  
+   				{      
+   					var TableFrame:Object = DG.list.getItemAt(j);
+   					if (TableFrame.RidFrame == RidFrame)
+   					{
+   						var dg:DataGrid = TableFrame.Grid;
+						selectedRow = dg.selectedIndex + 1;
+   					}
+   				}
+				QueryCount += 1;
+				var eo:Object = new Object ();
+				eo["QueryId"] = QueryCount;
+				eo["EventTarget"] = null;
+				eo["EventName"] = EventName;
+				Queries.addItem(eo); 
+
+				if (RemoteObjectId != "")
+					SendEvent.send(QueryCount, EventName, RidFrame, selectedRow, "");
+				else
+					SendEvent2.send(ContextId, RidDoc, ViewOnly, RidTypedoc, true, Mode, DumpFile, QueryCount, EventName, RidFrame, selectedRow, "");
+			}
+			private function OnFocus (e:Event):void
+			{
+				var o:Object = e.target;
+				var RidFF:int;
+				var selectedRow:int = 1;
+				if (o.FormField == 0 || !o.FormField) return;
+				RidFF = o.FormField;
+				if (o.parent.parent is DataGrid)
+					selectedRow = (o.parent.parent as DataGrid).selectedIndex + 1;
+				else return;
+
+				var AlwaysRO:Boolean = false;
+            	var ln2:int;
+            	var j:int;
+            	ln2 = DF.length;
+   				for (j=0;j<ln2;j++)  
+   				{      
+   					var field:Object = DF.list.getItemAt(j);
+   					if (field.RidFF == RidFF)
+    				{
+    					AlwaysRO = field.ReadOnly;
+    				}
+    			}
+
+				/* Set ReadOnly flag for table fields */
+            	ln2 = DisabledFields.length;
+   				for (j=0;j<ln2;j++)  
+   				{      
+   					field = DisabledFields.list.getItemAt(j);
+   					if (field.RidFF == RidFF && field.Row == selectedRow)
+   					{
+   						AlwaysRO = true;
+   					}
+   				}
+    			o.ReadOnly = AlwaysRO;
+			}
+			
+            private function OnSendEvent(event:ResultEvent):void
+            {
+                var QueryId:int = event.result.QueryId;
+				var o:Object;
+				var EventName:String;
+
+				/* Отрабатываем CallBack по событию OnGetContext */
+				for(var i:uint; i < Queries.length; i++) 
+				{
+    				if(Queries.getItemAt(i).QueryId == QueryId)
+    				{
+    					o = Queries.getItemAt(i).EventTarget;
+            			EventName = Queries.getItemAt(i).EventName;
+            			Queries.removeItemAt(i)
+        			}
+    			}
+
+				if (EventName == "SaveDocument" || event.result.OutputValue == "Quit")
+				{
+					pb.visible = false;
+					execTime.visible = false;
+					execTimeValue.visible = false;
+					if (execTimer != null && execTimer.running)
+					{ 
+						execTimer.stop();
+            			execTimer.removeEventListener(TimerEvent.TIMER, OnExecTime);
+    				}
+    			}
+				
+    			if (event.result.OutMessage != "") Alert.show(event.result.OutMessage);
+    			
+    			if (EventName == "GetContext" && o)
+    			{
+/*    				Alert.show (event.result.OutputValue); */
+    				(o as OblikBasetype).ContextParam = event.result.OutputValue;
+    				(o as OblikBasetype).GotContext = true;
+    				return;
+    			}
+    			if (event.result.OutputValue == "Quit")
+    			{
+    				WindowClose2 ();
+    				return;
+    			}
+    			
+    			/* Обновляем визуальные данные документа по двум массивам изменений. 
+    			   ModifiedFields - массив новых значений полей 
+    			   TableOpers - это более сложные массовые операции над данными:
+    			   DeleteAll - очистка таблицы или заголовочной части документа 
+    			   Delete - удаление строки таблицы 
+    			   Insert - вставка строки таблицы в середину таблицы
+    			*/
+    			var mf:ArrayCollection = event.result.ModifiedFields;
+    			var TO:ArrayCollection = event.result.TableOpers;
+
+    			/* Обновляем атрибуты enable/readonly для полей
+    			   DisabledFields - массив новых значений атрибутов для полей
+    			*/    
+    			var df:ArrayCollection = event.result.DisabledFields;
+    			
+            	var ln:int = TO.length;
+				for(i = 0; i < ln; i++)
+				{
+					var framedata:Object = TO.list.getItemAt(i);
+					var RidFrame:int = framedata.RidFrame;
+					var OperName:String = framedata.OperName;
+					var TRow:int = framedata.TRow;
+	            	var ln2:int = DF.length;
+	            	
+	            	if (TRow > 0) TRow -= 1; 
+	            	if (OperName == "DeleteAll")
+	            	{
+    					for (var j:int=0;j<ln2;j++)  
+    					{      
+    						var field:Object = DF.list.getItemAt(j);
+    						if (field.RidFrame == RidFrame && field.field)
+    						{
+    							field.field.InternalValueStr = "";
+    							field.field.FormValueStr = "";
+    						}
+    					}
+	            	}
+	            	ln2 = DG.length;
+   					for (j=0;j<ln2;j++)  
+   					{      
+   						var TableFrame:Object = DG.list.getItemAt(j);
+   						if (TableFrame.RidFrame == RidFrame)
+   						{
+   							var dg:DataGrid = TableFrame.Grid;
+   							var data:ArrayCollection = TableFrame.Data;
+   							if (OperName == "DeleteAll")
+   								data.removeAll();
+   							if (OperName == "Delete")
+   							{
+   								if (data.length > TRow)	data.removeItemAt(TRow);
+   							}
+   							if (OperName == "Insert")
+   							{
+   								var newRowObj:Object = CreateEmptyRow (TableFrame.fk);
+   								data.addItemAt(newRowObj, TRow);
+   							}  
+   						}
+   					}
+				}
+            	
+				for(i = 0; i < mf.length; i++)
+				{ 
+    				var fielddata:Object = mf.list.getItemAt(i);
+    				var RidFF:int = fielddata.RidFF;
+    				RidFrame = fielddata.RidFrame;
+    				var fieldvalue:String = fielddata.FormValue;
+    				var intvalue:String = fielddata.InternalValue;
+    				var trow:int = fielddata.TRow;
+	            	if (trow > 0) trow -= 1; 
+
+	            	ln2 = DF.length;
+    				for (j=0;j<ln2;j++)  
+    				{      
+    					field = DF.list.getItemAt(j);
+    					if (field.RidFF == RidFF && field.field)
+    					{
+    						field.field.InternalValueStr = intvalue;
+    						field.field.FormValueStr = fieldvalue;
+    					}
+    				}
+	            	ln2 = DG.length;
+   					for (j=0;j<ln2;j++)  
+   					{      
+   						TableFrame = DG.list.getItemAt(j);
+   						if (TableFrame.RidFrame == RidFrame)
+   						{
+   							dg = TableFrame.Grid;
+   							data = TableFrame.Data;
+   							for (var k:int = data.length; k <= trow; k++)
+   							{
+   								newRowObj = CreateEmptyRow (TableFrame.fk);
+   								data.addItem(newRowObj);
+   							}
+   							var modifiedRow:Object = data.list.getItemAt(trow);
+   							
+	      					modifiedRow ["Field" + RidFF] = fieldvalue;     
+    	  					modifiedRow ["Data" + RidFF] = intvalue;
+/*			    			Alert.show (ObjectUtil.toString(modifiedRow)); */
+   						}
+   					}
+    			}
+   				
+   				/* Обработка массива DisabledFields */
+   				for(i = 0; i < df.length; i++)
+				{ 
+    				fielddata = df.list.getItemAt(i);
+    				RidFF = fielddata.RidFF;
+    				RidFrame = fielddata.RidFrame;
+    				var roflag:Boolean = fielddata.ReadOnly;
+    				var enflag:Boolean = ! fielddata.Disabled;
+    				trow = fielddata.TRow;
+	            	if (trow > 0) trow -= 1; 
+
+	            	ln2 = DF.length;
+    				for (j=0;j<ln2;j++)  
+    				{      
+    					field = DF.list.getItemAt(j);
+    					if (field.RidFF == RidFF && field.field)
+    					{
+    						field.field.enabled = enflag;
+    						field.field.ReadOnly = field.ReadOnly || roflag;
+    					}
+    				}
+				}
+				UpdateDisabledFields (df);
+   				
+   				/* Обработка массива PrintOpers - передача на локальную машину файлов печати */
+    			var PO:ArrayCollection = event.result.PrintOpers;
+            	ln = PO.length;
+				for(i = 0; i < ln; i++)
+				{
+					CreatePreviewTab (PO.list.getItemAt(i));
+				}
+	            ln2 = DG.length;
+   				for (j=0;j<ln2;j++)  
+   				{      
+   					TableFrame = DG.list.getItemAt(j);
+   					dg = TableFrame.Grid;
+					dg.invalidateList();
+   				}
+            }
+            private function CreateEmptyRow(fk:String):Object
+            {
+            	var newObjRow:Object = new Object ();
+
+    			var oColumnDef:Object;
+                var aColumnDef:Array = Fields;         
+    			for (var i:int=0;i<aColumnDef.length;i++)  
+    			{                  
+      				oColumnDef = aColumnDef[i];
+      				if (oColumnDef.FrameKey == fk)
+      				{
+      					newObjRow ["Field" + oColumnDef.RidFF] = "";     
+      					newObjRow ["Data" + oColumnDef.RidFF] = "";
+      				}     
+      			}
+            	return newObjRow;
+            }
+			private function CreatePreviewTab (printObj:Object):void
+			{
+				var o:PrintPreview = new PrintPreview ();
+  				tn.addChild(o);
+				o.Initialize (ViewOnly, servicepath, ContextId, printObj );
+				tn.selectedChild = o;
+			}
+                        
+/*
+   	<mx:VBox height="200" width = "100%">
+   		<mx:TextArea id="TestArea" height="100%" width = "100%"/>
+   	</mx:VBox>
+*/            
+
+        ]]>
+    </mx:Script>
+	<flexlib:SuperTabNavigator id="tn" scrollSpeed="25"  dropShadowEnabled="true" tabClose="OnTabClose(event)"
+			horizontalGap="0" paddingLeft="0" paddingRight="0" paddingTop="5" paddingBottom="0" width="100%" height="100%"> 
+		<mx:VBox id="TopArea" width="100%" height="100%" label="{RM('EnterData')}">
+			<mx:HBox id="ControlArea" width="100%" paddingLeft="10">
+   				<mx:Button id = "bRun" icon="@Embed('run.png')" label="{RM('Run')}" click="OnRun(event)"/>
+   				<mx:Button id = "bCancel" label="{RM('CancelBtn')}" click="WindowClose(event)"/>
+   				<mx:ProgressBar id="pb"	width = "150" labelPlacement = "left" maximum = "1" mode = "manual" label = "{RM('ProcessBar')}" visible="true"/>
+   				<mx:Label id="execTime"	 text="{RM('ExecTime')+':'}" visible="false"/>
+   				<mx:Label id="execTimeValue" text = "" visible="false"/>
+   			</mx:HBox>
+	    	<mx:VBox id="rootframe" width="100%"/>
+	   	</mx:VBox>
+	</flexlib:SuperTabNavigator>		
+</mx:VBox>

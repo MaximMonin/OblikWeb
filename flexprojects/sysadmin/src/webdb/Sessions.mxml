@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:flexlib="flexlib.containers.*"
+	xmlns:classes="oblik.basetype.*"
+	paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="0" 
+	width="100%" height="100%" label="{RM('SessionsTitle')}"  initialize="init()">
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import flash.events.Event;
+			import flash.events.KeyboardEvent;
+			import flash.events.MouseEvent;
+			import mx.resources.ResourceManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+    	   	import mx.rpc.soap.Operation;
+	       	import mx.rpc.soap.WebService;
+	       	import mx.controls.Alert;
+        	import mx.collections.ArrayCollection;
+			import mx.formatters.DateFormatter;
+        	
+			import flexlib.controls.SuperTabBar;
+			import flexlib.events.TabReorderEvent;
+			import flexlib.controls.tabBarClasses.SuperTab;
+        	import oblik.basetype.OblikBasetype;
+        	import oblik.basetype.OblikCharacter;
+        	import oblik.basetype.OblikInteger;
+        	import oblik.basetype.OblikDateTimeBr;
+
+			private var srv:WebService;
+			private var ReadOper:Operation;
+			private var ReadOper2:Operation;
+			private var ReadOper3:Operation;
+			private var ContextId:String;
+			private var ReadOnly:Boolean;
+			private var _init:Boolean = false;
+			private var dp:ArrayCollection;
+			private var tp:ArrayCollection;
+			private var pp:ArrayCollection;
+			
+			private var curSession:int;
+			private var curContext:int;
+
+			private function init():void
+			{
+				if (_init == true) return;
+				srv = new WebService();
+				ReadOper = new Operation(null, "ReadSessions");
+				ReadOper.addEventListener(ResultEvent.RESULT, OnList, false, 0, true);
+				ReadOper.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				ReadOper2 = new Operation(null, "ContextThreads");
+				ReadOper2.addEventListener(ResultEvent.RESULT, OnThreads, false, 0, true);
+				ReadOper2.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				ReadOper3 = new Operation(null, "ContextParams");
+				ReadOper3.addEventListener(ResultEvent.RESULT, OnParams, false, 0, true);
+				ReadOper3.addEventListener(FaultEvent.FAULT, Onfault, false, 0, true);
+				srv.operations = [ReadOper,ReadOper2,ReadOper3];
+           		callLater(initNonClosableTab);
+				_init = true;
+			}
+			public function Initialize ( iReadOnly:Boolean, servicepath:String, iContextId:String):void 
+        	{
+				srv.wsdl = servicepath;
+				ContextId = iContextId;
+				ReadOnly = iReadOnly;
+				srv.loadWSDL();
+
+				selUser.SetWebService(servicepath);
+				selUser.ContextId = ContextId;
+
+				var now:Date = new Date(); 
+	  			var df1:DateFormatter = new DateFormatter ();
+	  			df1.formatString = "DD/MM/YYYY";
+				DateTo.InternalValueStr = df1.format(now);
+
+				var millisecondsPerDay:int = 1000 * 60 * 60 * 24;
+				now = new Date(DateTo.InternalValue.getTime() - (6 * millisecondsPerDay)); 
+				DateFrom.InternalValueStr = df1.format(now);
+
+				MaxRecordCount.InternalValue = 1000;
+				MaxRecordCount.SetFormat(">>>9");
+				ControlArea.addEventListener("ValueCommit", OnValueCommit);
+				ControlArea.addEventListener("ValueSelect", OnValueSelect);
+				
+				UpdateData ();
+	       	}
+			private function initNonClosableTab():void 
+			{
+				tn.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
+				tn2.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
+			}
+			private function RM (messname:String):String
+			{
+				return ResourceManager.getInstance().getString('SystemAdmin',messname);
+			}
+        	private function Onfault(event:FaultEvent):void
+        	{
+            	Alert.show(event.fault.faultString, RM('ConnectionError'));
+        	}
+	        private function OnList(event:ResultEvent):void
+    	    {
+          		dp = event.result.SessionsList;
+	  			dg.dataProvider = dp;
+        	}
+        	private function ViewSession ():void
+        	{
+        		var si:Object = dg.selectedItem;
+        		if (si)
+        		{
+					curSession = si.SessionId;
+					ReadOper2.send (ContextId, curSession);
+        		}
+        	}
+	        private function OnThreads(event:ResultEvent):void
+    	    {
+          		tp = event.result.ContextThreads;
+	  			dg2.dataProvider = tp;
+        	}
+        	private function ViewParams ():void
+        	{
+        		var si:Object = dg2.selectedItem;
+        		if (si)
+        		{
+					curContext = si.ContextId;
+					ReadOper3.send (ContextId, curContext);
+        		}
+        	}
+	        private function OnParams(event:ResultEvent):void
+    	    {
+          		pp = event.result.ContextParams;
+	  			dg3.dataProvider = pp;
+        	}
+        	
+        	public function UpdateData ():void
+        	{
+				ReadOper.send (ContextId, selUser.InternalValueStr, DateFrom.InternalValue, DateTo.InternalValue, MaxRecordCount.InternalValue);
+        	}
+			private function OnValueCommit (e:Event):void
+			{
+				UpdateData (); 
+			}
+			private function OnValueSelect (e:Event):void
+			{
+				UpdateData (); 
+			}
+        ]]>
+    </mx:Script>
+    <mx:HBox width="100%" height="30" verticalAlign="middle" horizontalAlign="left" id="ControlArea" borderStyle="solid" paddingLeft="5">
+        <mx:Label text="{RM('SessionsUser')+':'}"/>
+        <classes:OblikBasetype width="200" id="selUser" basetype="USER" dropDownWidth="300">
+        </classes:OblikBasetype>
+        <mx:Label text="{RM('SessionsDateFrom')+':'}"/>
+        <classes:OblikDate id="DateFrom"/>
+        <mx:Label text="{RM('SessionsDateTo')+':'}"/>
+        <classes:OblikDate id="DateTo"/>
+        <mx:Label text="{RM('SessionsRecCount')+':'}"/>
+        <classes:OblikInteger width="50" id="MaxRecordCount"/>
+        <mx:LinkButton toolTip="{RM('SessionsUpdate')}" id="updateButton" icon="@Embed('update.png')" width="16" height="16" click="UpdateData()"/>
+    </mx:HBox>
+  	<mx:VDividedBox width="100%" height="100%" verticalGap="6" backgroundColor="0x777777">
+        <mx:Canvas width="100%" height="100%" backgroundColor="0xFFFFFF">
+    		<mx:VBox height="100%" width="100%">
+        		<mx:DataGrid width="100%" height="100%" id="dg" horizontalScrollPolicy = "auto" click="ViewSession()">
+            	<mx:columns>
+                	<mx:DataGridColumn headerText="{RM('SessionsId')}" dataField="SessionId" width="50" textAlign="right" />
+                	<mx:DataGridColumn headerText="{RM('SessionsUser')}" dataField="UserName" width="200"/>
+                	<mx:DataGridColumn headerText="{RM('SessionsLoginTime')}" dataField="Login" width="150" itemRenderer="oblik.basetype.OblikDateTimeBr"/>
+                	<mx:DataGridColumn headerText="{RM('SessionsEndTime')}" dataField="EndTime" width="150" itemRenderer="oblik.basetype.OblikDateTimeBr"/>
+                	<mx:DataGridColumn headerText="{RM('SessionsThreads')}" dataField="Threads" textAlign="right" />
+                	<mx:DataGridColumn headerText="{RM('SessionsQueries')}" dataField="Queries" textAlign="right" />
+                	<mx:DataGridColumn headerText="{RM('SessionsSecErrors')}" dataField="SecErrors" textAlign="right" />
+				</mx:columns>
+        		</mx:DataGrid>
+    		</mx:VBox>
+    	</mx:Canvas>
+		<mx:Canvas width="100%" height="100%" backgroundColor="0xFFFFFF" >
+		<mx:HDividedBox width="100%" height="100%" verticalGap="6" >
+			<flexlib:SuperTabNavigator id="tn" scrollSpeed="25" dropShadowEnabled="true" 
+				horizontalGap="0" width="70%" height="100%"> 
+	        <mx:VBox id="Threads" label="{RM('SessionsContextTable')}">
+        		<mx:DataGrid width="100%" height="100%" id="dg2" horizontalScrollPolicy = "auto" click="ViewParams()">
+            	<mx:columns>
+                	<mx:DataGridColumn headerText="{RM('SessionsContextId')}" dataField="ContextId" width="50" />
+                	<mx:DataGridColumn headerText="{RM('SessionsContextParentId')}" dataField="ParentId" width="50"/>
+                	<mx:DataGridColumn headerText="{RM('SessionsType')}" dataField="ContextType" width="150"/>
+                	<mx:DataGridColumn headerText="{RM('SessionsCreateTime')}" dataField="CreateTime" width="150" itemRenderer="oblik.basetype.OblikDateTimeBr"/>
+                	<mx:DataGridColumn headerText="{RM('SessionsEndTime')}" dataField="EndTime" width="150" itemRenderer="oblik.basetype.OblikDateTimeBr"/>
+                	<mx:DataGridColumn headerText="{RM('SessionsQueries')}" dataField="Queries" textAlign="right" />
+                	<mx:DataGridColumn headerText="{RM('SessionsSecErrors')}" dataField="SecErrors" textAlign="right" />
+				</mx:columns>
+        		</mx:DataGrid>
+	        </mx:VBox>
+			</flexlib:SuperTabNavigator>		
+			<flexlib:SuperTabNavigator id="tn2" scrollSpeed="25" dropShadowEnabled="true" 
+				horizontalGap="0" width="30%" height="100%"> 
+	        <mx:VBox id="Params" label="{RM('SessionsParamTable')}">
+        		<mx:DataGrid width="100%" height="100%" horizontalScrollPolicy = "auto" id="dg3">
+            	<mx:columns>
+                	<mx:DataGridColumn headerText="{RM('SessionsParamName')}" dataField="ParamName" width="200" />
+                	<mx:DataGridColumn headerText="{RM('SessionsParamValue')}" dataField="ParamValue" width="200"/>
+				</mx:columns>
+        		</mx:DataGrid>
+	        </mx:VBox>
+			</flexlib:SuperTabNavigator>		
+	   	</mx:HDividedBox>
+		</mx:Canvas>
+   	</mx:VDividedBox>
+</mx:VBox>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * ============================================================================
+ * GNU Lesser General Public License
+ * ============================================================================
+ *
+ * FlexReport - Free Flex report-generating library.
+ * Copyright (C) 2008 Frederico Garcia
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * Frederico Garcia
+ * fmotagarcia@kemelyon.com
+ * http://www.kemelyon.com
+ */
+ 
+/*
+ * Contributors:
+ * Michal Wojcik (Michal.Wojcik@sabre.com)
+ * Sylwester Bajek (Sylwester.Bajek@sabre.com)
+ */
+ -->
+<mx:ApplicationControlBar xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="720" 
+	height="30" 
+	xmlns:ns1="components.toolbars.*" 
+	verticalAlign="middle" 
+	xmlns:print="org.print.*"
+   	fillAlphas="[1,1]"
+   	fillColors="[#f7f7f7, #dbdbdb]"
+   	backgroundAlpha="1"
+   	cornerRadius="3"
+   	dropShadowEnabled="true"
+   	shadowDistance="3"
+   	dropShadowColor="#333333"
+   	creationComplete="init()">
+	
+	<mx:Metadata>
+		[Event(name="pdf",type="flash.events.Event")]
+        [Event(name="print",type="flash.events.Event")]
+        [Event(name="previous",type="flash.events.Event")]
+        [Event(name="next",type="flash.events.Event")]
+        [Event(name="pageChanged",type="flash.events.Event")]
+        [Event(name="zoomIn",type="flash.events.Event")]
+        [Event(name="zoomOut",type="flash.events.Event")]
+        [Event(name="fitModeChange",type="flash.events.Event")]
+        [Event(name="LayoutChanged",type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import org.doc.PageFit;
+			import org.doc.PaperFormat;
+			import mx.events.ItemClickEvent;
+	    	import mx.collections.ArrayCollection;
+
+			[Bindable]
+			[Embed(source="/assets/page_white_acrobat.png")] 
+			private var pdfIcon:Class;
+						
+			[Bindable]
+			[Embed(source="/assets/printer.png")] 
+			private var printIcon:Class;
+
+			[Bindable]
+			[Embed(source="/assets/print_previous.png")] 
+			private var previousIcon:Class;
+			
+			[Bindable]
+			[Embed(source="/assets/print_next.png")] 
+			private var nextIcon:Class;
+
+			[Bindable]
+			[Embed(source="/assets/print_zoom_in.png")] 
+			private var zoomInIcon:Class;
+			
+			[Bindable]
+			[Embed(source="/assets/print_zoom_out.png")] 
+			private var zoomOutIcon:Class;
+				
+			[Bindable]						
+			[Embed(source="/assets/page_white.png")]
+			public var actualSizeIcon:Class;
+			
+			[Bindable]
+			[Embed(source="/assets/page_white_magnify.png")]
+			public var fitPageIcon:Class;
+			
+			[Bindable]
+			[Embed(source="/assets/page_white_width.png")]
+			public var fitWidthIcon:Class;
+														
+			[Bindable]
+			public var pageNumber:int;
+
+			[Bindable]
+			public var pageCount:int;
+			
+			public var inputNumber:int;
+			
+            public var PageFormat:ArrayCollection = new ArrayCollection();
+            public var Fonts:ArrayCollection = new ArrayCollection(
+                [ 
+                {label:"Auto", data:0}, 
+                {label:"6", data:6}, 
+                {label:"7", data:7}, 
+                {label:"8", data:8}, 
+                {label:"10", data:10}, 
+                {label:"12", data:12}, 
+                {label:"14", data:14}, 
+                {label:"16", data:16} 
+                  ]);            
+			public var Format:PaperFormat;
+			public var FontSize:int;
+			
+            private function init():void
+            {
+				var o:Object;
+				o = new Object();
+				o['label'] = RM("PrintPageFormatA4");
+				o['data'] = org.doc.PaperFormat.A4;
+				PageFormat.addItem(o);
+				o = new Object();
+				o['label'] = RM("PrintPageFormatA4R");
+				o['data'] = org.doc.PaperFormat.A4R;
+				PageFormat.addItem(o);
+				o = new Object();
+				o['label'] = RM("PrintPageFormatA3");
+				o['data'] = org.doc.PaperFormat.A3;
+				PageFormat.addItem(o);
+				o = new Object();
+				o['label'] = RM("PrintPageFormatA3R");
+				o['data'] = org.doc.PaperFormat.A3R;
+				PageFormat.addItem(o);
+				o = new Object();
+				o['label'] = RM("PrintPageFormatA5");
+				o['data'] = org.doc.PaperFormat.A5;
+				PageFormat.addItem(o);
+				o = new Object();
+				o['label'] = RM("PrintPageFormatA5R");
+				o['data'] = org.doc.PaperFormat.A5R;
+				PageFormat.addItem(o);
+				PrintFormat.dataProvider = PageFormat;
+				PrintFont.dataProvider = Fonts;
+            }		
+			private function onPrintLayout():void
+			{
+				Format = PrintFormat.selectedItem.data;
+				FontSize = PrintFont.selectedItem.data;
+				dispatchEvent(new Event("LayoutChanged"));
+			}
+            	
+			private function pageNumberChangeHandler(event:Event):void
+			{
+				inputNumber = pages.inputNumber;
+				dispatchEvent(new Event("pageChanged"));
+			}
+			
+			[Bindable]
+			public var zoom:Number = 1;
+			
+			private function pdf():void
+			{
+				dispatchEvent(new Event("pdf"));
+			}
+						
+			private function print():void
+			{
+				dispatchEvent(new Event("print"));
+			}  
+			
+			private function previous():void
+			{
+				dispatchEvent(new Event("previous"));
+			}
+			
+			private function next():void
+			{
+				dispatchEvent(new Event("next"));
+			}
+			
+			private function zoomIn():void {
+				tbbFitMode.selectedIndex = -1;
+				fitMode = PageFit.NONE;
+				dispatchEvent(new Event("fitModeChange"));				
+				dispatchEvent(new Event("zoomIn"));
+			}
+			
+			private function zoomOut():void
+			{
+				tbbFitMode.selectedIndex = -1;
+				fitMode = PageFit.NONE;
+				dispatchEvent(new Event("fitModeChange"));				
+				dispatchEvent(new Event("zoomOut"));
+			}
+			
+			public var fitMode:uint = PageFit.ACTUAL_PAGE_SIZE;
+			private function onFitMode(event:ItemClickEvent):void {
+				fitMode = event.index + 1;
+				dispatchEvent(new Event("fitModeChange"));
+			}		
+			private function RM (messname:String):String
+			{
+				return resourceManager.getString('CommonLibs',messname);
+			}
+/*
+		<mx:Button width="22" height="22" icon="{pdfIcon}" toolTip="{RM('PreviewToolbarExport')}" click="pdf()" id="pdfExportButton"/>
+*/													          			
+		]]>
+	</mx:Script>
+	<mx:HBox left="0" right="0" top="0" bottom="0" horizontalGap="3">	
+		<mx:Canvas width="100%" height="30" backgroundColor="#dedede">
+		</mx:Canvas>
+	</mx:HBox>
+	<mx:HBox horizontalGap="0">
+		<mx:Button width="22" height="22" icon="{printIcon}" toolTip="{RM('PreviewToolbarPrint')}" click="print()"/>
+	</mx:HBox>
+	<mx:VRule height="100%"/>
+	<mx:HBox horizontalGap="5" verticalAlign="middle" >
+		<mx:Label text="{RM('PrintFormat')+':'}" height="22"/>
+		<mx:ComboBox width="80" height="22" id="PrintFormat"  dropdownWidth="80" rowCount="10" labelField="label" change="onPrintLayout()"/>
+		<mx:Label text="{RM('PrintFont')+':'}" height="22"/>
+		<mx:ComboBox width="80" height="22" id="PrintFont"  dropdownWidth="80" rowCount="10" labelField="label" change="onPrintLayout()"/>
+	</mx:HBox>
+	<mx:VRule height="100%"/>
+	<mx:HBox horizontalGap="0" verticalCenter="0">
+		<mx:Button width="22" height="22" icon="{previousIcon}" toolTip="{RM('PreviewToolbarPrevPage')}" click="previous()"/>
+		<mx:Button width="22" height="22" icon="{nextIcon}" toolTip="{RM('PreviewToolbarNextPage')}" click="next()"/>
+		<print:PagesButton id="pages" pageChanged="pageNumberChangeHandler(event)" pageNumber="{pageNumber}" pageCount="{pageCount}"/>
+	</mx:HBox>
+	<mx:VRule height="100%"/>
+	<mx:HBox horizontalGap="0">
+		<mx:ToggleButtonBar buttonWidth="22" toggleOnClick="false" id="tbbFitMode" horizontalGap="1"
+			itemClick="onFitMode(event)">
+			<mx:Array>
+				<mx:Object icon="{actualSizeIcon}" toolTip="{RM('PreviewToolbarActualSize')}" buttonMode="true" enabled="false"/>
+				<mx:Object icon="{fitPageIcon}" toolTip="{RM('PreviewToolbarFitPage')}" buttonMode="true" enabled="false"/>
+				<mx:Object icon="{fitWidthIcon}" toolTip="{RM('PreviewToolbarFitWidth')}" buttonMode="true" enabled="false"/>
+			</mx:Array>
+		</mx:ToggleButtonBar>		
+	</mx:HBox>	
+	<mx:VRule height="100%" id="zoomSeparator"/>
+	<mx:HBox horizontalGap="0" id="zoomToolbar">
+		<mx:Button width="22" height="22" icon="{zoomOutIcon}" toolTip="{RM('PreviewToolbarZoomOut')}" click="zoomOut()" id="zoomOutButton"/>
+		<mx:Button icon="{zoomInIcon}" toolTip="{RM('PreviewToolbarZoomIn')}" click="zoomIn()" height="22" width="22" id="zoomInButton"/>
+		<mx:Label text="{Math.round(zoom*100)+'%'}" height="22"/>
+	</mx:HBox>
+</mx:ApplicationControlBar>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="30" height="20"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"  >
+	<mx:Script>
+		<![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+		import mx.resources.ResourceManager;
+		private function RM (messname:String):String
+		{
+			return resourceManager.getString('Document',messname);
+		}
+		]]>
+	</mx:Script>
+	<mx:LinkButton id="lb" label="{data.Direction}" toolTip="{RM('RelDocRenderTip')}" 
+		textAlign="center" click="parentApplication.OnDocItemMenu ('ViewRelation', data, '', lb.parent.parent.parent);" />
+</mx:VBox>

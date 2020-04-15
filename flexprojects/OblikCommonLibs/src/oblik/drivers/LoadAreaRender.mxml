@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="250" height="35" creationComplete="InitItem()"  
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"  >
+    <mx:Script>
+        <![CDATA[
+
+// Copyright (C) Maxim A. Monin 2009-2010 
+
+			import mx.resources.ResourceManager;
+			import mx.controls.Alert;
+
+			[Embed(source="download.png")]
+			private var download_icon:Class;
+			[Embed(source="upload.png")]
+			private var upload_icon:Class;
+			[Embed(source="save.png")]
+			private var save_icon:Class;
+			[Embed(source="remove.png")]
+			private var delete_icon:Class;
+			
+			private function RM (messname:String):String
+			{
+				return resourceManager.getString('CommonLibs',messname);
+			}
+			private function InitItem ():void
+			{
+				if (data.File.Mode == "Download")
+				{
+    	        	VButton.enabled = false;
+   	        		VButton.toolTip = RM('FileDownload');
+   	        		VButton.setStyle ("icon", download_icon);
+				}
+				if (data.File.Mode == "Upload")
+				{
+    	        	VButton.setStyle ("icon", upload_icon);
+    	        	VButton.setStyle ("overIcon", delete_icon);
+    	        	VButton.enabled = true;
+    	        	VButton.toolTip = RM('FileCancelUpload');
+				}
+			}
+			private function OnClick ():void
+			{
+				if (data.File.Mode == "Upload")
+				{
+					data.File.CancelUpload ();
+				}
+				if (data.File.Mode == "Download")
+				{
+					data.File.SaveFile(data.File.LocalFileName);
+				}
+
+			}
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				if (!data) return;
+				if (data.File.TotBytes != 0)
+				{
+					VBar.setProgress(data.File.TrBytes / data.File.TotBytes, 1 );
+					VBar.label = int(100 * data.File.TrBytes / data.File.TotBytes).toString() + "%";
+				}
+				if (data.File.Mode == "Upload")
+				{
+					if (data.File.TrBytes == data.File.TotBytes)
+					{
+						VButton.enabled = false;
+    	        		VButton.setStyle ("icon", save_icon);
+    	        		VButton.setStyle ("overIcon", null);
+    	        		VButton.toolTip = RM('FileAttachToDoc');;
+    				}
+    				else
+    				{
+	    	        	VButton.setStyle ("icon", upload_icon);
+    		        	VButton.setStyle ("overIcon", delete_icon);
+    		        	VButton.enabled = true;
+    	    	    	VButton.toolTip = RM('FileCancelUpload');
+    				}
+				}
+				if (data.File.Mode == "Download")
+				{
+					if (data.File.TrBytes == data.File.TotBytes)
+					{
+    	        		VButton.enabled = true;
+    	        		VButton.toolTip = RM('FileDownloadSaveFile');
+    	        		VButton.setStyle ("icon", save_icon);
+					}
+					else
+					{
+    	        		VButton.enabled = false;
+    	        		VButton.toolTip = RM('FileDownload');;
+    	        		VButton.setStyle ("icon", download_icon);
+					}
+				}
+			}
+]]>
+    </mx:Script>
+	<mx:LinkButton id = "VButton" enabled="false" width = "20"  click="OnClick ()"/>
+	<mx:ProgressBar id = "VBar" width = "50" maximum = "1" mode = "manual" labelPlacement="bottom" label="0%" />
+	<mx:Text text="{data.File.LocalFileName}" selectable="false" />
+</mx:HBox>

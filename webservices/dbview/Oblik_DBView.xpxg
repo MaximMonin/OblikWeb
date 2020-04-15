@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<WSAD xmlns="urn:schemas-progress-com:WSAD:0008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AppObject>
+    <PGVersion>
+      <PXGVersion>03</PXGVersion>
+    </PGVersion>
+    <PGGenInfo isSessionFree="true">
+      <Author />
+      <VersionString />
+      <VersionNumber>1</VersionNumber>
+      <Package />
+      <Service>Oblik_DBView</Service>
+      <WorkDir>d:\Maxim\webservices\dbview\</WorkDir>
+      <VerboseLogging>true</VerboseLogging>
+      <SaveBeforeGen>true</SaveBeforeGen>
+      <DotNetClient>false</DotNetClient>
+      <JavaClient>false</JavaClient>
+      <WebServicesClient>true</WebServicesClient>
+      <ESBClient>false</ESBClient>
+      <ESBClient2>false</ESBClient2>
+      <UserDefinedAppService>false</UserDefinedAppService>
+      <JavaCompilerType>1</JavaCompilerType>
+      <JavaCompiler>&lt;Install Dir&gt;\jdk\bin\javac</JavaCompiler>
+      <JavaSwitches />
+      <JavaClasspathSwitch>-classpath</JavaClasspathSwitch>
+      <JavaClasspath>&lt;Proxy Dir&gt;;&lt;Install Dir&gt;\java\progress.jar;&lt;Install Dir&gt;\java\messages.jar;;&lt;Default classes.zip&gt;</JavaClasspath>
+      <DotNetCompilerType>4</DotNetCompilerType>
+      <DotNetCompiler>csc</DotNetCompiler>
+      <DotNetSwitches />
+      <DotNetXSDGenerator>xsd</DotNetXSDGenerator>
+      <DotNetNamespace />
+      <DotNetTitle />
+      <DotNetVersion />
+      <DotNetDesc />
+      <DotNetCompany />
+      <DotNetProduct />
+      <DotNetPublicKey />
+      <DotNetDelaySign>false</DotNetDelaySign>
+      <DotNetRuntime>digitally signed</DotNetRuntime>
+      <DotNetDataSetNamespace>StrongTypesNS</DotNetDataSetNamespace>
+      <DNUseDefaultDSNamespace>true</DNUseDefaultDSNamespace>
+      <DNUseNamespaceAsDirs>true</DNUseNamespaceAsDirs>
+      <DotNetUseNullableTypes>false</DotNetUseNullableTypes>
+    </PGGenInfo>
+    <DeploymentWizard>
+      <CurrentEncoding>3</CurrentEncoding>
+      <SoapEndpointURL>http://www.oblik.com.ua/wsa/wsa1</SoapEndpointURL>
+      <WebServiceNamespace userDefined="true">urn:oblikerp-com-dbview</WebServiceNamespace>
+      <SoapAction appendToSoapAction="false" />
+      <ConnectReturnString userDefined="false" />
+      <TestWSDL bGen="true" RPCEncoded="false" RPCLiteral="false" DocLiteral="true" />
+      <ESBEncoding>3</ESBEncoding>
+      <EntryEndpoint useDefault="true" />
+      <FaultEndpoint useDefault="true" />
+      <RejectedEndpoint useDefault="true" />
+      <Container />
+      <AppserverURL>AppServerDC://localhost:3091</AppserverURL>
+      <FileName overWrite="false">Oblik_DBView</FileName>
+      <ResourceDirectory>/Resources/OpenEdgeServices</ResourceDirectory>
+      <SonicAppService useFileSystem="false" deployToDS="false" createXAR="false">
+        <ResourceDirectory overWrite="false" />
+        <XARName />
+      </SonicAppService>
+      <SonicConnectionInfo>
+        <SonicURL>tcp://localhost:2506</SonicURL>
+        <SonicDomain>Domain1</SonicDomain>
+        <User>Administrator</User>
+        <Password />
+      </SonicConnectionInfo>
+    </DeploymentWizard>
+    <Name>Oblik_DBView</Name>
+    <ProPath>d:\maxim\</ProPath>
+    <HelpString />
+    <ODLHelpString />
+    <ObjectType>false</ObjectType>
+    <AllowUnknown>true</AllowUnknown>
+    <IsTTResultSet>true</IsTTResultSet>
+    <WriteDatasetBeforeImage>false</WriteDatasetBeforeImage>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>BasetypeSearch</Name>
+      <ProcPath>webservices\dbview\src\</ProcPath>
+      <ProPath>d:\maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>BasetypeSelect</Name>
+      <ProcPath>webservices\dbview\src\</ProcPath>
+      <ProPath>d:\maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="true">
+      <Name>checkservice</Name>
+      <ProcPath>webservices\dbview\src\</ProcPath>
+      <ProPath>d:\maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+      <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+        <Name>checkservice</Name>
+        <HelpString />
+        <ODLHelpString />
+        <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+          <Name>c</Name>
+          <OrigName>c</OrigName>
+          <Type>1</Type>
+          <Mode>2</Mode>
+        </Parameter>
+      </ProcDetail>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>dbinfo</Name>
+      <ProcPath>webservices\dbview\src\</ProcPath>
+      <ProPath>d:\maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>GetTableData</Name>
+      <ProcPath>webservices\dbview\src\</ProcPath>
+      <ProPath>d:\maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="true">
+      <Name>GetTableList</Name>
+      <ProcPath>webservices\dbview\src\</ProcPath>
+      <ProPath>d:\maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+      <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+        <Name>GetTableList</Name>
+        <HelpString />
+        <ODLHelpString />
+        <Parameter allowUnknown="false" ordinal="1" writeXmlBeforeImage="false">
+          <Name>TableList</Name>
+          <OrigName>TableList</OrigName>
+          <Type>15</Type>
+          <Mode>2</Mode>
+          <MetaData>
+            <FieldName>table_name</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>table_label</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>sys</FieldName>
+            <Type>3</Type>
+            <Extent>0</Extent>
+            <TypeName>logical</TypeName>
+          </MetaData>
+        </Parameter>
+      </ProcDetail>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="true">
+      <Name>TableInfo</Name>
+      <ProcPath>webservices\dbview\src\</ProcPath>
+      <ProPath>d:\maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+      <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+        <Name>TableInfo</Name>
+        <HelpString />
+        <ODLHelpString />
+        <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+          <Name>TableName</Name>
+          <Type>1</Type>
+          <Mode>1</Mode>
+        </Parameter>
+        <Parameter allowUnknown="false" ordinal="2" writeXmlBeforeImage="false">
+          <Name>TableInfo</Name>
+          <Type>15</Type>
+          <Mode>2</Mode>
+          <MetaData>
+            <FieldName>table_name</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>table_label</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>dump_name</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>table_desc</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>valexp</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>valmsg</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>sys</FieldName>
+            <Type>3</Type>
+            <Extent>0</Extent>
+            <TypeName>logical</TypeName>
+          </MetaData>
+        </Parameter>
+        <Parameter allowUnknown="false" ordinal="3" writeXmlBeforeImage="false">
+          <Name>TTriggers</Name>
+          <Type>15</Type>
+          <Mode>2</Mode>
+          <MetaData>
+            <FieldName>event</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>proc_name</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>override</FieldName>
+            <Type>3</Type>
+            <Extent>0</Extent>
+            <TypeName>logical</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>checkcrc</FieldName>
+            <Type>3</Type>
+            <Extent>0</Extent>
+            <TypeName>logical</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>ttext</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+        </Parameter>
+        <Parameter allowUnknown="false" ordinal="4" writeXmlBeforeImage="false">
+          <Name>TRelation</Name>
+          <Type>15</Type>
+          <Mode>2</Mode>
+          <MetaData>
+            <FieldName>owner</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>ref_table</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>field_name</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+        </Parameter>
+        <Parameter allowUnknown="false" ordinal="5" writeXmlBeforeImage="false">
+          <Name>TFields</Name>
+          <Type>15</Type>
+          <Mode>2</Mode>
+          <MetaData>
+            <FieldName>pos</FieldName>
+            <Type>4</Type>
+            <Extent>0</Extent>
+            <TypeName>integer</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>field_name</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>field_label</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>dt</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>field_format</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>initial</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>flags</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+        </Parameter>
+        <Parameter allowUnknown="false" ordinal="6" writeXmlBeforeImage="false">
+          <Name>TIndexes</Name>
+          <Type>15</Type>
+          <Mode>2</Mode>
+          <MetaData>
+            <FieldName>pos</FieldName>
+            <Type>4</Type>
+            <Extent>0</Extent>
+            <TypeName>integer</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>name</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>idesc</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>num_fields</FieldName>
+            <Type>4</Type>
+            <Extent>0</Extent>
+            <TypeName>integer</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>flags</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>fields_name</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+        </Parameter>
+      </ProcDetail>
+    </Procedure>
+  </AppObject>
+</WSAD>

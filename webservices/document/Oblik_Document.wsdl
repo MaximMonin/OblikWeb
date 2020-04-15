@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Oblik_Document" targetNamespace="urn:oblikerp-com-document" xmlns:tns="urn:oblikerp-com-document" xmlns:S2="urn:oblikerp-com-document:Oblik_Document" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:prodata="urn:schemas-progress-com:xml-prodata:0001" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:S1="urn:soap-fault:details" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:documentation>EncodingType=DOC_LITERAL, Proxygen_Product=Progress Version 10.2A</wsdl:documentation>
+  <wsdl:types>
+<schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema"><element name="FaultDetail"><complexType><sequence><element name="errorMessage" type="xsd:string"/><element name="requestID" type="xsd:string"/></sequence></complexType></element></schema>
+<schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-document:Oblik_Document" xmlns="http://www.w3.org/2001/XMLSchema"><complexType name="TableHandleParam"><sequence><any namespace="##local"/></sequence></complexType><complexType name="AppDocMenu_AppDocMenuRow"><sequence><element name="MenuItem" nillable="true" type="xsd:string"/><element name="IdItem" nillable="true" type="xsd:int"/><element name="RidMenu" nillable="true" type="xsd:int"/><element name="RidApp" nillable="true" type="xsd:int"/><element name="RidTypedoc" nillable="true" type="xsd:int"/><element name="PutOff" nillable="true" type="xsd:boolean"/><element name="Scope" nillable="true" type="xsd:string"/><element name="ScopeList" nillable="true" type="xsd:string"/><element name="DateFrom" nillable="true" type="xsd:date"/><element name="DateTo" nillable="true" type="xsd:date"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="AppDocMenu_AppDocMenuParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AppDocMenuRow" type="S2:AppDocMenu_AppDocMenuRow"/></sequence></complexType><complexType name="AppReportMenu_AppDocMenuRow"><sequence><element name="MenuItem" nillable="true" type="xsd:string"/><element name="IdItem" nillable="true" type="xsd:int"/><element name="ItemLevel" nillable="true" type="xsd:int"/><element name="ParentId" nillable="true" type="xsd:int"/><element name="RidMenu" nillable="true" type="xsd:int"/><element name="RidTypedoc" nillable="true" type="xsd:int"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="IsAvailable" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="AppReportMenu_AppDocMenuParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AppDocMenuRow" type="S2:AppReportMenu_AppDocMenuRow"/></sequence></complexType><complexType name="DocContextMenu_ContextMenuRow"><sequence><element name="ItemId" nillable="true" type="xsd:int"/><element name="ItemKey" nillable="true" type="xsd:string"/><element name="ItemName" nillable="true" type="xsd:string"/><element name="UpItem" nillable="true" type="xsd:int"/><element name="AppParam" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="DocContextMenu_ContextMenuParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="ContextMenuRow" type="S2:DocContextMenu_ContextMenuRow"/></sequence></complexType><complexType name="DocData_FrameDataRow"><sequence><element name="RidFF" nillable="true" type="xsd:int"/><element name="InternalValue" nillable="true" type="xsd:string"/><element name="FormValue" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="DocData_FrameDataParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="FrameDataRow" type="S2:DocData_FrameDataRow"/></sequence></complexType><complexType name="DocForm_FramesRow"><sequence><element name="FrameKey" nillable="true" type="xsd:int"/><element name="RidFrame" nillable="true" type="xsd:int"/><element name="IsTable" nillable="true" type="xsd:boolean"/><element name="N" nillable="true" type="xsd:int"/><element name="PageN" nillable="true" type="xsd:int"/><element name="FrameHeight" nillable="true" type="xsd:int"/><element name="FrameTitle" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="DocForm_FramesParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="FramesRow" type="S2:DocForm_FramesRow"/></sequence></complexType><complexType name="DocForm_FrameFieldsRow"><sequence><element name="RidFF" nillable="true" type="xsd:int"/><element name="FrameKey" nillable="true" type="xsd:int"/><element name="RidFrame" nillable="true" type="xsd:int"/><element name="FieldNum" nillable="true" type="xsd:int"/><element name="IsMandatory" nillable="true" type="xsd:boolean"/><element name="IsLim" nillable="true" type="xsd:boolean"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="IsSelect" nillable="true" type="xsd:boolean"/><element name="IsAutoSelect" nillable="true" type="xsd:boolean"/><element name="FieldCol" nillable="true" type="xsd:int"/><element name="FieldRow" nillable="true" type="xsd:int"/><element name="FieldWidth" nillable="true" type="xsd:int"/><element name="FieldHeight" nillable="true" type="xsd:int"/><element name="ColNumber" nillable="true" type="xsd:int"/><element name="AppendParam" nillable="true" type="xsd:string"/><element name="BaseType" nillable="true" type="xsd:string"/><element name="FieldFormat" nillable="true" type="xsd:string"/><element name="FieldLabel" nillable="true" type="xsd:string"/><element name="FieldAlign" nillable="true" type="xsd:string"/><element name="ObjectType" nillable="true" type="xsd:string"/><element name="ProgressType" nillable="true" type="xsd:string"/><element name="HelpString" nillable="true" type="xsd:string"/><element name="FreeEdit" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="DocForm_FrameFieldsParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="FrameFieldsRow" type="S2:DocForm_FrameFieldsRow"/></sequence></complexType><complexType name="DocHeader_DocHeaderRow"><sequence><element name="Typedoc" nillable="true" type="xsd:string"/><element name="GroupDoc" nillable="true" type="xsd:string"/><element name="DateDoc" nillable="true" type="xsd:date"/><element name="IdDoc" nillable="true" type="xsd:int"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="CreationTime" nillable="true" type="xsd:dateTime"/><element name="CreatedBy" nillable="true" type="xsd:string"/><element name="SavedBy" nillable="true" type="xsd:string"/><element name="Ent" nillable="true" type="xsd:string"/><element name="Divis" nillable="true" type="xsd:string"/><element name="Application" nillable="true" type="xsd:string"/><element name="Workcenter" nillable="true" type="xsd:string"/><element name="Sum" nillable="true" type="xsd:decimal"/><element name="Currency" nillable="true" type="xsd:string"/><element name="DocCommitted" nillable="true" type="xsd:boolean"/><element name="RO" nillable="true" type="xsd:boolean"/><element name="NeedCalc" nillable="true" type="xsd:boolean"/><element name="Filled" nillable="true" type="xsd:boolean"/><element name="ExecFlag" nillable="true" type="xsd:boolean"/><element name="Error" nillable="true" type="xsd:boolean"/><element name="AuditEnabled" nillable="true" type="xsd:boolean"/><element name="DocStatus" nillable="true" type="xsd:string"/><element name="Description" nillable="true" type="xsd:string"/><element name="BlockedBy" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="DocHeader_DocHeaderParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="DocHeaderRow" type="S2:DocHeader_DocHeaderRow"/></sequence></complexType><complexType name="DocHeader_AttachedFilesRow"><sequence><element name="FileNumber" nillable="true" type="xsd:int"/><element name="FileName" nillable="true" type="xsd:string"/><element name="FileSize" nillable="true" type="xsd:int"/><element name="FileDate" nillable="true" type="xsd:date"/><element name="AddedBy" nillable="true" type="xsd:string"/><element name="FileDescr" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="DocHeader_AttachedFilesParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AttachedFilesRow" type="S2:DocHeader_AttachedFilesRow"/></sequence></complexType><complexType name="DocInfo_CollumnDataRow"><sequence><element name="IdField" nillable="true" type="xsd:int"/><element name="fLabel" nillable="true" type="xsd:string"/><element name="fName" nillable="true" type="xsd:string"/><element name="fWidth" nillable="true" type="xsd:int"/><element name="fType" nillable="true" type="xsd:string"/><element name="fAlign" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="DocInfo_CollumnDataParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="CollumnDataRow" type="S2:DocInfo_CollumnDataRow"/></sequence></complexType><complexType name="GetDocList_CollumnDataRow"><sequence><element name="IdField" nillable="true" type="xsd:int"/><element name="fLabel" nillable="true" type="xsd:string"/><element name="fName" nillable="true" type="xsd:string"/><element name="fWidth" nillable="true" type="xsd:int"/><element name="fType" nillable="true" type="xsd:string"/><element name="fAlign" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="GetDocList_CollumnDataParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="CollumnDataRow" type="S2:GetDocList_CollumnDataRow"/></sequence></complexType><complexType name="PrintDoc_PrintOpersRow"><sequence><element name="Module" nillable="true" type="xsd:string"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="FileName" nillable="true" type="xsd:string"/><element name="FileType" nillable="true" type="xsd:string"/><element name="PrintParams" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="PrintDoc_PrintOpersParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="PrintOpersRow" type="S2:PrintDoc_PrintOpersRow"/></sequence></complexType><complexType name="SendEvent_ModifiedFieldsRow"><sequence><element name="RidFrame" nillable="true" type="xsd:int"/><element name="RidFF" nillable="true" type="xsd:int"/><element name="TRow" nillable="true" type="xsd:int"/><element name="InternalValue" nillable="true" type="xsd:string"/><element name="FormValue" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="SendEvent_ModifiedFieldsParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="ModifiedFieldsRow" type="S2:SendEvent_ModifiedFieldsRow"/></sequence></complexType><complexType name="SendEvent_DisabledFieldsRow"><sequence><element name="RidFrame" nillable="true" type="xsd:int"/><element name="RidFF" nillable="true" type="xsd:int"/><element name="TRow" nillable="true" type="xsd:int"/><element name="ReadOnly" nillable="true" type="xsd:boolean"/><element name="Disabled" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="SendEvent_DisabledFieldsParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="DisabledFieldsRow" type="S2:SendEvent_DisabledFieldsRow"/></sequence></complexType><complexType name="SendEvent_TableOpersRow"><sequence><element name="RidFrame" nillable="true" type="xsd:int"/><element name="OperOrder" nillable="true" type="xsd:int"/><element name="OperName" nillable="true" type="xsd:string"/><element name="TRow" nillable="true" type="xsd:int"/></sequence></complexType><complexType name="SendEvent_TableOpersParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="TableOpersRow" type="S2:SendEvent_TableOpersRow"/></sequence></complexType><complexType name="SendEvent_PrintOpersRow"><sequence><element name="Module" nillable="true" type="xsd:string"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="FileName" nillable="true" type="xsd:string"/><element name="FileType" nillable="true" type="xsd:string"/><element name="PrintParams" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="SendEvent_PrintOpersParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="PrintOpersRow" type="S2:SendEvent_PrintOpersRow"/></sequence></complexType><element name="AppDocMenu"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="AppDocMenuResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="AppDocMenu" nillable="true" type="S2:AppDocMenu_AppDocMenuParam"/></sequence></complexType></element><element name="AppReportMenu"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="AppReportMenuResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="AppDocMenu" nillable="true" type="S2:AppReportMenu_AppDocMenuParam"/></sequence></complexType></element><element name="BasetypeSearch"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="basetype" nillable="true" type="xsd:string"/><element name="AppendParam" nillable="true" type="xsd:string"/><element name="ContextParam" nillable="true" type="xsd:string"/><element name="SearchString" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="BasetypeSearchResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="SearchData" nillable="true" type="S2:TableHandleParam"/></sequence></complexType></element><element name="BasetypeSelect"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="basetype" nillable="true" type="xsd:string"/><element name="AppendParam" nillable="true" type="xsd:string"/><element name="ContextParam" nillable="true" type="xsd:string"/><element name="SearchString" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="BasetypeSelectResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="SearchData" nillable="true" type="S2:TableHandleParam"/><element name="AllRecords" nillable="true" type="xsd:boolean"/></sequence></complexType></element><element name="CheckDocView"><complexType><sequence><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="CheckDocViewResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="DocRight" nillable="true" type="xsd:int"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="CopyContext"><complexType><sequence><element name="KeyId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ContextType" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="CopyContextResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="KeyId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="NewContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="DocContextMenu"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/></sequence></complexType></element><element name="DocContextMenuResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ContextMenu" nillable="true" type="S2:DocContextMenu_ContextMenuParam"/></sequence></complexType></element><element name="DocData"><complexType><sequence><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="FrameKey" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocDataResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="FrameKey" nillable="true" type="xsd:int"/><element name="FrameData" nillable="true" type="S2:DocData_FrameDataParam"/></sequence></complexType></element><element name="DocFileAdd"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="HostFileName" nillable="true" type="xsd:string"/><element name="LocalFileName" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="DocFileAddResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="DocFileDel"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidFileDoc" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocFileDelResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="DocFileView"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidFileDoc" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocFileViewResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="HostFileName" nillable="true" type="xsd:string"/><element name="LocalFileName" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="DocForm"><complexType><sequence><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidTypeDoc" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocFormResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="Frames" nillable="true" type="S2:DocForm_FramesParam"/><element name="FrameFields" nillable="true" type="S2:DocForm_FrameFieldsParam"/></sequence></complexType></element><element name="DocHeader"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocHeaderResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="DocHeader" nillable="true" type="S2:DocHeader_DocHeaderParam"/><element name="AttachedFiles" nillable="true" type="S2:DocHeader_AttachedFilesParam"/></sequence></complexType></element><element name="DocInfo"><complexType><sequence><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="InfoType" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocInfoResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="InfoType" nillable="true" type="xsd:string"/><element name="CollumnData" nillable="true" type="S2:DocInfo_CollumnDataParam"/><element name="DocumentData" nillable="true" type="S2:TableHandleParam"/></sequence></complexType></element><element name="DocTableData"><complexType><sequence><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="FrameKey" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocTableDataResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="FrameKey" nillable="true" type="xsd:int"/><element name="DocTableData" nillable="true" type="S2:TableHandleParam"/></sequence></complexType></element><element name="FileDBegin"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="HostFileName" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="FileDBeginResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/><element name="HostFileSize" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="FileDChunk"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="HostFileName" nillable="true" type="xsd:string"/><element name="BytesFrom" nillable="true" type="xsd:int"/><element name="BytesTo" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="FileDChunkResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="BytesFrom" nillable="true" type="xsd:int"/><element name="BytesTo" nillable="true" type="xsd:int"/><element name="OutMessage" nillable="true" type="xsd:string"/><element name="HostFileSize" nillable="true" type="xsd:int"/><element name="FileBinary" nillable="true" type="xsd:base64Binary"/></sequence></complexType></element><element name="FileDelete"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="HostFileName" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="FileDeleteResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="FileUBegin"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="FileUBeginResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="HostFileName" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="FileUChunk"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="HostFileName" nillable="true" type="xsd:string"/><element name="FileBinary" nillable="true" type="xsd:base64Binary"/></sequence></complexType></element><element name="FileUChunkResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/><element name="HostFileSize" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="GetDocList"><complexType><sequence><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="PutOff" nillable="true" type="xsd:boolean"/><element name="RidApp" nillable="true" type="xsd:int"/><element name="RidTypedoc" nillable="true" type="xsd:int"/><element name="DateFrom" nillable="true" type="xsd:date"/><element name="DateTo" nillable="true" type="xsd:date"/><element name="Scope" nillable="true" type="xsd:string"/><element name="IdDocument" nillable="true" type="xsd:int"/><element name="RidDocument" nillable="true" type="xsd:int"/><element name="MaxRecCount" nillable="true" type="xsd:int"/><element name="DocFilterParams" nillable="true" type="xsd:string"/><element name="FieldFilterParams" nillable="true" type="xsd:string"/><element name="SortBy" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="GetDocListResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="DocsId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="CollumnData" nillable="true" type="S2:GetDocList_CollumnDataParam"/><element name="DocumentData" nillable="true" type="S2:TableHandleParam"/></sequence></complexType></element><element name="PrintDoc"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="PrintDocResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="OutMessage" nillable="true" type="xsd:string"/><element name="PrintOpers" nillable="true" type="S2:PrintDoc_PrintOpersParam"/></sequence></complexType></element><element name="PrintDriver"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="Module" nillable="true" type="xsd:string"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="FileName" nillable="true" type="xsd:string"/><element name="FileType" nillable="true" type="xsd:string"/><element name="PrintParams" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="PrintDriverResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="HostFileName" nillable="true" type="xsd:string"/><element name="LocalFileName" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SendEvent"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="RidTypedoc" nillable="true" type="xsd:int"/><element name="NewDoc" nillable="true" type="xsd:boolean"/><element name="EditMode" nillable="true" type="xsd:string"/><element name="DumpFile" nillable="true" type="xsd:string"/><element name="QueryId" nillable="true" type="xsd:int"/><element name="EventName" nillable="true" type="xsd:string"/><element name="RidFF" nillable="true" type="xsd:int"/><element name="row" nillable="true" type="xsd:int"/><element name="InputValue" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SendEventResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="RidTypedoc" nillable="true" type="xsd:int"/><element name="QueryId" nillable="true" type="xsd:int"/><element name="OutMessage" nillable="true" type="xsd:string"/><element name="OutputValue" nillable="true" type="xsd:string"/><element name="ModifiedFields" nillable="true" type="S2:SendEvent_ModifiedFieldsParam"/><element name="DisabledFields" nillable="true" type="S2:SendEvent_DisabledFieldsParam"/><element name="TableOpers" nillable="true" type="S2:SendEvent_TableOpersParam"/><element name="PrintOpers" nillable="true" type="S2:SendEvent_PrintOpersParam"/></sequence></complexType></element></schema>
+  </wsdl:types>
+  <wsdl:message name="Oblik_Document_DocContextMenu">
+    <wsdl:part name="parameters" element="S2:DocContextMenu"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_SendEventResponse">
+    <wsdl:part name="parameters" element="S2:SendEventResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocFileAddResponse">
+    <wsdl:part name="parameters" element="S2:DocFileAddResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_BasetypeSelect">
+    <wsdl:part name="parameters" element="S2:BasetypeSelect"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocTableData">
+    <wsdl:part name="parameters" element="S2:DocTableData"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_AppReportMenu">
+    <wsdl:part name="parameters" element="S2:AppReportMenu"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_GetDocList">
+    <wsdl:part name="parameters" element="S2:GetDocList"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_PrintDriver">
+    <wsdl:part name="parameters" element="S2:PrintDriver"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocTableDataResponse">
+    <wsdl:part name="parameters" element="S2:DocTableDataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_PrintDriverResponse">
+    <wsdl:part name="parameters" element="S2:PrintDriverResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_CheckDocView">
+    <wsdl:part name="parameters" element="S2:CheckDocView"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileDBegin">
+    <wsdl:part name="parameters" element="S2:FileDBegin"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileDeleteResponse">
+    <wsdl:part name="parameters" element="S2:FileDeleteResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocFileAdd">
+    <wsdl:part name="parameters" element="S2:DocFileAdd"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_PrintDoc">
+    <wsdl:part name="parameters" element="S2:PrintDoc"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_AppReportMenuResponse">
+    <wsdl:part name="parameters" element="S2:AppReportMenuResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocInfo">
+    <wsdl:part name="parameters" element="S2:DocInfo"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileDelete">
+    <wsdl:part name="parameters" element="S2:FileDelete"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileDChunk">
+    <wsdl:part name="parameters" element="S2:FileDChunk"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocForm">
+    <wsdl:part name="parameters" element="S2:DocForm"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocFormResponse">
+    <wsdl:part name="parameters" element="S2:DocFormResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileUBegin">
+    <wsdl:part name="parameters" element="S2:FileUBegin"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocContextMenuResponse">
+    <wsdl:part name="parameters" element="S2:DocContextMenuResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_AppDocMenuResponse">
+    <wsdl:part name="parameters" element="S2:AppDocMenuResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_SendEvent">
+    <wsdl:part name="parameters" element="S2:SendEvent"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocHeaderResponse">
+    <wsdl:part name="parameters" element="S2:DocHeaderResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocFileDelResponse">
+    <wsdl:part name="parameters" element="S2:DocFileDelResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_CopyContextResponse">
+    <wsdl:part name="parameters" element="S2:CopyContextResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocFileViewResponse">
+    <wsdl:part name="parameters" element="S2:DocFileViewResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_AppDocMenu">
+    <wsdl:part name="parameters" element="S2:AppDocMenu"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_CopyContext">
+    <wsdl:part name="parameters" element="S2:CopyContext"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_BasetypeSearchResponse">
+    <wsdl:part name="parameters" element="S2:BasetypeSearchResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocFileView">
+    <wsdl:part name="parameters" element="S2:DocFileView"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_PrintDocResponse">
+    <wsdl:part name="parameters" element="S2:PrintDocResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_GetDocListResponse">
+    <wsdl:part name="parameters" element="S2:GetDocListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocHeader">
+    <wsdl:part name="parameters" element="S2:DocHeader"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocFileDel">
+    <wsdl:part name="parameters" element="S2:DocFileDel"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileUChunk">
+    <wsdl:part name="parameters" element="S2:FileUChunk"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileUChunkResponse">
+    <wsdl:part name="parameters" element="S2:FileUChunkResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocDataResponse">
+    <wsdl:part name="parameters" element="S2:DocDataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_BasetypeSelectResponse">
+    <wsdl:part name="parameters" element="S2:BasetypeSelectResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileDBeginResponse">
+    <wsdl:part name="parameters" element="S2:FileDBeginResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileDChunkResponse">
+    <wsdl:part name="parameters" element="S2:FileDChunkResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_BasetypeSearch">
+    <wsdl:part name="parameters" element="S2:BasetypeSearch"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocData">
+    <wsdl:part name="parameters" element="S2:DocData"/>
+  </wsdl:message>
+  <wsdl:message name="FaultDetailMessage">
+    <wsdl:part name="FaultDetail" element="S1:FaultDetail"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_DocInfoResponse">
+    <wsdl:part name="parameters" element="S2:DocInfoResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_FileUBeginResponse">
+    <wsdl:part name="parameters" element="S2:FileUBeginResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Document_CheckDocViewResponse">
+    <wsdl:part name="parameters" element="S2:CheckDocViewResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="Oblik_DocumentObj">
+    <wsdl:operation name="AppDocMenu">
+      <wsdl:input message="tns:Oblik_Document_AppDocMenu"/>
+      <wsdl:output message="tns:Oblik_Document_AppDocMenuResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="AppReportMenu">
+      <wsdl:input message="tns:Oblik_Document_AppReportMenu"/>
+      <wsdl:output message="tns:Oblik_Document_AppReportMenuResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="BasetypeSearch">
+      <wsdl:input message="tns:Oblik_Document_BasetypeSearch"/>
+      <wsdl:output message="tns:Oblik_Document_BasetypeSearchResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="BasetypeSelect">
+      <wsdl:input message="tns:Oblik_Document_BasetypeSelect"/>
+      <wsdl:output message="tns:Oblik_Document_BasetypeSelectResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="CheckDocView">
+      <wsdl:input message="tns:Oblik_Document_CheckDocView"/>
+      <wsdl:output message="tns:Oblik_Document_CheckDocViewResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="CopyContext">
+      <wsdl:input message="tns:Oblik_Document_CopyContext"/>
+      <wsdl:output message="tns:Oblik_Document_CopyContextResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocContextMenu">
+      <wsdl:input message="tns:Oblik_Document_DocContextMenu"/>
+      <wsdl:output message="tns:Oblik_Document_DocContextMenuResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocData">
+      <wsdl:input message="tns:Oblik_Document_DocData"/>
+      <wsdl:output message="tns:Oblik_Document_DocDataResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocFileAdd">
+      <wsdl:input message="tns:Oblik_Document_DocFileAdd"/>
+      <wsdl:output message="tns:Oblik_Document_DocFileAddResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocFileDel">
+      <wsdl:input message="tns:Oblik_Document_DocFileDel"/>
+      <wsdl:output message="tns:Oblik_Document_DocFileDelResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocFileView">
+      <wsdl:input message="tns:Oblik_Document_DocFileView"/>
+      <wsdl:output message="tns:Oblik_Document_DocFileViewResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocForm">
+      <wsdl:input message="tns:Oblik_Document_DocForm"/>
+      <wsdl:output message="tns:Oblik_Document_DocFormResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocHeader">
+      <wsdl:input message="tns:Oblik_Document_DocHeader"/>
+      <wsdl:output message="tns:Oblik_Document_DocHeaderResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocInfo">
+      <wsdl:input message="tns:Oblik_Document_DocInfo"/>
+      <wsdl:output message="tns:Oblik_Document_DocInfoResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocTableData">
+      <wsdl:input message="tns:Oblik_Document_DocTableData"/>
+      <wsdl:output message="tns:Oblik_Document_DocTableDataResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="FileDBegin">
+      <wsdl:input message="tns:Oblik_Document_FileDBegin"/>
+      <wsdl:output message="tns:Oblik_Document_FileDBeginResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="FileDChunk">
+      <wsdl:input message="tns:Oblik_Document_FileDChunk"/>
+      <wsdl:output message="tns:Oblik_Document_FileDChunkResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="FileDelete">
+      <wsdl:input message="tns:Oblik_Document_FileDelete"/>
+      <wsdl:output message="tns:Oblik_Document_FileDeleteResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="FileUBegin">
+      <wsdl:input message="tns:Oblik_Document_FileUBegin"/>
+      <wsdl:output message="tns:Oblik_Document_FileUBeginResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="FileUChunk">
+      <wsdl:input message="tns:Oblik_Document_FileUChunk"/>
+      <wsdl:output message="tns:Oblik_Document_FileUChunkResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocList">
+      <wsdl:input message="tns:Oblik_Document_GetDocList"/>
+      <wsdl:output message="tns:Oblik_Document_GetDocListResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="PrintDoc">
+      <wsdl:input message="tns:Oblik_Document_PrintDoc"/>
+      <wsdl:output message="tns:Oblik_Document_PrintDocResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="PrintDriver">
+      <wsdl:input message="tns:Oblik_Document_PrintDriver"/>
+      <wsdl:output message="tns:Oblik_Document_PrintDriverResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SendEvent">
+      <wsdl:input message="tns:Oblik_Document_SendEvent"/>
+      <wsdl:output message="tns:Oblik_Document_SendEventResponse"/>
+      <wsdl:fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Oblik_DocumentObj" type="tns:Oblik_DocumentObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="AppDocMenu">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AppReportMenu">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="BasetypeSearch">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="BasetypeSelect">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CheckDocView">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CopyContext">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocContextMenu">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocFileAdd">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocFileDel">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocFileView">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocForm">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocHeader">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocInfo">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocTableData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="FileDBegin">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="FileDChunk">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="FileDelete">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="FileUBegin">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="FileUChunk">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="PrintDoc">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="PrintDriver">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SendEvent">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Oblik_DocumentService">
+    <wsdl:port name="Oblik_DocumentObj" binding="tns:Oblik_DocumentObj">
+<wsdl:documentation></wsdl:documentation>
+      <soap:address location="http://www.oblikerp.com/wsa/wsa1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,130 @@
+
+**  ProxyGen, Progress Version 10.2A
+
+** Checking for existence of .r files ...
+
+** Processing non-persistent procedures ...
+
+** Processing persistent procedures ...
+
+** Processing: D:\Maxim\webservices\document\src\DocEditor.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocEditor.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT-OUTPUT RidDoc INTEGER
+          INPUT-OUTPUT ViewOnly LOGICAL
+          INPUT-OUTPUT RidTypedoc INTEGER
+          INPUT NewDoc LOGICAL
+          INPUT PutOff LOGICAL
+          INPUT RidMainDoc INTEGER
+          INPUT EditMode CHARACTER
+          OUTPUT OutMessage CHARACTER
+          OUTPUT ViewReason CHARACTER
+       PROCEDURE SaveDoc 
+          OUTPUT OutMessage CHARACTER
+       PROCEDURE SendEvent 
+          INPUT-OUTPUT QueryId INTEGER
+          INPUT EventName CHARACTER
+          INPUT RidFF INTEGER
+          INPUT row INTEGER
+          INPUT InputValue CHARACTER
+          OUTPUT OutMessage CHARACTER
+          OUTPUT OutputValue CHARACTER
+          OUTPUT ModifiedFields TABLE
+          OUTPUT DisabledFields TABLE
+          OUTPUT TableOpers TABLE
+          OUTPUT PrintOpers TABLE
+       PROCEDURE DumpCache 
+          OUTPUT DumpFile CHARACTER
+       PROCEDURE DocTableData 
+          INPUT-OUTPUT FrameKey INTEGER
+          OUTPUT DisabledFields TABLE
+          OUTPUT DocTableData TABLE-HANDLE
+       PROCEDURE DocHeaderData 
+          INPUT-OUTPUT FrameKey INTEGER
+          OUTPUT FrameData TABLE
+       PROCEDURE Ping 
+          OUTPUT OutMessage CHARACTER
+       PROCEDURE ViewStatus 
+          OUTPUT ViewOnly LOGICAL
+          OUTPUT Reason CHARACTER
+       PROCEDURE ToEdit 
+       PROCEDURE crNewDoc 
+          INPUT rid-typedoc INTEGER
+          OUTPUT temp-rid INTEGER
+       PROCEDURE CopyDoc 
+          INPUT rid-typedoc INTEGER
+          INPUT put-offpr LOGICAL
+          INPUT rid-docfrom INTEGER
+          OUTPUT rid-doc INTEGER
+       PROCEDURE archsyncdel 
+          INPUT rid-rec INTEGER
+          INPUT tblname CHARACTER
+       PROCEDURE checkdel 
+          INPUT rid-rec INTEGER
+          INPUT tblname CHARACTER
+       TABLE: FrameData
+          RidFF integer
+          InternalValue character
+          FormValue character
+          ReadOnly logical
+          Disabled logical
+       TABLE: DisabledFields
+          RidFrame integer
+          RidFF integer
+          TRow integer
+          ReadOnly logical
+          Disabled logical
+       TABLE: ModifiedFields
+          RidFrame integer
+          RidFF integer
+          TRow integer
+          InternalValue character
+          FormValue character
+       TABLE: TableOpers
+          RidFrame integer
+          OperOrder integer
+          OperName character
+          TRow integer
+       TABLE: PrintOpers
+          Module character
+          ViewOnly logical
+          FileName character
+          FileType character
+          PrintParams character
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+      Matching methods (customizations applied):
+         (excluded) PROCEDURE checkdel
+         (excluded) PROCEDURE archsyncdel
+         (excluded) PROCEDURE CopyDoc
+         (excluded) PROCEDURE crNewDoc
+         (excluded) PROCEDURE ToEdit
+          PROCEDURE ViewStatus
+            Defaults used for parameters
+          PROCEDURE Ping
+            Defaults used for parameters
+          PROCEDURE DocHeaderData
+            Defaults used for parameters
+          PROCEDURE DocTableData
+            Defaults used for parameters
+          PROCEDURE DumpCache
+            Defaults used for parameters
+          PROCEDURE SendEvent
+            Defaults used for parameters
+         (excluded) PROCEDURE SaveDoc
+      Removed or renamed internal procedures:
+         None
+      New or renamed internal procedures:
+         None
+
+** Checking method and parameter names ...
+
+** Generating Web Services files ...
+   Creating wsm file ...
+   Generation of wsm file complete ...
+   Creating test wsdl file ...
+   Generation of test wsdl file complete ...
+
+** Generation complete

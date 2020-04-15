@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AppContainer xmlns="urn:schemas-progress-com:WSAD:0008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FriendlyName xsi:nil="true"/>
+  <ApplicationRuntimeProperties xsi:nil="true"/>
+  <WSAD>
+    <AppObject>
+      <PGVersion>
+        <PXGVersion>03</PXGVersion>
+      </PGVersion>
+      <PGGenInfo isSessionFree="true">
+        <Author></Author>
+        <VersionString></VersionString>
+        <VersionNumber>1</VersionNumber>
+        <Package></Package>
+        <Service>Oblik_DBView</Service>
+        <WorkDir>d:\Maxim\webservices\dbview\</WorkDir>
+        <VerboseLogging>true</VerboseLogging>
+        <SaveBeforeGen>true</SaveBeforeGen>
+        <DotNetClient>false</DotNetClient>
+        <JavaClient>false</JavaClient>
+        <WebServicesClient>true</WebServicesClient>
+        <ESBClient>false</ESBClient>
+        <ESBClient2>false</ESBClient2>
+        <UserDefinedAppService>false</UserDefinedAppService>
+        <JavaCompilerType>1</JavaCompilerType>
+        <JavaCompiler>&lt;Install Dir&gt;\jdk\bin\javac</JavaCompiler>
+        <JavaSwitches></JavaSwitches>
+        <JavaClasspathSwitch>-classpath</JavaClasspathSwitch>
+        <JavaClasspath>&lt;Proxy Dir&gt;;&lt;Install Dir&gt;\java\progress.jar;&lt;Install Dir&gt;\java\messages.jar;;&lt;Default classes.zip&gt;;&lt;Install Dir&gt;\java\ext\ecore.sdo.jar;&lt;Install Dir&gt;\java\ext\ecore.change.jar;&lt;Install Dir&gt;\java\ext\commonj.sdo.jar;&lt;Install Dir&gt;\java\ext\ecore.jar;&lt;Install Dir&gt;\java\ext\ecore.resources.jar;&lt;Install Dir&gt;\java\ext\common.jar;&lt;Install Dir&gt;\java\ext\ecore.xmi.jar</JavaClasspath>
+        <DotNetCompilerType>4</DotNetCompilerType>
+        <DotNetCompiler>csc</DotNetCompiler>
+        <DotNetSwitches></DotNetSwitches>
+        <DotNetXSDGenerator>xsd</DotNetXSDGenerator>
+        <DotNetNamespace></DotNetNamespace>
+        <DotNetTitle></DotNetTitle>
+        <DotNetVersion></DotNetVersion>
+        <DotNetDesc></DotNetDesc>
+        <DotNetCompany></DotNetCompany>
+        <DotNetProduct></DotNetProduct>
+        <DotNetPublicKey></DotNetPublicKey>
+        <DotNetDelaySign>false</DotNetDelaySign>
+        <DotNetRuntime>digitally signed</DotNetRuntime>
+        <DotNetDataSetNamespace>StrongTypesNS</DotNetDataSetNamespace>
+        <DNUseDefaultDSNamespace>true</DNUseDefaultDSNamespace>
+        <DNUseNamespaceAsDirs>true</DNUseNamespaceAsDirs>
+        <DotNetUseNullableTypes>false</DotNetUseNullableTypes>
+      </PGGenInfo>
+      <DeploymentWizard>
+        <CurrentEncoding>3</CurrentEncoding>
+        <SoapEndpointURL>http://www.oblik.com.ua/wsa/wsa1</SoapEndpointURL>
+        <WebServiceNamespace userDefined="true">urn:oblikerp-com-dbview</WebServiceNamespace>
+        <SoapAction appendToSoapAction="false"/>
+        <ConnectReturnString userDefined="false"/>
+        <TestWSDL RPCEncoded="false" RPCLiteral="false" DocLiteral="true"/>
+        <ESBEncoding>3</ESBEncoding>
+        <EntryEndpoint useDefault="true"/>
+        <FaultEndpoint useDefault="true"/>
+        <RejectedEndpoint useDefault="true"/>
+        <Container></Container>
+        <AppserverURL>AppServerDC://localhost:3091</AppserverURL>
+        <FileName overWrite="false">Oblik_DBView</FileName>
+        <ResourceDirectory>/Resources/OpenEdgeServices</ResourceDirectory>
+        <SonicAppService useFileSystem="false" deployToDS="false" createXAR="false">
+          <ResourceDirectory overWrite="false"></ResourceDirectory>
+          <XARName></XARName>
+        </SonicAppService>
+      </DeploymentWizard>
+      <Name>Oblik_DBView</Name>
+      <ProPath>d:\maxim\</ProPath>
+      <HelpString></HelpString>
+      <ObjectType>false</ObjectType>
+      <AllowUnknown>true</AllowUnknown>
+      <IsTTResultSet>true</IsTTResultSet>
+      <WriteDatasetBeforeImage>false</WriteDatasetBeforeImage>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>BasetypeSearch</Name>
+        <ProcPath>webservices\dbview\src\</ProcPath>
+        <ProPath>d:\maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="false" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+          <Name>BasetypeSearch</Name>
+          <ReturnValue allowUnknown="true" ordinal="0" writeXmlBeforeImage="false">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+            <Name>basetype</Name>
+            <OrigName>basetype</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3" writeXmlBeforeImage="false">
+            <Name>AppendParam</Name>
+            <OrigName>AppendParam</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="4" writeXmlBeforeImage="false">
+            <Name>ContextParam</Name>
+            <OrigName>ContextParam</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="5" writeXmlBeforeImage="false">
+            <Name>SearchString</Name>
+            <OrigName>SearchString</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="6" writeXmlBeforeImage="false">
+            <Name>SearchData</Name>
+            <OrigName>SearchData</OrigName>
+            <Type>17</Type>
+            <Mode>2</Mode>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>BasetypeSelect</Name>
+        <ProcPath>webservices\dbview\src\</ProcPath>
+        <ProPath>d:\maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="false" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+          <Name>BasetypeSelect</Name>
+          <ReturnValue allowUnknown="true" ordinal="0" writeXmlBeforeImage="false">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+            <Name>basetype</Name>
+            <OrigName>basetype</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3" writeXmlBeforeImage="false">
+            <Name>AppendParam</Name>
+            <OrigName>AppendParam</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="4" writeXmlBeforeImage="false">
+            <Name>ContextParam</Name>
+            <OrigName>ContextParam</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="5" writeXmlBeforeImage="false">
+            <Name>SearchString</Name>
+            <OrigName>SearchString</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="6" writeXmlBeforeImage="false">
+            <Name>SearchData</Name>
+            <OrigName>SearchData</OrigName>
+            <Type>17</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="7" writeXmlBeforeImage="false">
+            <Name>AllRecords</Name>
+            <OrigName>AllRecords</OrigName>
+            <Type>3</Type>
+            <Mode>2</Mode>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="true">
+        <Name>checkservice</Name>
+        <ProcPath>webservices\dbview\src\</ProcPath>
+        <ProPath>d:\maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+          <Name>checkservice</Name>
+          <HelpString></HelpString>
+          <ReturnValue allowUnknown="true" ordinal="0" writeXmlBeforeImage="false">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+            <Name>c</Name>
+            <OrigName>c</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>dbinfo</Name>
+        <ProcPath>webservices\dbview\src\</ProcPath>
+        <ProPath>d:\maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="false" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+          <Name>dbinfo</Name>
+          <ReturnValue allowUnknown="true" ordinal="0" writeXmlBeforeImage="false">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+            <Name>db_name</Name>
+            <OrigName>db_name</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3" writeXmlBeforeImage="false">
+            <Name>db_version</Name>
+            <OrigName>db_version</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>GetTableData</Name>
+        <ProcPath>webservices\dbview\src\</ProcPath>
+        <ProPath>d:\maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="false" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+          <Name>GetTableData</Name>
+          <ReturnValue allowUnknown="true" ordinal="0" writeXmlBeforeImage="false">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+            <Name>TableName</Name>
+            <OrigName>TableName</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3" writeXmlBeforeImage="false">
+            <Name>MaxRecCount</Name>
+            <OrigName>MaxRecCount</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="4" writeXmlBeforeImage="false">
+            <Name>sortby</Name>
+            <OrigName>sortby</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="5" writeXmlBeforeImage="false">
+            <Name>filtertext</Name>
+            <OrigName>filtertext</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="6" writeXmlBeforeImage="false">
+            <Name>TableData</Name>
+            <OrigName>TableData</OrigName>
+            <Type>17</Type>
+            <Mode>2</Mode>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="true">
+        <Name>GetTableList</Name>
+        <ProcPath>webservices\dbview\src\</ProcPath>
+        <ProPath>d:\maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+          <Name>GetTableList</Name>
+          <HelpString></HelpString>
+          <ReturnValue allowUnknown="true" ordinal="0" writeXmlBeforeImage="false">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="2" writeXmlBeforeImage="false">
+            <Name>TableList</Name>
+            <OrigName>TableList</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <NamespaceUri xsi:nil="true"/>
+            <MetaData>
+              <FieldName>table_name</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>table_label</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>sys</FieldName>
+              <Type>3</Type>
+              <Extent>0</Extent>
+              <TypeName>logical</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="true">
+        <Name>TableInfo</Name>
+        <ProcPath>webservices\dbview\src\</ProcPath>
+        <ProPath>d:\maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+          <Name>TableInfo</Name>
+          <HelpString></HelpString>
+          <ReturnValue allowUnknown="true" ordinal="0" writeXmlBeforeImage="false">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+            <Name>TableName</Name>
+            <OrigName>TableName</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="3" writeXmlBeforeImage="false">
+            <Name>TableInfo</Name>
+            <OrigName>TableInfo</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <NamespaceUri xsi:nil="true"/>
+            <MetaData>
+              <FieldName>table_name</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>table_label</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>dump_name</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>table_desc</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>valexp</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>valmsg</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>sys</FieldName>
+              <Type>3</Type>
+              <Extent>0</Extent>
+              <TypeName>logical</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="4" writeXmlBeforeImage="false">
+            <Name>TTriggers</Name>
+            <OrigName>TTriggers</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <NamespaceUri xsi:nil="true"/>
+            <MetaData>
+              <FieldName>event</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>proc_name</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>override</FieldName>
+              <Type>3</Type>
+              <Extent>0</Extent>
+              <TypeName>logical</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>checkcrc</FieldName>
+              <Type>3</Type>
+              <Extent>0</Extent>
+              <TypeName>logical</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>ttext</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="5" writeXmlBeforeImage="false">
+            <Name>TRelation</Name>
+            <OrigName>TRelation</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <NamespaceUri xsi:nil="true"/>
+            <MetaData>
+              <FieldName>owner</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>ref_table</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>field_name</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="6" writeXmlBeforeImage="false">
+            <Name>TFields</Name>
+            <OrigName>TFields</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <NamespaceUri xsi:nil="true"/>
+            <MetaData>
+              <FieldName>pos</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>field_name</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>field_label</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>dt</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>field_format</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>initial</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>flags</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>field_width</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="7" writeXmlBeforeImage="false">
+            <Name>TIndexes</Name>
+            <OrigName>TIndexes</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <NamespaceUri xsi:nil="true"/>
+            <MetaData>
+              <FieldName>pos</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>name</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>idesc</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>num_fields</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>flags</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+            <MetaData>
+              <FieldName>fields_name</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+              <XmlNodeType>0</XmlNodeType>
+            </MetaData>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+    </AppObject>
+  </WSAD>
+</AppContainer>

@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project name="dbview" resourceRoot="" soapui-version="3.0.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="Oblik_DBViewObj" type="wsdl" bindingName="{urn:oblik-com-ua}Oblik_DBViewObj" soapVersion="1_1" anonymous="optional" definition="https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_DBView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_DBView"><con:part><con:url>https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_DBView</con:url><con:content><![CDATA[<definitions name="Oblik_DBView" targetNamespace="urn:oblik-com-ua" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="urn:oblik-com-ua" xmlns:S2="urn:oblik-com-ua:Oblik_DBView" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:S1="urn:soap-fault:details" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:documentation>EncodingType=DOC_LITERAL, WSA_Product=10.1B - N/A</wsdl:documentation>
+  <types>
+    <schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="FaultDetail">
+        <complexType>
+          <sequence>
+            <element name="errorMessage" type="xsd:string"/>
+            <element name="requestID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <schema elementFormDefault="qualified" targetNamespace="urn:oblik-com-ua:Oblik_DBView" xmlns="http://www.w3.org/2001/XMLSchema">
+      <complexType name="TableHandleParam">
+        <sequence>
+          <any namespace="##local"/>
+        </sequence>
+      </complexType>
+      <complexType name="GetTableList_TableListRow">
+        <sequence>
+          <element name="table_name" nillable="true" type="xsd:string"/>
+          <element name="table_label" nillable="true" type="xsd:string"/>
+          <element name="sys" nillable="true" type="xsd:boolean"/>
+        </sequence>
+      </complexType>
+      <complexType name="GetTableList_TableListParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="TableListRow" type="S2:GetTableList_TableListRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TableInfoRow">
+        <sequence>
+          <element name="table_name" nillable="true" type="xsd:string"/>
+          <element name="table_label" nillable="true" type="xsd:string"/>
+          <element name="dump_name" nillable="true" type="xsd:string"/>
+          <element name="table_desc" nillable="true" type="xsd:string"/>
+          <element name="valexp" nillable="true" type="xsd:string"/>
+          <element name="valmsg" nillable="true" type="xsd:string"/>
+          <element name="sys" nillable="true" type="xsd:boolean"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TableInfoParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="TableInfoRow" type="S2:TableInfo_TableInfoRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TTriggersRow">
+        <sequence>
+          <element name="event" nillable="true" type="xsd:string"/>
+          <element name="proc_name" nillable="true" type="xsd:string"/>
+          <element name="override" nillable="true" type="xsd:boolean"/>
+          <element name="checkcrc" nillable="true" type="xsd:boolean"/>
+          <element name="ttext" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TTriggersParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="TTriggersRow" type="S2:TableInfo_TTriggersRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TRelationRow">
+        <sequence>
+          <element name="owner" nillable="true" type="xsd:string"/>
+          <element name="ref_table" nillable="true" type="xsd:string"/>
+          <element name="field_name" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TRelationParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="TRelationRow" type="S2:TableInfo_TRelationRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TFieldsRow">
+        <sequence>
+          <element name="pos" nillable="true" type="xsd:int"/>
+          <element name="field_name" nillable="true" type="xsd:string"/>
+          <element name="field_label" nillable="true" type="xsd:string"/>
+          <element name="dt" nillable="true" type="xsd:string"/>
+          <element name="field_format" nillable="true" type="xsd:string"/>
+          <element name="initial" nillable="true" type="xsd:string"/>
+          <element name="flags" nillable="true" type="xsd:string"/>
+          <element name="field_width" nillable="true" type="xsd:int"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TFieldsParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="TFieldsRow" type="S2:TableInfo_TFieldsRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TIndexesRow">
+        <sequence>
+          <element name="pos" nillable="true" type="xsd:int"/>
+          <element name="name" nillable="true" type="xsd:string"/>
+          <element name="idesc" nillable="true" type="xsd:string"/>
+          <element name="num_fields" nillable="true" type="xsd:int"/>
+          <element name="flags" nillable="true" type="xsd:string"/>
+          <element name="fields_name" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="TableInfo_TIndexesParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="TIndexesRow" type="S2:TableInfo_TIndexesRow"/>
+        </sequence>
+      </complexType>
+      <element name="checkservice">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="checkserviceResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="c" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="dbinfo">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="dbinfoResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="db_name" nillable="true" type="xsd:string"/>
+            <element name="db_version" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetTableData">
+        <complexType>
+          <sequence>
+            <element name="TableName" nillable="true" type="xsd:string"/>
+            <element name="MaxRecCount" nillable="true" type="xsd:int"/>
+            <element name="sortby" nillable="true" type="xsd:string"/>
+            <element name="filtertext" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetTableDataResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="TableName" nillable="true" type="xsd:string"/>
+            <element name="TableData" nillable="true" type="S2:TableHandleParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetTableList">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="GetTableListResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="TableList" nillable="true" type="S2:GetTableList_TableListParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="TableInfo">
+        <complexType>
+          <sequence>
+            <element name="TableName" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="TableInfoResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="TableName" nillable="true" type="xsd:string"/>
+            <element name="TableInfo" nillable="true" type="S2:TableInfo_TableInfoParam"/>
+            <element name="TTriggers" nillable="true" type="S2:TableInfo_TTriggersParam"/>
+            <element name="TRelation" nillable="true" type="S2:TableInfo_TRelationParam"/>
+            <element name="TFields" nillable="true" type="S2:TableInfo_TFieldsParam"/>
+            <element name="TIndexes" nillable="true" type="S2:TableInfo_TIndexesParam"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="Oblik_DBView_GetTableDataResponse">
+    <part name="parameters" element="S2:GetTableDataResponse"/>
+  </message>
+  <message name="Oblik_DBView_checkserviceResponse">
+    <part name="parameters" element="S2:checkserviceResponse"/>
+  </message>
+  <message name="Oblik_DBView_GetTableList">
+    <part name="parameters" element="S2:GetTableList"/>
+  </message>
+  <message name="Oblik_DBView_checkservice">
+    <part name="parameters" element="S2:checkservice"/>
+  </message>
+  <message name="Oblik_DBView_TableInfoResponse">
+    <part name="parameters" element="S2:TableInfoResponse"/>
+  </message>
+  <message name="FaultDetailMessage">
+    <part name="FaultDetail" element="S1:FaultDetail"/>
+  </message>
+  <message name="Oblik_DBView_GetTableData">
+    <part name="parameters" element="S2:GetTableData"/>
+  </message>
+  <message name="Oblik_DBView_dbinfo">
+    <part name="parameters" element="S2:dbinfo"/>
+  </message>
+  <message name="Oblik_DBView_TableInfo">
+    <part name="parameters" element="S2:TableInfo"/>
+  </message>
+  <message name="Oblik_DBView_dbinfoResponse">
+    <part name="parameters" element="S2:dbinfoResponse"/>
+  </message>
+  <message name="Oblik_DBView_GetTableListResponse">
+    <part name="parameters" element="S2:GetTableListResponse"/>
+  </message>
+  <portType name="Oblik_DBViewObj">
+    <operation name="checkservice">
+      <input message="tns:Oblik_DBView_checkservice"/>
+      <output message="tns:Oblik_DBView_checkserviceResponse"/>
+      <fault name="Oblik_DBViewFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="dbinfo">
+      <input message="tns:Oblik_DBView_dbinfo"/>
+      <output message="tns:Oblik_DBView_dbinfoResponse"/>
+      <fault name="Oblik_DBViewFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="GetTableData">
+      <input message="tns:Oblik_DBView_GetTableData"/>
+      <output message="tns:Oblik_DBView_GetTableDataResponse"/>
+      <fault name="Oblik_DBViewFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="GetTableList">
+      <input message="tns:Oblik_DBView_GetTableList"/>
+      <output message="tns:Oblik_DBView_GetTableListResponse"/>
+      <fault name="Oblik_DBViewFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="TableInfo">
+      <input message="tns:Oblik_DBView_TableInfo"/>
+      <output message="tns:Oblik_DBView_TableInfoResponse"/>
+      <fault name="Oblik_DBViewFault" message="tns:FaultDetailMessage"/>
+    </operation>
+  </portType>
+  <binding name="Oblik_DBViewObj" type="tns:Oblik_DBViewObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="checkservice">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DBViewFault">
+        <soap:fault name="Oblik_DBViewFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="dbinfo">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DBViewFault">
+        <soap:fault name="Oblik_DBViewFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="GetTableData">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DBViewFault">
+        <soap:fault name="Oblik_DBViewFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="GetTableList">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DBViewFault">
+        <soap:fault name="Oblik_DBViewFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="TableInfo">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DBViewFault">
+        <soap:fault name="Oblik_DBViewFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="Oblik_DBViewService">
+    <port name="Oblik_DBViewObj" binding="tns:Oblik_DBViewObj">
+      <wsdl:documentation/>
+      <soap:address location="http://localhost:8080/oblik/wsa1"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/oblik/wsa1</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="checkservice" bindingOperationName="checkservice" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblik-com-ua:Oblik_DBView">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:checkservice/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblik-com-ua/Oblik_DBViewObj/checkserviceRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="dbinfo" bindingOperationName="dbinfo" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblik-com-ua:Oblik_DBView">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:dbinfo/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblik-com-ua/Oblik_DBViewObj/dbinfoRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="GetTableData" bindingOperationName="GetTableData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblik-com-ua:Oblik_DBView">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:GetTableData>
+         <urn:TableName>?</urn:TableName>
+         <urn:MaxRecCount>?</urn:MaxRecCount>
+         <urn:sortby>?</urn:sortby>
+         <urn:filtertext>?</urn:filtertext>
+      </urn:GetTableData>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblik-com-ua/Oblik_DBViewObj/GetTableDataRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="GetTableList" bindingOperationName="GetTableList" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblik-com-ua:Oblik_DBView">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:GetTableList/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblik-com-ua/Oblik_DBViewObj/GetTableListRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="TableInfo" bindingOperationName="TableInfo" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblik-com-ua:Oblik_DBView">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:TableInfo>
+         <urn:TableName>?</urn:TableName>
+      </urn:TableInfo>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblik-com-ua/Oblik_DBViewObj/TableInfoRequest"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="Oblik_MainObj" type="wsdl" bindingName="{urn:oblikerp-com}Oblik_MainObj" soapVersion="1_1" anonymous="optional" definition="https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_Main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_Main"><con:part><con:url>https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_Main</con:url><con:content><![CDATA[<definitions name="Oblik_Main" targetNamespace="urn:oblikerp-com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="urn:oblikerp-com" xmlns:S2="urn:oblikerp-com:Oblik_Main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:S1="urn:soap-fault:details" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:documentation>EncodingType=DOC_LITERAL, WSA_Product=10.1B - N/A</wsdl:documentation>
+  <types>
+    <schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="FaultDetail">
+        <complexType>
+          <sequence>
+            <element name="errorMessage" type="xsd:string"/>
+            <element name="requestID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com:Oblik_Main" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="Start">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="ServiceId" nillable="true" type="xsd:int"/>
+            <element name="login" nillable="true" type="xsd:string"/>
+            <element name="pwd" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="StartResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="OblikContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="Oblik_Main_Start">
+    <part name="parameters" element="S2:Start"/>
+  </message>
+  <message name="Oblik_Main_StartResponse">
+    <part name="parameters" element="S2:StartResponse"/>
+  </message>
+  <message name="FaultDetailMessage">
+    <part name="FaultDetail" element="S1:FaultDetail"/>
+  </message>
+  <portType name="Oblik_MainObj">
+    <operation name="Start">
+      <input message="tns:Oblik_Main_Start"/>
+      <output message="tns:Oblik_Main_StartResponse"/>
+      <fault name="Oblik_MainFault" message="tns:FaultDetailMessage"/>
+    </operation>
+  </portType>
+  <binding name="Oblik_MainObj" type="tns:Oblik_MainObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Start">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_MainFault">
+        <soap:fault name="Oblik_MainFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="Oblik_MainService">
+    <port name="Oblik_MainObj" binding="tns:Oblik_MainObj">
+      <wsdl:documentation/>
+      <soap:address location="http://localhost:8080/oblik/wsa1"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/oblik/wsa1</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="Start" bindingOperationName="Start" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 2"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com:Oblik_Main">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Start>
+         <urn:ContextId>dJflzfgljeNceNyi</urn:ContextId>
+         <urn:ServiceId>12</urn:ServiceId>
+         <urn:login>dbadmin</urn:login>
+         <urn:pwd></urn:pwd>
+      </urn:Start>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com/Oblik_MainObj/StartRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

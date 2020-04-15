@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AppContainer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:schemas-progress-com:WSAD:0006">
+  <FriendlyName xsi:nil="true"/>
+  <ApplicationRuntimeProperties xsi:nil="true"/>
+  <WSAD>
+    <AppObject>
+      <PGVersion>
+        <PXGVersion>03</PXGVersion>
+      </PGVersion>
+      <PGGenInfo isSessionFree="true">
+        <Author></Author>
+        <VersionString></VersionString>
+        <VersionNumber>1</VersionNumber>
+        <Package></Package>
+        <Service>Oblik_Main</Service>
+        <WorkDir>d:\Maxim\webservices\main\</WorkDir>
+        <VerboseLogging>true</VerboseLogging>
+        <SaveBeforeGen>true</SaveBeforeGen>
+        <DotNetClient>false</DotNetClient>
+        <JavaClient>false</JavaClient>
+        <WebServicesClient>true</WebServicesClient>
+        <ESBClient>false</ESBClient>
+        <UserDefinedAppService>false</UserDefinedAppService>
+        <JavaCompilerType>1</JavaCompilerType>
+        <JavaCompiler>&lt;Install Dir&gt;\jdk\bin\javac</JavaCompiler>
+        <JavaSwitches></JavaSwitches>
+        <JavaClasspathSwitch>-classpath</JavaClasspathSwitch>
+        <JavaClasspath>&lt;Proxy Dir&gt;;&lt;Install Dir&gt;\java\progress.jar;&lt;Install Dir&gt;\java\messages.jar;;&lt;Default classes.zip&gt;;&lt;Install Dir&gt;\java\ext\ecore.sdo.jar;&lt;Install Dir&gt;\java\ext\ecore.change.jar;&lt;Install Dir&gt;\java\ext\commonj.sdo.jar;&lt;Install Dir&gt;\java\ext\ecore.jar;&lt;Install Dir&gt;\java\ext\ecore.resources.jar;&lt;Install Dir&gt;\java\ext\common.jar;&lt;Install Dir&gt;\java\ext\ecore.xmi.jar</JavaClasspath>
+        <DotNetCompilerType>4</DotNetCompilerType>
+        <DotNetCompiler>csc</DotNetCompiler>
+        <DotNetSwitches></DotNetSwitches>
+        <DotNetXSDGenerator>xsd</DotNetXSDGenerator>
+        <DotNetNamespace></DotNetNamespace>
+        <DotNetTitle></DotNetTitle>
+        <DotNetVersion></DotNetVersion>
+        <DotNetDesc></DotNetDesc>
+        <DotNetCompany></DotNetCompany>
+        <DotNetProduct></DotNetProduct>
+        <DotNetPublicKey></DotNetPublicKey>
+        <DotNetDelaySign>false</DotNetDelaySign>
+        <DotNetStrongNamedRuntime>false</DotNetStrongNamedRuntime>
+        <DotNetDataSetNamespace>StrongTypesNS</DotNetDataSetNamespace>
+        <DNUseDefaultDSNamespace>true</DNUseDefaultDSNamespace>
+        <DNUseNamespaceAsDirs>true</DNUseNamespaceAsDirs>
+      </PGGenInfo>
+      <DeploymentWizard>
+        <CurrentEncoding>3</CurrentEncoding>
+        <SoapEndpointURL>http://www.oblikerp.com/wsa/wsa1</SoapEndpointURL>
+        <WebServiceNamespace userDefined="true">urn:oblikerp-com</WebServiceNamespace>
+        <SoapAction appendToSoapAction="false"/>
+        <ConnectReturnString userDefined="false"/>
+        <TestWSDL RPCEncoded="false" RPCLiteral="false" DocLiteral="true"/>
+        <ESBEncoding>1</ESBEncoding>
+        <EntryEndpoint useDefault="true"/>
+        <FaultEndpoint useDefault="true"/>
+        <RejectedEndpoint useDefault="true"/>
+        <Container></Container>
+        <AppserverURL>AppServerDC://localhost:3091</AppserverURL>
+        <FileName overWrite="false">Oblik_Main</FileName>
+        <ResourceDirectory>/Resources/OpenEdgeServices</ResourceDirectory>
+      </DeploymentWizard>
+      <Name>Oblik_Main</Name>
+      <ProPath>D:\Maxim\</ProPath>
+      <HelpString></HelpString>
+      <ObjectType>false</ObjectType>
+      <AllowUnknown>true</AllowUnknown>
+      <IsTTResultSet>true</IsTTResultSet>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>AppContext</Name>
+        <ProcPath>webservices\main\src\</ProcPath>
+        <ProPath>D:\Maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true">
+          <Name>AppContext</Name>
+          <HelpString></HelpString>
+          <ReturnValue allowUnknown="true" ordinal="0">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2">
+            <Name>AppName</Name>
+            <OrigName>AppName</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3">
+            <Name>Db_Name</Name>
+            <OrigName>Db_Name</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="4">
+            <Name>UserName</Name>
+            <OrigName>UserName</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>AvailApps</Name>
+        <ProcPath>webservices\main\src\</ProcPath>
+        <ProPath>D:\Maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true">
+          <Name>AvailApps</Name>
+          <HelpString></HelpString>
+          <ReturnValue allowUnknown="true" ordinal="0">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1">
+            <Name>AppId</Name>
+            <OrigName>AppId</OrigName>
+            <Type>4</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3">
+            <Name>ServiceId</Name>
+            <OrigName>ServiceId</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="4">
+            <Name>UserName</Name>
+            <OrigName>UserName</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="5">
+            <Name>Db_Name</Name>
+            <OrigName>Db_Name</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="6">
+            <Name>DefEnt</Name>
+            <OrigName>DefEnt</OrigName>
+            <Type>4</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="7">
+            <Name>DefCathg</Name>
+            <OrigName>DefCathg</OrigName>
+            <Type>4</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="8">
+            <Name>DefApp</Name>
+            <OrigName>DefApp</OrigName>
+            <Type>4</Type>
+            <Mode>2</Mode>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="9">
+            <Name>AvailEnt</Name>
+            <OrigName>AvailEnt</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <MetaData>
+              <FieldName>EntName</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>rident</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="10">
+            <Name>AvailCathg</Name>
+            <OrigName>AvailCathg</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <MetaData>
+              <FieldName>CathgName</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ridcathg</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="11">
+            <Name>AvailApp</Name>
+            <OrigName>AvailApp</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <MetaData>
+              <FieldName>AppName</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ridcathg</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ridapp</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>GetMenu</Name>
+        <ProcPath>webservices\main\src\</ProcPath>
+        <ProPath>D:\Maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true">
+          <Name>GetMenu</Name>
+          <HelpString></HelpString>
+          <ReturnValue allowUnknown="true" ordinal="0">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1">
+            <Name>AppId</Name>
+            <OrigName>AppId</OrigName>
+            <Type>4</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3">
+            <Name>RidEnt</Name>
+            <OrigName>RidEnt</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="4">
+            <Name>RidCathg</Name>
+            <OrigName>RidCathg</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="5">
+            <Name>RidApp</Name>
+            <OrigName>RidApp</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="6">
+            <Name>MainMenu</Name>
+            <OrigName>MainMenu</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <MetaData>
+              <FieldName>RidMenu</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ItemId</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ItemLevel</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ParentId</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ItemName</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ItemHelp</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ImagePath</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ModulePath</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+          </Parameter>
+          <Parameter allowUnknown="false" ordinal="7">
+            <Name>FastMenu</Name>
+            <OrigName>FastMenu</OrigName>
+            <Type>15</Type>
+            <Mode>2</Mode>
+            <MetaData>
+              <FieldName>RidMenu</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ItemName</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ItemHelp</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ImagePath</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>RunCount</FieldName>
+              <Type>4</Type>
+              <Extent>0</Extent>
+              <TypeName>integer</TypeName>
+            </MetaData>
+            <MetaData>
+              <FieldName>ModulePath</FieldName>
+              <Type>1</Type>
+              <Extent>0</Extent>
+              <TypeName>character</TypeName>
+            </MetaData>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>RunModule</Name>
+        <ProcPath>webservices\main\src\</ProcPath>
+        <ProPath>D:\Maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="false" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true">
+          <Name>RunModule</Name>
+          <ReturnValue allowUnknown="true" ordinal="0">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1">
+            <Name>AppId</Name>
+            <OrigName>AppId</OrigName>
+            <Type>4</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3">
+            <Name>Module</Name>
+            <OrigName>Module</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="4">
+            <Name>RidEnt</Name>
+            <OrigName>RidEnt</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="5">
+            <Name>RidCathg</Name>
+            <OrigName>RidCathg</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="6">
+            <Name>RidApp</Name>
+            <OrigName>RidApp</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="7">
+            <Name>RidMenu</Name>
+            <OrigName>RidMenu</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="8">
+            <Name>ModuleContextId</Name>
+            <OrigName>ModuleContextId</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+      <Procedure isPersistent="false" useFullName="false">
+        <Name>Start</Name>
+        <ProcPath>webservices\main\src\</ProcPath>
+        <ProPath>D:\Maxim\</ProPath>
+        <ProcExt>p</ProcExt>
+        <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="true" usesTTMappingDefault="true" IsTTResultSet="true">
+          <Name>Start</Name>
+          <HelpString></HelpString>
+          <ReturnValue allowUnknown="true" ordinal="0">
+            <Name>result</Name>
+            <OrigName>result</OrigName>
+            <Type>1</Type>
+            <Mode>0</Mode>
+          </ReturnValue>
+          <Parameter allowUnknown="true" ordinal="1">
+            <Name>ContextId</Name>
+            <OrigName>ContextId</OrigName>
+            <Type>1</Type>
+            <Mode>3</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="2">
+            <Name>ServiceId</Name>
+            <OrigName>ServiceId</OrigName>
+            <Type>4</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="3">
+            <Name>login</Name>
+            <OrigName>login</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="4">
+            <Name>pwd</Name>
+            <OrigName>pwd</OrigName>
+            <Type>1</Type>
+            <Mode>1</Mode>
+          </Parameter>
+          <Parameter allowUnknown="true" ordinal="5">
+            <Name>OblikContextId</Name>
+            <OrigName>OblikContextId</OrigName>
+            <Type>1</Type>
+            <Mode>2</Mode>
+          </Parameter>
+        </ProcDetail>
+      </Procedure>
+    </AppObject>
+  </WSAD>
+</AppContainer>

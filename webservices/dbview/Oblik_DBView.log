@@ -1,0 +1,129 @@
+
+**  ProxyGen, Progress Version 10.2A
+
+** Checking for existence of .r files ...
+
+** Processing non-persistent procedures ...
+
+** Processing: d:\maxim\webservices\dbview\src\BasetypeSearch.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\dbview\src\BasetypeSearch.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT basetype CHARACTER
+          INPUT AppendParam CHARACTER
+          INPUT ContextParam CHARACTER
+          INPUT SearchString CHARACTER
+          OUTPUT SearchData TABLE-HANDLE
+   -- No customizations; Validation not necessary
+
+** Processing: d:\maxim\webservices\dbview\src\BasetypeSelect.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\dbview\src\BasetypeSelect.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT basetype CHARACTER
+          INPUT AppendParam CHARACTER
+          INPUT ContextParam CHARACTER
+          INPUT SearchString CHARACTER
+          OUTPUT SearchData TABLE-HANDLE
+          OUTPUT AllRecords LOGICAL
+   -- No customizations; Validation not necessary
+
+** Processing: d:\maxim\webservices\dbview\src\checkservice.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\dbview\src\checkservice.p 
+          OUTPUT c CHARACTER
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: d:\maxim\webservices\dbview\src\dbinfo.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\dbview\src\dbinfo.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT db_name CHARACTER
+          OUTPUT db_version CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: d:\maxim\webservices\dbview\src\GetTableData.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\dbview\src\GetTableData.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT-OUTPUT TableName CHARACTER
+          INPUT MaxRecCount INTEGER
+          INPUT sortby CHARACTER
+          INPUT filtertext CHARACTER
+          OUTPUT TableData TABLE-HANDLE
+   -- No customizations; Validation not necessary
+
+** Processing: d:\maxim\webservices\dbview\src\GetTableList.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\dbview\src\GetTableList.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT TableList TABLE
+       TABLE: TableList
+          table_name character
+          table_label character
+          sys logical
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Customizations applied to: 1 matching parameters
+
+** Processing: d:\maxim\webservices\dbview\src\TableInfo.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\dbview\src\TableInfo.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT-OUTPUT TableName CHARACTER
+          OUTPUT TableInfo TABLE
+          OUTPUT TTriggers TABLE
+          OUTPUT TRelation TABLE
+          OUTPUT TFields TABLE
+          OUTPUT TIndexes TABLE
+       TABLE: TableInfo
+          table_name character
+          table_label character
+          dump_name character
+          table_desc character
+          valexp character
+          valmsg character
+          sys logical
+       TABLE: TTriggers
+          event character
+          proc_name character
+          override logical
+          checkcrc logical
+          ttext character
+       TABLE: TRelation
+          owner character
+          ref_table character
+          field_name character
+       TABLE: TFields
+          pos integer
+          field_name character
+          field_label character
+          dt character
+          field_format character
+          initial character
+          flags character
+          field_width integer
+       TABLE: TIndexes
+          pos integer
+          name character
+          idesc character
+          num_fields integer
+          flags character
+          fields_name character
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Customizations applied to: 6 matching parameters
+
+** Processing persistent procedures ...
+
+** Checking method and parameter names ...
+
+** Generating Web Services files ...
+   Creating wsm file ...
+   Generation of wsm file complete ...
+   Creating test wsdl file ...
+   Generation of test wsdl file complete ...
+
+** Generation complete

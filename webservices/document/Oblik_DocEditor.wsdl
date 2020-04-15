@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Oblik_DocEditor" targetNamespace="urn:oblikerp-com-doceditor" xmlns:tns="urn:oblikerp-com-doceditor" xmlns:S2="urn:oblikerp-com-doceditor:Oblik_DocEditor" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:prodata="urn:schemas-progress-com:xml-prodata:0001" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:S3="urn:oblikerp-com-doceditor:DocEditor" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:S1="urn:soap-fault:details" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:documentation>EncodingType=DOC_LITERAL, Proxygen_Product=Progress Version 10.2A</wsdl:documentation>
+  <wsdl:types>
+<schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema"><element name="FaultDetail"><complexType><sequence><element name="errorMessage" type="xsd:string"/><element name="requestID" type="xsd:string"/></sequence></complexType></element></schema>
+<schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-doceditor:Oblik_DocEditor" xmlns="http://www.w3.org/2001/XMLSchema"><element name="CreatePO_DocEditor"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="RidTypedoc" nillable="true" type="xsd:int"/><element name="NewDoc" nillable="true" type="xsd:boolean"/><element name="PutOff" nillable="true" type="xsd:boolean"/><element name="RidMainDoc" nillable="true" type="xsd:int"/><element name="EditMode" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="CreatePO_DocEditorResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidDoc" nillable="true" type="xsd:int"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="RidTypedoc" nillable="true" type="xsd:int"/><element name="OutMessage" nillable="true" type="xsd:string"/><element name="ViewReason" nillable="true" type="xsd:string"/></sequence></complexType></element></schema>
+<schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-doceditor:DocEditor" xmlns="http://www.w3.org/2001/XMLSchema"><element name="DocEditorID"><complexType><sequence><element name="UUID" type="xsd:string"/></sequence></complexType></element><element name="Release_DocEditor"><complexType><sequence/></complexType></element><element name="Release_DocEditorResponse"><complexType><sequence/></complexType></element><complexType name="TableHandleParam"><sequence><any namespace="##local"/></sequence></complexType><complexType name="FrameDataRow"><sequence><element name="RidFF" nillable="true" type="xsd:int"/><element name="InternalValue" nillable="true" type="xsd:string"/><element name="FormValue" nillable="true" type="xsd:string"/><element name="ReadOnly" nillable="true" type="xsd:boolean"/><element name="Disabled" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="FrameDataParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="FrameDataRow" type="S3:FrameDataRow"/></sequence></complexType><complexType name="DisabledFieldsRow"><sequence><element name="RidFrame" nillable="true" type="xsd:int"/><element name="RidFF" nillable="true" type="xsd:int"/><element name="TRow" nillable="true" type="xsd:int"/><element name="ReadOnly" nillable="true" type="xsd:boolean"/><element name="Disabled" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="DisabledFieldsParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="DisabledFieldsRow" type="S3:DisabledFieldsRow"/></sequence></complexType><complexType name="ModifiedFieldsRow"><sequence><element name="RidFrame" nillable="true" type="xsd:int"/><element name="RidFF" nillable="true" type="xsd:int"/><element name="TRow" nillable="true" type="xsd:int"/><element name="InternalValue" nillable="true" type="xsd:string"/><element name="FormValue" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="ModifiedFieldsParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="ModifiedFieldsRow" type="S3:ModifiedFieldsRow"/></sequence></complexType><complexType name="TableOpersRow"><sequence><element name="RidFrame" nillable="true" type="xsd:int"/><element name="OperOrder" nillable="true" type="xsd:int"/><element name="OperName" nillable="true" type="xsd:string"/><element name="TRow" nillable="true" type="xsd:int"/></sequence></complexType><complexType name="TableOpersParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="TableOpersRow" type="S3:TableOpersRow"/></sequence></complexType><complexType name="PrintOpersRow"><sequence><element name="Module" nillable="true" type="xsd:string"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="FileName" nillable="true" type="xsd:string"/><element name="FileType" nillable="true" type="xsd:string"/><element name="PrintParams" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="PrintOpersParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="PrintOpersRow" type="S3:PrintOpersRow"/></sequence></complexType><element name="ViewStatus"><complexType><sequence/></complexType></element><element name="ViewStatusResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="Reason" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="Ping"><complexType><sequence/></complexType></element><element name="PingResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="DocHeaderData"><complexType><sequence><element name="FrameKey" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocHeaderDataResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="FrameKey" nillable="true" type="xsd:int"/><element name="FrameData" nillable="true" type="S3:FrameDataParam"/></sequence></complexType></element><element name="DocTableData"><complexType><sequence><element name="FrameKey" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DocTableDataResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="FrameKey" nillable="true" type="xsd:int"/><element name="DisabledFields" nillable="true" type="S3:DisabledFieldsParam"/><element name="DocTableData" nillable="true" type="S3:TableHandleParam"/></sequence></complexType></element><element name="DumpCache"><complexType><sequence/></complexType></element><element name="DumpCacheResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="DumpFile" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SendEvent"><complexType><sequence><element name="QueryId" nillable="true" type="xsd:int"/><element name="EventName" nillable="true" type="xsd:string"/><element name="RidFF" nillable="true" type="xsd:int"/><element name="row" nillable="true" type="xsd:int"/><element name="InputValue" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SendEventResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="QueryId" nillable="true" type="xsd:int"/><element name="OutMessage" nillable="true" type="xsd:string"/><element name="OutputValue" nillable="true" type="xsd:string"/><element name="ModifiedFields" nillable="true" type="S3:ModifiedFieldsParam"/><element name="DisabledFields" nillable="true" type="S3:DisabledFieldsParam"/><element name="TableOpers" nillable="true" type="S3:TableOpersParam"/><element name="PrintOpers" nillable="true" type="S3:PrintOpersParam"/></sequence></complexType></element></schema>
+  </wsdl:types>
+  <wsdl:message name="DocEditor_DocHeaderDataResponse">
+    <wsdl:part name="parameters" element="S3:DocHeaderDataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_DocTableData">
+    <wsdl:part name="parameters" element="S3:DocTableData"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_ViewStatus">
+    <wsdl:part name="parameters" element="S3:ViewStatus"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_DocHeaderData">
+    <wsdl:part name="parameters" element="S3:DocHeaderData"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditorReleaseResponse">
+    <wsdl:part name="parameters" element="S3:Release_DocEditorResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor">
+    <wsdl:part name="parameters" element="S2:CreatePO_DocEditor"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_DumpCache">
+    <wsdl:part name="parameters" element="S3:DumpCache"/>
+  </wsdl:message>
+  <wsdl:message name="FaultDetailMessage">
+    <wsdl:part name="FaultDetail" element="S1:FaultDetail"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_DocTableDataResponse">
+    <wsdl:part name="parameters" element="S3:DocTableDataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_SendEventResponse">
+    <wsdl:part name="parameters" element="S3:SendEventResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditorID">
+    <wsdl:part name="DocEditorID" element="S3:DocEditorID"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditorResponse">
+    <wsdl:part name="parameters" element="S2:CreatePO_DocEditorResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_ViewStatusResponse">
+    <wsdl:part name="parameters" element="S3:ViewStatusResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_SendEvent">
+    <wsdl:part name="parameters" element="S3:SendEvent"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_DumpCacheResponse">
+    <wsdl:part name="parameters" element="S3:DumpCacheResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_Ping">
+    <wsdl:part name="parameters" element="S3:Ping"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditorRelease">
+    <wsdl:part name="parameters" element="S3:Release_DocEditor"/>
+  </wsdl:message>
+  <wsdl:message name="DocEditor_PingResponse">
+    <wsdl:part name="parameters" element="S3:PingResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="Oblik_DocEditorObj">
+    <wsdl:operation name="CreatePO_DocEditor">
+      <wsdl:input message="tns:DocEditor"/>
+      <wsdl:output message="tns:DocEditorResponse"/>
+      <wsdl:fault name="Oblik_DocEditorFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="DocEditorObj">
+    <wsdl:operation name="Release_DocEditor">
+      <wsdl:input message="tns:DocEditorRelease"/>
+      <wsdl:output message="tns:DocEditorReleaseResponse"/>
+      <wsdl:fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ViewStatus">
+      <wsdl:input message="tns:DocEditor_ViewStatus"/>
+      <wsdl:output message="tns:DocEditor_ViewStatusResponse"/>
+      <wsdl:fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <wsdl:input message="tns:DocEditor_Ping"/>
+      <wsdl:output message="tns:DocEditor_PingResponse"/>
+      <wsdl:fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocHeaderData">
+      <wsdl:input message="tns:DocEditor_DocHeaderData"/>
+      <wsdl:output message="tns:DocEditor_DocHeaderDataResponse"/>
+      <wsdl:fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DocTableData">
+      <wsdl:input message="tns:DocEditor_DocTableData"/>
+      <wsdl:output message="tns:DocEditor_DocTableDataResponse"/>
+      <wsdl:fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DumpCache">
+      <wsdl:input message="tns:DocEditor_DumpCache"/>
+      <wsdl:output message="tns:DocEditor_DumpCacheResponse"/>
+      <wsdl:fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SendEvent">
+      <wsdl:input message="tns:DocEditor_SendEvent"/>
+      <wsdl:output message="tns:DocEditor_SendEventResponse"/>
+      <wsdl:fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Oblik_DocEditorObj" type="tns:Oblik_DocEditorObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CreatePO_DocEditor">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal">
+        </soap:header>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_DocEditorFault">
+        <soap:fault name="Oblik_DocEditorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DocEditorObj" type="tns:DocEditorObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Release_DocEditor">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" wsdl:required="true">
+        </soap:header>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ViewStatus">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" wsdl:required="true">
+        </soap:header>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" wsdl:required="true">
+        </soap:header>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocHeaderData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" wsdl:required="true">
+        </soap:header>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DocTableData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" wsdl:required="true">
+        </soap:header>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DumpCache">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" wsdl:required="true">
+        </soap:header>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SendEvent">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" wsdl:required="true">
+        </soap:header>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Oblik_DocEditorService">
+    <wsdl:port name="DocEditorObj" binding="tns:DocEditorObj">
+<wsdl:documentation></wsdl:documentation>
+      <soap:address location="http://www.oblikerp.com/wsa/wsa1"/>
+    </wsdl:port>
+    <wsdl:port name="Oblik_DocEditorObj" binding="tns:Oblik_DocEditorObj">
+<wsdl:documentation></wsdl:documentation>
+      <soap:address location="http://www.oblikerp.com/wsa/wsa1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

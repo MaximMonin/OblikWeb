@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<WSAD xmlns="urn:schemas-progress-com:WSAD:0008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AppObject>
+    <PGVersion>
+      <PXGVersion>03</PXGVersion>
+    </PGVersion>
+    <PGGenInfo isSessionFree="true">
+      <Author />
+      <VersionString />
+      <VersionNumber>1</VersionNumber>
+      <Package />
+      <Service>Oblik_Document</Service>
+      <WorkDir>d:\Maxim\webservices\document\</WorkDir>
+      <VerboseLogging>true</VerboseLogging>
+      <SaveBeforeGen>true</SaveBeforeGen>
+      <DotNetClient>false</DotNetClient>
+      <JavaClient>false</JavaClient>
+      <WebServicesClient>true</WebServicesClient>
+      <ESBClient>false</ESBClient>
+      <ESBClient2>false</ESBClient2>
+      <UserDefinedAppService>false</UserDefinedAppService>
+      <JavaCompilerType>1</JavaCompilerType>
+      <JavaCompiler>&lt;Install Dir&gt;\jdk\bin\javac</JavaCompiler>
+      <JavaSwitches />
+      <JavaClasspathSwitch>-classpath</JavaClasspathSwitch>
+      <JavaClasspath>&lt;Proxy Dir&gt;;&lt;Install Dir&gt;\java\progress.jar;&lt;Install Dir&gt;\java\messages.jar;;&lt;Default classes.zip&gt;</JavaClasspath>
+      <DotNetCompilerType>4</DotNetCompilerType>
+      <DotNetCompiler>csc</DotNetCompiler>
+      <DotNetSwitches />
+      <DotNetXSDGenerator>xsd</DotNetXSDGenerator>
+      <DotNetNamespace />
+      <DotNetTitle />
+      <DotNetVersion />
+      <DotNetDesc />
+      <DotNetCompany />
+      <DotNetProduct />
+      <DotNetPublicKey />
+      <DotNetDelaySign>false</DotNetDelaySign>
+      <DotNetRuntime>digitally signed</DotNetRuntime>
+      <DotNetDataSetNamespace>StrongTypesNS</DotNetDataSetNamespace>
+      <DNUseDefaultDSNamespace>true</DNUseDefaultDSNamespace>
+      <DNUseNamespaceAsDirs>true</DNUseNamespaceAsDirs>
+      <DotNetUseNullableTypes>false</DotNetUseNullableTypes>
+    </PGGenInfo>
+    <DeploymentWizard>
+      <CurrentEncoding>3</CurrentEncoding>
+      <SoapEndpointURL>http://www.oblikerp.com/wsa/wsa1</SoapEndpointURL>
+      <WebServiceNamespace userDefined="true">urn:oblikerp-com-document</WebServiceNamespace>
+      <SoapAction appendToSoapAction="false" />
+      <ConnectReturnString userDefined="false" />
+      <TestWSDL bGen="true" RPCEncoded="false" RPCLiteral="false" DocLiteral="true" />
+      <ESBEncoding>1</ESBEncoding>
+      <EntryEndpoint useDefault="true" />
+      <FaultEndpoint useDefault="true" />
+      <RejectedEndpoint useDefault="true" />
+      <Container />
+      <AppserverURL>AppServerDC://localhost:3091</AppserverURL>
+      <FileName overWrite="false">Oblik_Document</FileName>
+      <ResourceDirectory>/Resources/OpenEdgeServices</ResourceDirectory>
+      <SonicAppService useFileSystem="false" deployToDS="false" createXAR="false">
+        <ResourceDirectory overWrite="false" />
+        <XARName />
+      </SonicAppService>
+      <SonicConnectionInfo>
+        <SonicURL>tcp://localhost:2506</SonicURL>
+        <SonicDomain>Domain1</SonicDomain>
+        <User>Administrator</User>
+        <Password />
+      </SonicConnectionInfo>
+    </DeploymentWizard>
+    <Name>Oblik_Document</Name>
+    <ProPath>D:\Maxim\</ProPath>
+    <HelpString />
+    <ODLHelpString />
+    <ObjectType>false</ObjectType>
+    <AllowUnknown>true</AllowUnknown>
+    <IsTTResultSet>true</IsTTResultSet>
+    <WriteDatasetBeforeImage>false</WriteDatasetBeforeImage>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>AppDocMenu</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+      <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+        <Name>AppDocMenu</Name>
+        <HelpString />
+        <ODLHelpString />
+        <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+          <Name>ContextId</Name>
+          <OrigName>ContextId</OrigName>
+          <Type>1</Type>
+          <Mode>3</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+          <Name>AppDocMenu</Name>
+          <OrigName>AppDocMenu</OrigName>
+          <Type>15</Type>
+          <Mode>2</Mode>
+          <MetaData>
+            <FieldName>MenuItem</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>IdItem</FieldName>
+            <Type>4</Type>
+            <Extent>0</Extent>
+            <TypeName>integer</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>RidMenu</FieldName>
+            <Type>4</Type>
+            <Extent>0</Extent>
+            <TypeName>integer</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>RidApp</FieldName>
+            <Type>4</Type>
+            <Extent>0</Extent>
+            <TypeName>integer</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>RidTypedoc</FieldName>
+            <Type>4</Type>
+            <Extent>0</Extent>
+            <TypeName>integer</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>PutOff</FieldName>
+            <Type>3</Type>
+            <Extent>0</Extent>
+            <TypeName>logical</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>Scope</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>ScopeList</FieldName>
+            <Type>1</Type>
+            <Extent>0</Extent>
+            <TypeName>character</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>DateFrom</FieldName>
+            <Type>2</Type>
+            <Extent>0</Extent>
+            <TypeName>date</TypeName>
+          </MetaData>
+          <MetaData>
+            <FieldName>DateTo</FieldName>
+            <Type>2</Type>
+            <Extent>0</Extent>
+            <TypeName>date</TypeName>
+          </MetaData>
+        </Parameter>
+      </ProcDetail>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>AppReportMenu</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>BasetypeSearch</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+      <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+        <Name>BasetypeSearch</Name>
+        <HelpString />
+        <ODLHelpString />
+        <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+          <Name>ContextId</Name>
+          <Type>1</Type>
+          <Mode>3</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+          <Name>basetype</Name>
+          <Type>1</Type>
+          <Mode>1</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="3" writeXmlBeforeImage="false">
+          <Name>SearchString</Name>
+          <Type>1</Type>
+          <Mode>1</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="4" writeXmlBeforeImage="false">
+          <Name>SearchData</Name>
+          <Type>17</Type>
+          <Mode>2</Mode>
+        </Parameter>
+      </ProcDetail>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>BasetypeSelect</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>CheckDocView</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>CopyContext</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocContextMenu</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocData</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocFileAdd</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocFileDel</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocFileView</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocForm</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocHeader</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocInfo</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>DocTableData</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>FileDBegin</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>FileDChunk</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>FileDelete</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>FileUBegin</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+      <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+        <Name>FileUBegin</Name>
+        <HelpString />
+        <ODLHelpString />
+        <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+          <Name>ContextId</Name>
+          <Type>1</Type>
+          <Mode>3</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+          <Name>HostFileName</Name>
+          <Type>1</Type>
+          <Mode>2</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="3" writeXmlBeforeImage="false">
+          <Name>OutMessage</Name>
+          <Type>1</Type>
+          <Mode>2</Mode>
+        </Parameter>
+      </ProcDetail>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>FileUChunk</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>GetDocList</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>PrintDoc</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>PrintDriver</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+    <Procedure isPersistent="false" useFullName="false">
+      <Name>SendEvent</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+    </Procedure>
+  </AppObject>
+</WSAD>

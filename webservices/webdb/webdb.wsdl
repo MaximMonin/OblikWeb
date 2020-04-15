@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="webdb" targetNamespace="urn:oblikerp-com-webdb" xmlns:tns="urn:oblikerp-com-webdb" xmlns:S2="urn:oblikerp-com-webdb:webdb" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:prodata="urn:schemas-progress-com:xml-prodata:0001" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:S1="urn:soap-fault:details" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:documentation>EncodingType=DOC_LITERAL, Proxygen_Product=Progress Version 10.2A</wsdl:documentation>
+  <wsdl:types>
+<schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema"><element name="FaultDetail"><complexType><sequence><element name="errorMessage" type="xsd:string"/><element name="requestID" type="xsd:string"/></sequence></complexType></element></schema>
+<schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-webdb:webdb" xmlns="http://www.w3.org/2001/XMLSchema"><complexType name="TableHandleParam"><sequence><any namespace="##local"/></sequence></complexType><complexType name="ContextParams_ContextParamsRow"><sequence><element name="ParamName" nillable="true" type="xsd:string"/><element name="ParamValue" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="ContextParams_ContextParamsParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="ContextParamsRow" type="S2:ContextParams_ContextParamsRow"/></sequence></complexType><complexType name="ContextThreads_ContextThreadsRow"><sequence><element name="ContextId" nillable="true" type="xsd:int"/><element name="ParentId" nillable="true" type="xsd:int"/><element name="ContextType" nillable="true" type="xsd:string"/><element name="CreateTime" nillable="true" type="xsd:dateTime"/><element name="EndTime" nillable="true" type="xsd:dateTime"/><element name="Queries" nillable="true" type="xsd:int"/><element name="SecErrors" nillable="true" type="xsd:int"/></sequence></complexType><complexType name="ContextThreads_ContextThreadsParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="ContextThreadsRow" type="S2:ContextThreads_ContextThreadsRow"/></sequence></complexType><complexType name="ReadDB_DBListRow"><sequence><element name="DBRid" nillable="true" type="xsd:int"/><element name="DBId" nillable="true" type="xsd:int"/><element name="DB_Name" nillable="true" type="xsd:string"/><element name="WSPath" nillable="true" type="xsd:string"/><element name="WSPath2" nillable="true" type="xsd:string"/><element name="ImagePath" nillable="true" type="xsd:string"/><element name="Services" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="ReadDB_DBListParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="DBListRow" type="S2:ReadDB_DBListRow"/></sequence></complexType><complexType name="ReadServices_ServiceListRow"><sequence><element name="ServiceRid" nillable="true" type="xsd:int"/><element name="ServiceName" nillable="true" type="xsd:string"/><element name="STRid" nillable="true" type="xsd:int"/><element name="ServiceType" nillable="true" type="xsd:string"/><element name="DBRid" nillable="true" type="xsd:int"/><element name="DB" nillable="true" type="xsd:string"/><element name="EasyLogin" nillable="true" type="xsd:boolean"/><element name="NumUsers" nillable="true" type="xsd:int"/></sequence></complexType><complexType name="ReadServices_ServiceListParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="ServiceListRow" type="S2:ReadServices_ServiceListRow"/></sequence></complexType><complexType name="ReadServiceTypes_STListRow"><sequence><element name="STRid" nillable="true" type="xsd:int"/><element name="STName" nillable="true" type="xsd:string"/><element name="ImagePath" nillable="true" type="xsd:string"/><element name="Services" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="ReadServiceTypes_STListParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="STListRow" type="S2:ReadServiceTypes_STListRow"/></sequence></complexType><complexType name="ReadSessions_SessionsListRow"><sequence><element name="SessionId" nillable="true" type="xsd:int"/><element name="UserName" nillable="true" type="xsd:string"/><element name="Login" nillable="true" type="xsd:dateTime"/><element name="EndTime" nillable="true" type="xsd:dateTime"/><element name="Threads" nillable="true" type="xsd:int"/><element name="Queries" nillable="true" type="xsd:int"/><element name="SecErrors" nillable="true" type="xsd:int"/></sequence></complexType><complexType name="ReadSessions_SessionsListParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="SessionsListRow" type="S2:ReadSessions_SessionsListRow"/></sequence></complexType><complexType name="ReadUsers_UserProfileRow"><sequence><element name="Id" nillable="true" type="xsd:int"/><element name="Login" nillable="true" type="xsd:string"/><element name="Name" nillable="true" type="xsd:string"/><element name="Banned" nillable="true" type="xsd:boolean"/><element name="Company" nillable="true" type="xsd:string"/><element name="Position" nillable="true" type="xsd:string"/><element name="EMail" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="ReadUsers_UserProfileParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="UserProfileRow" type="S2:ReadUsers_UserProfileRow"/></sequence></complexType><complexType name="SaveDB_DBListRow"><sequence><element name="DBRid" nillable="true" type="xsd:int"/><element name="DBId" nillable="true" type="xsd:int"/><element name="DB_Name" nillable="true" type="xsd:string"/><element name="WSPath" nillable="true" type="xsd:string"/><element name="WSPath2" nillable="true" type="xsd:string"/><element name="ImagePath" nillable="true" type="xsd:string"/><element name="Services" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="SaveDB_DBListParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="DBListRow" type="S2:SaveDB_DBListRow"/></sequence></complexType><complexType name="SaveProfile_UserProfileRow"><sequence><element name="UserLogin" nillable="true" type="xsd:string"/><element name="UserName" nillable="true" type="xsd:string"/><element name="UserEMail" nillable="true" type="xsd:string"/><element name="UserCompany" nillable="true" type="xsd:string"/><element name="UserPosition" nillable="true" type="xsd:string"/><element name="UserBanned" nillable="true" type="xsd:boolean"/><element name="ConfPass" nillable="true" type="xsd:string"/><element name="NewPass" nillable="true" type="xsd:string"/><element name="OldPass" nillable="true" type="xsd:string"/><element name="ChangePass" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="SaveProfile_UserProfileParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="UserProfileRow" type="S2:SaveProfile_UserProfileRow"/></sequence></complexType><complexType name="SaveProfile_AvailServicesRow"><sequence><element name="ServiceId" nillable="true" type="xsd:int"/><element name="ServiceRid" nillable="true" type="xsd:int"/><element name="UserServiceName" nillable="true" type="xsd:string"/><element name="ServiceName" nillable="true" type="xsd:string"/><element name="ServiceType" nillable="true" type="xsd:string"/><element name="RunCount" nillable="true" type="xsd:int"/><element name="ReadOnly" nillable="true" type="xsd:boolean"/><element name="Enabled" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="SaveProfile_AvailServicesParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AvailServicesRow" type="S2:SaveProfile_AvailServicesRow"/></sequence></complexType><complexType name="SaveServices_ServiceListRow"><sequence><element name="ServiceRid" nillable="true" type="xsd:int"/><element name="ServiceName" nillable="true" type="xsd:string"/><element name="STRid" nillable="true" type="xsd:int"/><element name="DBRid" nillable="true" type="xsd:int"/><element name="EasyLogin" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="SaveServices_ServiceListParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="ServiceListRow" type="S2:SaveServices_ServiceListRow"/></sequence></complexType><complexType name="SaveServiceTypes_STListRow"><sequence><element name="STRid" nillable="true" type="xsd:int"/><element name="STName" nillable="true" type="xsd:string"/><element name="ImagePath" nillable="true" type="xsd:string"/><element name="Services" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="SaveServiceTypes_STListParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="STListRow" type="S2:SaveServiceTypes_STListRow"/></sequence></complexType><complexType name="UserData_AvailServicesRow"><sequence><element name="ServiceId" nillable="true" type="xsd:int"/><element name="ServiceName" nillable="true" type="xsd:string"/><element name="ServiceType" nillable="true" type="xsd:string"/><element name="ImageLink" nillable="true" type="xsd:string"/><element name="ServiceDbName" nillable="true" type="xsd:string"/><element name="EndPoint" nillable="true" type="xsd:string"/><element name="DefLogin" nillable="true" type="xsd:string"/><element name="RunCount" nillable="true" type="xsd:int"/><element name="EasyLogin" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="UserData_AvailServicesParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AvailServicesRow" type="S2:UserData_AvailServicesRow"/></sequence></complexType><complexType name="UserProfile_UserProfileRow"><sequence><element name="UserLogin" nillable="true" type="xsd:string"/><element name="UserName" nillable="true" type="xsd:string"/><element name="UserEMail" nillable="true" type="xsd:string"/><element name="UserCompany" nillable="true" type="xsd:string"/><element name="UserPosition" nillable="true" type="xsd:string"/><element name="UserBanned" nillable="true" type="xsd:boolean"/><element name="ConfPass" nillable="true" type="xsd:string"/><element name="NewPass" nillable="true" type="xsd:string"/><element name="OldPass" nillable="true" type="xsd:string"/><element name="ChangePass" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="UserProfile_UserProfileParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="UserProfileRow" type="S2:UserProfile_UserProfileRow"/></sequence></complexType><complexType name="UserProfile_AvailServicesRow"><sequence><element name="ServiceId" nillable="true" type="xsd:int"/><element name="ServiceRid" nillable="true" type="xsd:int"/><element name="UserServiceName" nillable="true" type="xsd:string"/><element name="ServiceName" nillable="true" type="xsd:string"/><element name="ServiceType" nillable="true" type="xsd:string"/><element name="RunCount" nillable="true" type="xsd:int"/><element name="ReadOnly" nillable="true" type="xsd:boolean"/><element name="Enabled" nillable="true" type="xsd:boolean"/></sequence></complexType><complexType name="UserProfile_AvailServicesParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AvailServicesRow" type="S2:UserProfile_AvailServicesRow"/></sequence></complexType><element name="BasetypeSearch"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="basetype" nillable="true" type="xsd:string"/><element name="AppendParam" nillable="true" type="xsd:string"/><element name="ContextParam" nillable="true" type="xsd:string"/><element name="SearchString" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="BasetypeSearchResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="SearchData" nillable="true" type="S2:TableHandleParam"/></sequence></complexType></element><element name="BasetypeSelect"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="basetype" nillable="true" type="xsd:string"/><element name="AppendParam" nillable="true" type="xsd:string"/><element name="ContextParam" nillable="true" type="xsd:string"/><element name="SearchString" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="BasetypeSelectResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="SearchData" nillable="true" type="S2:TableHandleParam"/><element name="AllRecords" nillable="true" type="xsd:boolean"/></sequence></complexType></element><element name="ContextParams"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="ContextRid" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="ContextParamsResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ContextParams" nillable="true" type="S2:ContextParams_ContextParamsParam"/></sequence></complexType></element><element name="ContextThreads"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="SessionRid" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="ContextThreadsResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ContextThreads" nillable="true" type="S2:ContextThreads_ContextThreadsParam"/></sequence></complexType></element><element name="DeleteService"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="ServiceRid" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="DeleteServiceResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="DeleteUser"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="UserLogin" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="DeleteUserResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="InputParams"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="InputParamsResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ViewOnly" nillable="true" type="xsd:boolean"/><element name="MenuParams" nillable="true" type="xsd:string"/><element name="ModuleName" nillable="true" type="xsd:string"/><element name="RidMenu" nillable="true" type="xsd:int"/><element name="EndPoint" nillable="true" type="xsd:string"/><element name="EndPoint2" nillable="true" type="xsd:string"/><element name="lang" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="ReadDB"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="ReadDBResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="DBList" nillable="true" type="S2:ReadDB_DBListParam"/></sequence></complexType></element><element name="ReadServices"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="DBRid" nillable="true" type="xsd:int"/><element name="STRid" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="ReadServicesResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ServiceList" nillable="true" type="S2:ReadServices_ServiceListParam"/></sequence></complexType></element><element name="ReadServiceTypes"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="ReadServiceTypesResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="STList" nillable="true" type="S2:ReadServiceTypes_STListParam"/></sequence></complexType></element><element name="ReadSessions"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="UserRid" nillable="true" type="xsd:int"/><element name="DateFrom" nillable="true" type="xsd:date"/><element name="DateTo" nillable="true" type="xsd:date"/><element name="MaxRecordCount" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="ReadSessionsResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="SessionsList" nillable="true" type="S2:ReadSessions_SessionsListParam"/></sequence></complexType></element><element name="ReadUsers"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="MyUsers" nillable="true" type="xsd:boolean"/><element name="RidService" nillable="true" type="xsd:string"/><element name="RidUser" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="ReadUsersResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="UserProfile" nillable="true" type="S2:ReadUsers_UserProfileParam"/></sequence></complexType></element><element name="RunAdmin"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="ServiceId" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="RunAdminResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ModuleContextId" nillable="true" type="xsd:string"/><element name="Module" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="RunUserAdmin"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="ServiceId" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="RunUserAdminResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ModuleContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/><element name="ReadOnly" nillable="true" type="xsd:boolean"/></sequence></complexType></element><element name="SaveDB"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="DBList" nillable="true" type="S2:SaveDB_DBListParam"/></sequence></complexType></element><element name="SaveDBResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SaveProfile"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="IsNew" nillable="true" type="xsd:boolean"/><element name="UserProfile" nillable="true" type="S2:SaveProfile_UserProfileParam"/><element name="AvailServices" nillable="true" type="S2:SaveProfile_AvailServicesParam"/></sequence></complexType></element><element name="SaveProfileResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SaveServiceParams"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="ServiceId" nillable="true" type="xsd:int"/><element name="ContextData" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SaveServiceParamsResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SessionStart"><complexType><sequence><element name="login" nillable="true" type="xsd:string"/><element name="pwd" nillable="true" type="xsd:string"/><element name="lang" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SessionStartResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="Relogin"><complexType><sequence><element name="login" nillable="true" type="xsd:string"/><element name="pwd" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="ReloginResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SaveServices"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="ServiceList" nillable="true" type="S2:SaveServices_ServiceListParam"/></sequence></complexType></element><element name="SaveServicesResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="SaveServiceTypes"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="STList" nillable="true" type="S2:SaveServiceTypes_STListParam"/></sequence></complexType></element><element name="SaveServiceTypesResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OutMessage" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="UserData"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="UserDataResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="UserName" nillable="true" type="xsd:string"/><element name="UserPos" nillable="true" type="xsd:string"/><element name="AvailServices" nillable="true" type="S2:UserData_AvailServicesParam"/></sequence></complexType></element><element name="UserProfile"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="IsNew" nillable="true" type="xsd:boolean"/><element name="UserLogin" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="UserProfileResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="UserProfile" nillable="true" type="S2:UserProfile_UserProfileParam"/><element name="AvailServices" nillable="true" type="S2:UserProfile_AvailServicesParam"/></sequence></complexType></element></schema>
+  </wsdl:types>
+  <wsdl:message name="webdb_UserProfile">
+    <wsdl:part name="parameters" element="S2:UserProfile"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_DeleteServiceResponse">
+    <wsdl:part name="parameters" element="S2:DeleteServiceResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ContextParams">
+    <wsdl:part name="parameters" element="S2:ContextParams"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadSessionsResponse">
+    <wsdl:part name="parameters" element="S2:ReadSessionsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveServiceTypes">
+    <wsdl:part name="parameters" element="S2:SaveServiceTypes"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadSessions">
+    <wsdl:part name="parameters" element="S2:ReadSessions"/>
+  </wsdl:message>
+  <wsdl:message name="FaultDetailMessage">
+    <wsdl:part name="FaultDetail" element="S1:FaultDetail"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveDB">
+    <wsdl:part name="parameters" element="S2:SaveDB"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveServicesResponse">
+    <wsdl:part name="parameters" element="S2:SaveServicesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_BasetypeSearchResponse">
+    <wsdl:part name="parameters" element="S2:BasetypeSearchResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveDBResponse">
+    <wsdl:part name="parameters" element="S2:SaveDBResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_RunUserAdminResponse">
+    <wsdl:part name="parameters" element="S2:RunUserAdminResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_DeleteUser">
+    <wsdl:part name="parameters" element="S2:DeleteUser"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ContextThreadsResponse">
+    <wsdl:part name="parameters" element="S2:ContextThreadsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_RunUserAdmin">
+    <wsdl:part name="parameters" element="S2:RunUserAdmin"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadServiceTypes">
+    <wsdl:part name="parameters" element="S2:ReadServiceTypes"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_DeleteUserResponse">
+    <wsdl:part name="parameters" element="S2:DeleteUserResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ContextThreads">
+    <wsdl:part name="parameters" element="S2:ContextThreads"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadServicesResponse">
+    <wsdl:part name="parameters" element="S2:ReadServicesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadDBResponse">
+    <wsdl:part name="parameters" element="S2:ReadDBResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_InputParams">
+    <wsdl:part name="parameters" element="S2:InputParams"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_UserDataResponse">
+    <wsdl:part name="parameters" element="S2:UserDataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveServiceParams">
+    <wsdl:part name="parameters" element="S2:SaveServiceParams"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveServices">
+    <wsdl:part name="parameters" element="S2:SaveServices"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_BasetypeSelect">
+    <wsdl:part name="parameters" element="S2:BasetypeSelect"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveProfileResponse">
+    <wsdl:part name="parameters" element="S2:SaveProfileResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_DeleteService">
+    <wsdl:part name="parameters" element="S2:DeleteService"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ContextParamsResponse">
+    <wsdl:part name="parameters" element="S2:ContextParamsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadDB">
+    <wsdl:part name="parameters" element="S2:ReadDB"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadUsers">
+    <wsdl:part name="parameters" element="S2:ReadUsers"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_BasetypeSearch">
+    <wsdl:part name="parameters" element="S2:BasetypeSearch"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_RunAdmin">
+    <wsdl:part name="parameters" element="S2:RunAdmin"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReloginResponse">
+    <wsdl:part name="parameters" element="S2:ReloginResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_RunAdminResponse">
+    <wsdl:part name="parameters" element="S2:RunAdminResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadServices">
+    <wsdl:part name="parameters" element="S2:ReadServices"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SessionStartResponse">
+    <wsdl:part name="parameters" element="S2:SessionStartResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_BasetypeSelectResponse">
+    <wsdl:part name="parameters" element="S2:BasetypeSelectResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadUsersResponse">
+    <wsdl:part name="parameters" element="S2:ReadUsersResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_UserData">
+    <wsdl:part name="parameters" element="S2:UserData"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveServiceTypesResponse">
+    <wsdl:part name="parameters" element="S2:SaveServiceTypesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveServiceParamsResponse">
+    <wsdl:part name="parameters" element="S2:SaveServiceParamsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_InputParamsResponse">
+    <wsdl:part name="parameters" element="S2:InputParamsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SessionStart">
+    <wsdl:part name="parameters" element="S2:SessionStart"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_SaveProfile">
+    <wsdl:part name="parameters" element="S2:SaveProfile"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_Relogin">
+    <wsdl:part name="parameters" element="S2:Relogin"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_ReadServiceTypesResponse">
+    <wsdl:part name="parameters" element="S2:ReadServiceTypesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="webdb_UserProfileResponse">
+    <wsdl:part name="parameters" element="S2:UserProfileResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="webdbObj">
+    <wsdl:operation name="BasetypeSearch">
+      <wsdl:input message="tns:webdb_BasetypeSearch"/>
+      <wsdl:output message="tns:webdb_BasetypeSearchResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="BasetypeSelect">
+      <wsdl:input message="tns:webdb_BasetypeSelect"/>
+      <wsdl:output message="tns:webdb_BasetypeSelectResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ContextParams">
+      <wsdl:input message="tns:webdb_ContextParams"/>
+      <wsdl:output message="tns:webdb_ContextParamsResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ContextThreads">
+      <wsdl:input message="tns:webdb_ContextThreads"/>
+      <wsdl:output message="tns:webdb_ContextThreadsResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteService">
+      <wsdl:input message="tns:webdb_DeleteService"/>
+      <wsdl:output message="tns:webdb_DeleteServiceResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <wsdl:input message="tns:webdb_DeleteUser"/>
+      <wsdl:output message="tns:webdb_DeleteUserResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="InputParams">
+      <wsdl:input message="tns:webdb_InputParams"/>
+      <wsdl:output message="tns:webdb_InputParamsResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ReadDB">
+      <wsdl:input message="tns:webdb_ReadDB"/>
+      <wsdl:output message="tns:webdb_ReadDBResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ReadServices">
+      <wsdl:input message="tns:webdb_ReadServices"/>
+      <wsdl:output message="tns:webdb_ReadServicesResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ReadServiceTypes">
+      <wsdl:input message="tns:webdb_ReadServiceTypes"/>
+      <wsdl:output message="tns:webdb_ReadServiceTypesResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ReadSessions">
+      <wsdl:input message="tns:webdb_ReadSessions"/>
+      <wsdl:output message="tns:webdb_ReadSessionsResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ReadUsers">
+      <wsdl:input message="tns:webdb_ReadUsers"/>
+      <wsdl:output message="tns:webdb_ReadUsersResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="RunAdmin">
+      <wsdl:input message="tns:webdb_RunAdmin"/>
+      <wsdl:output message="tns:webdb_RunAdminResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="RunUserAdmin">
+      <wsdl:input message="tns:webdb_RunUserAdmin"/>
+      <wsdl:output message="tns:webdb_RunUserAdminResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SaveDB">
+      <wsdl:input message="tns:webdb_SaveDB"/>
+      <wsdl:output message="tns:webdb_SaveDBResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SaveProfile">
+      <wsdl:input message="tns:webdb_SaveProfile"/>
+      <wsdl:output message="tns:webdb_SaveProfileResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SaveServiceParams">
+      <wsdl:input message="tns:webdb_SaveServiceParams"/>
+      <wsdl:output message="tns:webdb_SaveServiceParamsResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SessionStart">
+      <wsdl:input message="tns:webdb_SessionStart"/>
+      <wsdl:output message="tns:webdb_SessionStartResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="Relogin">
+      <wsdl:input message="tns:webdb_Relogin"/>
+      <wsdl:output message="tns:webdb_ReloginResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SaveServices">
+      <wsdl:input message="tns:webdb_SaveServices"/>
+      <wsdl:output message="tns:webdb_SaveServicesResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SaveServiceTypes">
+      <wsdl:input message="tns:webdb_SaveServiceTypes"/>
+      <wsdl:output message="tns:webdb_SaveServiceTypesResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="UserData">
+      <wsdl:input message="tns:webdb_UserData"/>
+      <wsdl:output message="tns:webdb_UserDataResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="UserProfile">
+      <wsdl:input message="tns:webdb_UserProfile"/>
+      <wsdl:output message="tns:webdb_UserProfileResponse"/>
+      <wsdl:fault name="webdbFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="webdbObj" type="tns:webdbObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="BasetypeSearch">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="BasetypeSelect">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ContextParams">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ContextThreads">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteService">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="InputParams">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ReadDB">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ReadServices">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ReadServiceTypes">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ReadSessions">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ReadUsers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RunAdmin">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RunUserAdmin">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SaveDB">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SaveProfile">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SaveServiceParams">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SessionStart">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Relogin">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SaveServices">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SaveServiceTypes">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UserData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UserProfile">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="webdbFault">
+        <soap:fault name="webdbFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="webdbService">
+    <wsdl:port name="webdbObj" binding="tns:webdbObj">
+<wsdl:documentation></wsdl:documentation>
+      <soap:address location="http://www.oblikerp.com/wsa/wsa1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

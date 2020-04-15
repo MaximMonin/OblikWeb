@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<WSAD xmlns="urn:schemas-progress-com:WSAD:0008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AppObject>
+    <PGVersion>
+      <PXGVersion>03</PXGVersion>
+    </PGVersion>
+    <PGGenInfo isSessionFree="true">
+      <Author />
+      <VersionString />
+      <VersionNumber>1</VersionNumber>
+      <Package />
+      <Service>Oblik_DocEditor</Service>
+      <WorkDir>d:\Maxim\webservices\document\</WorkDir>
+      <VerboseLogging>true</VerboseLogging>
+      <SaveBeforeGen>true</SaveBeforeGen>
+      <DotNetClient>false</DotNetClient>
+      <JavaClient>false</JavaClient>
+      <WebServicesClient>true</WebServicesClient>
+      <ESBClient>false</ESBClient>
+      <ESBClient2>false</ESBClient2>
+      <UserDefinedAppService>false</UserDefinedAppService>
+      <JavaCompilerType>1</JavaCompilerType>
+      <JavaCompiler>&lt;Install Dir&gt;\jdk\bin\javac</JavaCompiler>
+      <JavaSwitches />
+      <JavaClasspathSwitch>-classpath</JavaClasspathSwitch>
+      <JavaClasspath>&lt;Proxy Dir&gt;;&lt;Install Dir&gt;\java\progress.jar;&lt;Install Dir&gt;\java\messages.jar;;&lt;Default classes.zip&gt;</JavaClasspath>
+      <DotNetCompilerType>4</DotNetCompilerType>
+      <DotNetCompiler>csc</DotNetCompiler>
+      <DotNetSwitches />
+      <DotNetXSDGenerator>xsd</DotNetXSDGenerator>
+      <DotNetNamespace />
+      <DotNetTitle />
+      <DotNetVersion />
+      <DotNetDesc />
+      <DotNetCompany />
+      <DotNetProduct />
+      <DotNetPublicKey />
+      <DotNetDelaySign>false</DotNetDelaySign>
+      <DotNetRuntime>digitally signed</DotNetRuntime>
+      <DotNetDataSetNamespace>StrongTypesNS</DotNetDataSetNamespace>
+      <DNUseDefaultDSNamespace>true</DNUseDefaultDSNamespace>
+      <DNUseNamespaceAsDirs>true</DNUseNamespaceAsDirs>
+      <DotNetUseNullableTypes>false</DotNetUseNullableTypes>
+    </PGGenInfo>
+    <DeploymentWizard>
+      <CurrentEncoding>3</CurrentEncoding>
+      <SoapEndpointURL>http://www.oblikerp.com/wsa/wsa1</SoapEndpointURL>
+      <WebServiceNamespace userDefined="true">urn:oblikerp-com-doceditor</WebServiceNamespace>
+      <SoapAction appendToSoapAction="false" />
+      <ConnectReturnString userDefined="false" />
+      <TestWSDL bGen="true" RPCEncoded="false" RPCLiteral="false" DocLiteral="true" />
+      <ESBEncoding>1</ESBEncoding>
+      <EntryEndpoint useDefault="true" />
+      <FaultEndpoint useDefault="true" />
+      <RejectedEndpoint useDefault="true" />
+      <Container />
+      <AppserverURL>AppServerDC://localhost:3091</AppserverURL>
+      <FileName overWrite="false">Oblik_DocEditor</FileName>
+      <ResourceDirectory>/Resources/OpenEdgeServices</ResourceDirectory>
+      <SonicAppService useFileSystem="false" deployToDS="false" createXAR="false">
+        <ResourceDirectory overWrite="false" />
+        <XARName />
+      </SonicAppService>
+      <SonicConnectionInfo>
+        <SonicURL>tcp://localhost:2506</SonicURL>
+        <SonicDomain>Domain1</SonicDomain>
+        <User>Administrator</User>
+        <Password />
+      </SonicConnectionInfo>
+    </DeploymentWizard>
+    <Name>Oblik_DocEditor</Name>
+    <ProPath>D:\Maxim\</ProPath>
+    <HelpString />
+    <ODLHelpString />
+    <ObjectType>false</ObjectType>
+    <AllowUnknown>true</AllowUnknown>
+    <IsTTResultSet>true</IsTTResultSet>
+    <WriteDatasetBeforeImage>false</WriteDatasetBeforeImage>
+    <Procedure isPersistent="true" useFullName="false">
+      <Name>DocEditor</Name>
+      <ProcPath>webservices\document\src\</ProcPath>
+      <ProPath>D:\Maxim\</ProPath>
+      <ProcExt>p</ProcExt>
+      <ProcDetail isCustomized="true" usesUnknownDefault="true" useRetVal="false" usesTTMappingDefault="true" IsTTResultSet="true" usesBeforeImageDefault="true">
+        <Name>DocEditor</Name>
+        <HelpString />
+        <ODLHelpString />
+        <Parameter allowUnknown="true" ordinal="1" writeXmlBeforeImage="false">
+          <Name>ContextId</Name>
+          <Type>1</Type>
+          <Mode>3</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="2" writeXmlBeforeImage="false">
+          <Name>RidDoc</Name>
+          <Type>4</Type>
+          <Mode>3</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="3" writeXmlBeforeImage="false">
+          <Name>ViewOnly</Name>
+          <Type>3</Type>
+          <Mode>3</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="4" writeXmlBeforeImage="false">
+          <Name>RidTypedoc</Name>
+          <Type>4</Type>
+          <Mode>3</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="5" writeXmlBeforeImage="false">
+          <Name>NewDoc</Name>
+          <Type>3</Type>
+          <Mode>1</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="6" writeXmlBeforeImage="false">
+          <Name>PutOff</Name>
+          <Type>3</Type>
+          <Mode>1</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="7" writeXmlBeforeImage="false">
+          <Name>RidMainDoc</Name>
+          <Type>4</Type>
+          <Mode>1</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="8" writeXmlBeforeImage="false">
+          <Name>EditMode</Name>
+          <Type>1</Type>
+          <Mode>1</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="9" writeXmlBeforeImage="false">
+          <Name>OutMessage</Name>
+          <Type>1</Type>
+          <Mode>2</Mode>
+        </Parameter>
+        <Parameter allowUnknown="true" ordinal="10" writeXmlBeforeImage="false">
+          <Name>ViewReason</Name>
+          <Type>1</Type>
+          <Mode>2</Mode>
+        </Parameter>
+        <InternalProc isExcluded="true" hasBadParams="false">
+          <Name>checkdel</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="true" hasBadParams="false">
+          <Name>archsyncdel</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="true" hasBadParams="false">
+          <Name>CopyDoc</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="true" hasBadParams="false">
+          <Name>crNewDoc</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="true" hasBadParams="false">
+          <Name>ToEdit</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="false" hasBadParams="false">
+          <Name>ViewStatus</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="false" hasBadParams="false">
+          <Name>Ping</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="false" hasBadParams="false">
+          <Name>DocHeaderData</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="false" hasBadParams="false">
+          <Name>DocTableData</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="false" hasBadParams="false">
+          <Name>DumpCache</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="false" hasBadParams="false">
+          <Name>SendEvent</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+        <InternalProc isExcluded="true" hasBadParams="false">
+          <Name>SaveDoc</Name>
+          <ProcType>1</ProcType>
+        </InternalProc>
+      </ProcDetail>
+    </Procedure>
+  </AppObject>
+</WSAD>

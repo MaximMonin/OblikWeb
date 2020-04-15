@@ -1,0 +1,112 @@
+
+**  ProxyGen, Progress Version 10.1B
+
+** Checking for existence of .r files ...
+
+** Processing non-persistent procedures ...
+
+** Processing: D:\Maxim\webservices\main\src\AppContext.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\main\src\AppContext.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT AppName CHARACTER
+          OUTPUT Db_Name CHARACTER
+          OUTPUT UserName CHARACTER
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: D:\Maxim\webservices\main\src\AvailApps.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\main\src\AvailApps.p 
+          INPUT-OUTPUT AppId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ServiceId INTEGER
+          OUTPUT UserName CHARACTER
+          OUTPUT Db_Name CHARACTER
+          OUTPUT DefEnt INTEGER
+          OUTPUT DefCathg INTEGER
+          OUTPUT DefApp INTEGER
+          OUTPUT AvailEnt TABLE
+          OUTPUT AvailCathg TABLE
+          OUTPUT AvailApp TABLE
+       TABLE: AvailEnt
+          EntName character
+          rident integer
+       TABLE: AvailCathg
+          CathgName character
+          ridcathg integer
+       TABLE: AvailApp
+          AppName character
+          ridcathg integer
+          ridapp integer
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Customizations applied to: 10 matching parameters
+
+** Processing: D:\Maxim\webservices\main\src\GetMenu.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\main\src\GetMenu.p 
+          INPUT-OUTPUT AppId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidEnt INTEGER
+          INPUT RidCathg INTEGER
+          INPUT RidApp INTEGER
+          OUTPUT MainMenu TABLE
+          OUTPUT FastMenu TABLE
+       TABLE: MainMenu
+          RidMenu integer
+          ItemId integer
+          ItemLevel integer
+          ParentId integer
+          ItemName character
+          ItemHelp character
+          ImagePath character
+          ModulePath character
+       TABLE: FastMenu
+          RidMenu integer
+          ItemName character
+          ItemHelp character
+          ImagePath character
+          RunCount integer
+          ModulePath character
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Customizations applied to: 7 matching parameters
+
+** Processing: D:\Maxim\webservices\main\src\RunModule.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\main\src\RunModule.p 
+          INPUT-OUTPUT AppId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT-OUTPUT Module CHARACTER
+          INPUT RidEnt INTEGER
+          INPUT RidCathg INTEGER
+          INPUT RidApp INTEGER
+          INPUT RidMenu INTEGER
+          OUTPUT ModuleContextId CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\main\src\Start.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\main\src\Start.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ServiceId INTEGER
+          INPUT login CHARACTER
+          INPUT pwd CHARACTER
+          OUTPUT OblikContextId CHARACTER
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing persistent procedures ...
+
+** Checking method and parameter names ...
+
+** Generating Web Services files ...
+   Creating wsm file ...
+   Generation of wsm file complete ...
+   Creating test wsdl file ...
+   Generation of test wsdl file complete ...
+
+** Generation complete

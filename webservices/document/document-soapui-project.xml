@@ -1,0 +1,1763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project name="document" resourceRoot="" soapui-version="3.0.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="Oblik_DocumentObj" type="wsdl" bindingName="{urn:oblikerp-com-document}Oblik_DocumentObj" soapVersion="1_1" anonymous="optional" definition="https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_Document" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_Document"><con:part><con:url>https://maximmonin:8443/oblik/wsa1/wsdl?targetURI=Oblik_Document</con:url><con:content><![CDATA[<definitions name="Oblik_Document" targetNamespace="urn:oblikerp-com-document" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:prodata="urn:schemas-progress-com:xml-prodata:0001" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="urn:oblikerp-com-document" xmlns:S2="urn:oblikerp-com-document:Oblik_Document" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:S1="urn:soap-fault:details" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:documentation>EncodingType=DOC_LITERAL, WSA_Product=10.2A03 - N/A</wsdl:documentation>
+  <types>
+    <schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="FaultDetail">
+        <complexType>
+          <sequence>
+            <element name="errorMessage" type="xsd:string"/>
+            <element name="requestID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-document:Oblik_Document" xmlns="http://www.w3.org/2001/XMLSchema">
+      <complexType name="TableHandleParam">
+        <sequence>
+          <any namespace="##local"/>
+        </sequence>
+      </complexType>
+      <complexType name="AppDocMenu_AppDocMenuRow">
+        <sequence>
+          <element name="MenuItem" nillable="true" type="xsd:string"/>
+          <element name="IdItem" nillable="true" type="xsd:int"/>
+          <element name="RidMenu" nillable="true" type="xsd:int"/>
+          <element name="RidApp" nillable="true" type="xsd:int"/>
+          <element name="RidTypedoc" nillable="true" type="xsd:int"/>
+          <element name="PutOff" nillable="true" type="xsd:boolean"/>
+          <element name="Scope" nillable="true" type="xsd:string"/>
+          <element name="ScopeList" nillable="true" type="xsd:string"/>
+          <element name="DateFrom" nillable="true" type="xsd:date"/>
+          <element name="DateTo" nillable="true" type="xsd:date"/>
+          <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+        </sequence>
+      </complexType>
+      <complexType name="AppDocMenu_AppDocMenuParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="AppDocMenuRow" type="S2:AppDocMenu_AppDocMenuRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocContextMenu_ContextMenuRow">
+        <sequence>
+          <element name="ItemId" nillable="true" type="xsd:int"/>
+          <element name="ItemKey" nillable="true" type="xsd:string"/>
+          <element name="ItemName" nillable="true" type="xsd:string"/>
+          <element name="UpItem" nillable="true" type="xsd:int"/>
+          <element name="AppParam" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocContextMenu_ContextMenuParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="ContextMenuRow" type="S2:DocContextMenu_ContextMenuRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocData_FrameDataRow">
+        <sequence>
+          <element name="RidFF" nillable="true" type="xsd:int"/>
+          <element name="InternalValue" nillable="true" type="xsd:string"/>
+          <element name="FormValue" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocData_FrameDataParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="FrameDataRow" type="S2:DocData_FrameDataRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocForm_FramesRow">
+        <sequence>
+          <element name="FrameKey" nillable="true" type="xsd:int"/>
+          <element name="IsTable" nillable="true" type="xsd:boolean"/>
+          <element name="N" nillable="true" type="xsd:int"/>
+          <element name="PageN" nillable="true" type="xsd:int"/>
+          <element name="FrameHeight" nillable="true" type="xsd:int"/>
+          <element name="FrameTitle" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocForm_FramesParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="FramesRow" type="S2:DocForm_FramesRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocForm_FrameFieldsRow">
+        <sequence>
+          <element name="RidFF" nillable="true" type="xsd:int"/>
+          <element name="FrameKey" nillable="true" type="xsd:int"/>
+          <element name="FieldNum" nillable="true" type="xsd:int"/>
+          <element name="IsMandatory" nillable="true" type="xsd:boolean"/>
+          <element name="IsLim" nillable="true" type="xsd:boolean"/>
+          <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+          <element name="IsSelect" nillable="true" type="xsd:boolean"/>
+          <element name="IsAutoSelect" nillable="true" type="xsd:boolean"/>
+          <element name="FieldCol" nillable="true" type="xsd:int"/>
+          <element name="FieldRow" nillable="true" type="xsd:int"/>
+          <element name="FieldWidth" nillable="true" type="xsd:int"/>
+          <element name="FieldHeight" nillable="true" type="xsd:int"/>
+          <element name="ColNumber" nillable="true" type="xsd:int"/>
+          <element name="AppendParam" nillable="true" type="xsd:string"/>
+          <element name="BaseType" nillable="true" type="xsd:string"/>
+          <element name="FieldFormat" nillable="true" type="xsd:string"/>
+          <element name="FieldLabel" nillable="true" type="xsd:string"/>
+          <element name="FieldAlign" nillable="true" type="xsd:string"/>
+          <element name="ObjectType" nillable="true" type="xsd:string"/>
+          <element name="ProgressType" nillable="true" type="xsd:string"/>
+          <element name="HelpString" nillable="true" type="xsd:string"/>
+          <element name="FreeEdit" nillable="true" type="xsd:boolean"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocForm_FrameFieldsParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="FrameFieldsRow" type="S2:DocForm_FrameFieldsRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocInfo_CollumnDataRow">
+        <sequence>
+          <element name="IdField" nillable="true" type="xsd:int"/>
+          <element name="fLabel" nillable="true" type="xsd:string"/>
+          <element name="fName" nillable="true" type="xsd:string"/>
+          <element name="fWidth" nillable="true" type="xsd:int"/>
+          <element name="fType" nillable="true" type="xsd:string"/>
+          <element name="fAlign" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="DocInfo_CollumnDataParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="CollumnDataRow" type="S2:DocInfo_CollumnDataRow"/>
+        </sequence>
+      </complexType>
+      <complexType name="GetDocList_CollumnDataRow">
+        <sequence>
+          <element name="IdField" nillable="true" type="xsd:int"/>
+          <element name="fLabel" nillable="true" type="xsd:string"/>
+          <element name="fName" nillable="true" type="xsd:string"/>
+          <element name="fWidth" nillable="true" type="xsd:int"/>
+          <element name="fType" nillable="true" type="xsd:string"/>
+          <element name="fAlign" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="GetDocList_CollumnDataParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="CollumnDataRow" type="S2:GetDocList_CollumnDataRow"/>
+        </sequence>
+      </complexType>
+      <element name="AppDocMenu">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="AppDocMenuResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="AppDocMenu" nillable="true" type="S2:AppDocMenu_AppDocMenuParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BasetypeSearch">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="basetype" nillable="true" type="xsd:string"/>
+            <element name="AppendParam" nillable="true" type="xsd:string"/>
+            <element name="ContextParam" nillable="true" type="xsd:string"/>
+            <element name="SearchString" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BasetypeSearchResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="SearchData" nillable="true" type="S2:TableHandleParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BasetypeSelect">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="basetype" nillable="true" type="xsd:string"/>
+            <element name="AppendParam" nillable="true" type="xsd:string"/>
+            <element name="ContextParam" nillable="true" type="xsd:string"/>
+            <element name="SearchString" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BasetypeSelectResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="SearchData" nillable="true" type="S2:TableHandleParam"/>
+            <element name="AllRecords" nillable="true" type="xsd:boolean"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CheckDocView">
+        <complexType>
+          <sequence>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CheckDocViewResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="DocRight" nillable="true" type="xsd:int"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocContextMenu">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+            <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocContextMenuResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="ContextMenu" nillable="true" type="S2:DocContextMenu_ContextMenuParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocData">
+        <complexType>
+          <sequence>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+            <element name="FrameKey" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocDataResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="FrameKey" nillable="true" type="xsd:int"/>
+            <element name="FrameData" nillable="true" type="S2:DocData_FrameDataParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocFileAdd">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+            <element name="HostFileName" nillable="true" type="xsd:string"/>
+            <element name="LocalFileName" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocFileAddResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocFileDel">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidFileDoc" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocFileDelResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocFileView">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidFileDoc" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocFileViewResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="HostFileName" nillable="true" type="xsd:string"/>
+            <element name="LocalFileName" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocForm">
+        <complexType>
+          <sequence>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidTypeDoc" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocFormResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="Frames" nillable="true" type="S2:DocForm_FramesParam"/>
+            <element name="FrameFields" nillable="true" type="S2:DocForm_FrameFieldsParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocInfo">
+        <complexType>
+          <sequence>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="InfoType" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocInfoResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="InfoType" nillable="true" type="xsd:string"/>
+            <element name="CollumnData" nillable="true" type="S2:DocInfo_CollumnDataParam"/>
+            <element name="DocumentData" nillable="true" type="S2:TableHandleParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocTableData">
+        <complexType>
+          <sequence>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+            <element name="FrameKey" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocTableDataResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="FrameKey" nillable="true" type="xsd:int"/>
+            <element name="DocTableData" nillable="true" type="S2:TableHandleParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileDBegin">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="HostFileName" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileDBeginResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+            <element name="HostFileSize" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileDChunk">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="HostFileName" nillable="true" type="xsd:string"/>
+            <element name="BytesFrom" nillable="true" type="xsd:int"/>
+            <element name="BytesTo" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileDChunkResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="BytesFrom" nillable="true" type="xsd:int"/>
+            <element name="BytesTo" nillable="true" type="xsd:int"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+            <element name="HostFileSize" nillable="true" type="xsd:int"/>
+            <element name="FileBinary" nillable="true" type="xsd:base64Binary"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileDelete">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="HostFileName" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileDeleteResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileUBegin">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileUBeginResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="HostFileName" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileUChunk">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="HostFileName" nillable="true" type="xsd:string"/>
+            <element name="FileBinary" nillable="true" type="xsd:base64Binary"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FileUChunkResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+            <element name="HostFileSize" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetDocList">
+        <complexType>
+          <sequence>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="PutOff" nillable="true" type="xsd:boolean"/>
+            <element name="RidApp" nillable="true" type="xsd:int"/>
+            <element name="RidTypedoc" nillable="true" type="xsd:int"/>
+            <element name="DateFrom" nillable="true" type="xsd:date"/>
+            <element name="DateTo" nillable="true" type="xsd:date"/>
+            <element name="Scope" nillable="true" type="xsd:string"/>
+            <element name="IdDocument" nillable="true" type="xsd:int"/>
+            <element name="RidDocument" nillable="true" type="xsd:int"/>
+            <element name="MaxRecCount" nillable="true" type="xsd:int"/>
+            <element name="DocFilterParams" nillable="true" type="xsd:string"/>
+            <element name="FieldFilterParams" nillable="true" type="xsd:string"/>
+            <element name="SortBy" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetDocListResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="DocsId" nillable="true" type="xsd:int"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="CollumnData" nillable="true" type="S2:GetDocList_CollumnDataParam"/>
+            <element name="DocumentData" nillable="true" type="S2:TableHandleParam"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="Oblik_Document_DocForm">
+    <part name="parameters" element="S2:DocForm"/>
+  </message>
+  <message name="Oblik_Document_FileUBeginResponse">
+    <part name="parameters" element="S2:FileUBeginResponse"/>
+  </message>
+  <message name="Oblik_Document_AppDocMenuResponse">
+    <part name="parameters" element="S2:AppDocMenuResponse"/>
+  </message>
+  <message name="Oblik_Document_DocInfo">
+    <part name="parameters" element="S2:DocInfo"/>
+  </message>
+  <message name="Oblik_Document_DocTableDataResponse">
+    <part name="parameters" element="S2:DocTableDataResponse"/>
+  </message>
+  <message name="Oblik_Document_FileDChunk">
+    <part name="parameters" element="S2:FileDChunk"/>
+  </message>
+  <message name="Oblik_Document_DocFileViewResponse">
+    <part name="parameters" element="S2:DocFileViewResponse"/>
+  </message>
+  <message name="Oblik_Document_FileDBeginResponse">
+    <part name="parameters" element="S2:FileDBeginResponse"/>
+  </message>
+  <message name="Oblik_Document_DocFileDelResponse">
+    <part name="parameters" element="S2:DocFileDelResponse"/>
+  </message>
+  <message name="Oblik_Document_DocFileDel">
+    <part name="parameters" element="S2:DocFileDel"/>
+  </message>
+  <message name="Oblik_Document_DocFileView">
+    <part name="parameters" element="S2:DocFileView"/>
+  </message>
+  <message name="Oblik_Document_DocContextMenu">
+    <part name="parameters" element="S2:DocContextMenu"/>
+  </message>
+  <message name="Oblik_Document_CheckDocViewResponse">
+    <part name="parameters" element="S2:CheckDocViewResponse"/>
+  </message>
+  <message name="Oblik_Document_FileDChunkResponse">
+    <part name="parameters" element="S2:FileDChunkResponse"/>
+  </message>
+  <message name="Oblik_Document_FileDBegin">
+    <part name="parameters" element="S2:FileDBegin"/>
+  </message>
+  <message name="Oblik_Document_DocDataResponse">
+    <part name="parameters" element="S2:DocDataResponse"/>
+  </message>
+  <message name="FaultDetailMessage">
+    <part name="FaultDetail" element="S1:FaultDetail"/>
+  </message>
+  <message name="Oblik_Document_FileUBegin">
+    <part name="parameters" element="S2:FileUBegin"/>
+  </message>
+  <message name="Oblik_Document_DocFormResponse">
+    <part name="parameters" element="S2:DocFormResponse"/>
+  </message>
+  <message name="Oblik_Document_DocContextMenuResponse">
+    <part name="parameters" element="S2:DocContextMenuResponse"/>
+  </message>
+  <message name="Oblik_Document_DocTableData">
+    <part name="parameters" element="S2:DocTableData"/>
+  </message>
+  <message name="Oblik_Document_GetDocList">
+    <part name="parameters" element="S2:GetDocList"/>
+  </message>
+  <message name="Oblik_Document_BasetypeSelectResponse">
+    <part name="parameters" element="S2:BasetypeSelectResponse"/>
+  </message>
+  <message name="Oblik_Document_BasetypeSearchResponse">
+    <part name="parameters" element="S2:BasetypeSearchResponse"/>
+  </message>
+  <message name="Oblik_Document_DocInfoResponse">
+    <part name="parameters" element="S2:DocInfoResponse"/>
+  </message>
+  <message name="Oblik_Document_BasetypeSearch">
+    <part name="parameters" element="S2:BasetypeSearch"/>
+  </message>
+  <message name="Oblik_Document_BasetypeSelect">
+    <part name="parameters" element="S2:BasetypeSelect"/>
+  </message>
+  <message name="Oblik_Document_FileDeleteResponse">
+    <part name="parameters" element="S2:FileDeleteResponse"/>
+  </message>
+  <message name="Oblik_Document_DocFileAddResponse">
+    <part name="parameters" element="S2:DocFileAddResponse"/>
+  </message>
+  <message name="Oblik_Document_FileUChunkResponse">
+    <part name="parameters" element="S2:FileUChunkResponse"/>
+  </message>
+  <message name="Oblik_Document_FileUChunk">
+    <part name="parameters" element="S2:FileUChunk"/>
+  </message>
+  <message name="Oblik_Document_DocData">
+    <part name="parameters" element="S2:DocData"/>
+  </message>
+  <message name="Oblik_Document_AppDocMenu">
+    <part name="parameters" element="S2:AppDocMenu"/>
+  </message>
+  <message name="Oblik_Document_FileDelete">
+    <part name="parameters" element="S2:FileDelete"/>
+  </message>
+  <message name="Oblik_Document_CheckDocView">
+    <part name="parameters" element="S2:CheckDocView"/>
+  </message>
+  <message name="Oblik_Document_DocFileAdd">
+    <part name="parameters" element="S2:DocFileAdd"/>
+  </message>
+  <message name="Oblik_Document_GetDocListResponse">
+    <part name="parameters" element="S2:GetDocListResponse"/>
+  </message>
+  <portType name="Oblik_DocumentObj">
+    <operation name="AppDocMenu">
+      <input message="tns:Oblik_Document_AppDocMenu"/>
+      <output message="tns:Oblik_Document_AppDocMenuResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="BasetypeSearch">
+      <input message="tns:Oblik_Document_BasetypeSearch"/>
+      <output message="tns:Oblik_Document_BasetypeSearchResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="BasetypeSelect">
+      <input message="tns:Oblik_Document_BasetypeSelect"/>
+      <output message="tns:Oblik_Document_BasetypeSelectResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="CheckDocView">
+      <input message="tns:Oblik_Document_CheckDocView"/>
+      <output message="tns:Oblik_Document_CheckDocViewResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocContextMenu">
+      <input message="tns:Oblik_Document_DocContextMenu"/>
+      <output message="tns:Oblik_Document_DocContextMenuResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocData">
+      <input message="tns:Oblik_Document_DocData"/>
+      <output message="tns:Oblik_Document_DocDataResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocFileAdd">
+      <input message="tns:Oblik_Document_DocFileAdd"/>
+      <output message="tns:Oblik_Document_DocFileAddResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocFileDel">
+      <input message="tns:Oblik_Document_DocFileDel"/>
+      <output message="tns:Oblik_Document_DocFileDelResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocFileView">
+      <input message="tns:Oblik_Document_DocFileView"/>
+      <output message="tns:Oblik_Document_DocFileViewResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocForm">
+      <input message="tns:Oblik_Document_DocForm"/>
+      <output message="tns:Oblik_Document_DocFormResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocInfo">
+      <input message="tns:Oblik_Document_DocInfo"/>
+      <output message="tns:Oblik_Document_DocInfoResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocTableData">
+      <input message="tns:Oblik_Document_DocTableData"/>
+      <output message="tns:Oblik_Document_DocTableDataResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="FileDBegin">
+      <input message="tns:Oblik_Document_FileDBegin"/>
+      <output message="tns:Oblik_Document_FileDBeginResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="FileDChunk">
+      <input message="tns:Oblik_Document_FileDChunk"/>
+      <output message="tns:Oblik_Document_FileDChunkResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="FileDelete">
+      <input message="tns:Oblik_Document_FileDelete"/>
+      <output message="tns:Oblik_Document_FileDeleteResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="FileUBegin">
+      <input message="tns:Oblik_Document_FileUBegin"/>
+      <output message="tns:Oblik_Document_FileUBeginResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="FileUChunk">
+      <input message="tns:Oblik_Document_FileUChunk"/>
+      <output message="tns:Oblik_Document_FileUChunkResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="GetDocList">
+      <input message="tns:Oblik_Document_GetDocList"/>
+      <output message="tns:Oblik_Document_GetDocListResponse"/>
+      <fault name="Oblik_DocumentFault" message="tns:FaultDetailMessage"/>
+    </operation>
+  </portType>
+  <binding name="Oblik_DocumentObj" type="tns:Oblik_DocumentObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="AppDocMenu">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="BasetypeSearch">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="BasetypeSelect">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="CheckDocView">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocContextMenu">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocData">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocFileAdd">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocFileDel">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocFileView">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocForm">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocInfo">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocTableData">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="FileDBegin">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="FileDChunk">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="FileDelete">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="FileUBegin">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="FileUChunk">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="GetDocList">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocumentFault">
+        <soap:fault name="Oblik_DocumentFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="Oblik_DocumentService">
+    <port name="Oblik_DocumentObj" binding="tns:Oblik_DocumentObj">
+      <wsdl:documentation/>
+      <soap:address location="http://maximmonin:8080/oblik/wsa1"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="AppDocMenu" bindingOperationName="AppDocMenu" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:AppDocMenu>
+         <urn:ContextId>?</urn:ContextId>
+      </urn:AppDocMenu>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/AppDocMenuRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="BasetypeSearch" bindingOperationName="BasetypeSearch" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:BasetypeSearch>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:basetype>?</urn:basetype>
+         <urn:AppendParam>?</urn:AppendParam>
+         <urn:SearchString>?</urn:SearchString>
+      </urn:BasetypeSearch>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/BasetypeSearchRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="BasetypeSelect" bindingOperationName="BasetypeSelect" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:BasetypeSelect>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:basetype>?</urn:basetype>
+         <urn:AppendParam>?</urn:AppendParam>
+         <urn:SearchString>?</urn:SearchString>
+      </urn:BasetypeSelect>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/BasetypeSelectRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocData" bindingOperationName="DocData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:DocData>
+         <urn:DocsId>?</urn:DocsId>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:RidDoc>?</urn:RidDoc>
+         <urn:FrameKey>?</urn:FrameKey>
+      </urn:DocData>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/DocDataRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocForm" bindingOperationName="DocForm" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:DocForm>
+         <urn:DocsId>?</urn:DocsId>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:RidTypeDoc>?</urn:RidTypeDoc>
+      </urn:DocForm>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/DocFormRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocTableData" bindingOperationName="DocTableData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:DocTableData>
+         <urn:DocsId>?</urn:DocsId>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:RidDoc>?</urn:RidDoc>
+         <urn:FrameKey>?</urn:FrameKey>
+      </urn:DocTableData>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/DocTableDataRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="GetDocList" bindingOperationName="GetDocList" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:GetDocList>
+         <urn:DocsId>?</urn:DocsId>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:PutOff>?</urn:PutOff>
+         <urn:RidApp>?</urn:RidApp>
+         <urn:RidTypedoc>?</urn:RidTypedoc>
+         <urn:DateFrom>?</urn:DateFrom>
+         <urn:DateTo>?</urn:DateTo>
+         <urn:Scope>?</urn:Scope>
+         <urn:IdDocument>?</urn:IdDocument>
+         <urn:RidDocument>?</urn:RidDocument>
+         <urn:MaxRecCount>?</urn:MaxRecCount>
+         <urn:DocFilterParams>?</urn:DocFilterParams>
+         <urn:FieldFilterParams>?</urn:FieldFilterParams>
+         <urn:SortBy>?</urn:SortBy>
+      </urn:GetDocList>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/GetDocListRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocContextMenu" bindingOperationName="DocContextMenu" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:DocContextMenu>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:RidDoc>?</urn:RidDoc>
+         <urn:ViewOnly>?</urn:ViewOnly>
+      </urn:DocContextMenu>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/DocContextMenuRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="CheckDocView" bindingOperationName="CheckDocView" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:CheckDocView>
+         <urn:DocsId>?</urn:DocsId>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:RidDoc>?</urn:RidDoc>
+      </urn:CheckDocView>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/CheckDocViewRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocFileAdd" bindingOperationName="DocFileAdd" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:DocFileAdd>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:RidDoc>?</urn:RidDoc>
+         <urn:HostFileName>?</urn:HostFileName>
+         <urn:LocalFileName>?</urn:LocalFileName>
+      </urn:DocFileAdd>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/DocFileAddRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocFileDel" bindingOperationName="DocFileDel" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:DocFileDel>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:RidFileDoc>?</urn:RidFileDoc>
+      </urn:DocFileDel>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/DocFileDelRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocFileView" bindingOperationName="DocFileView" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:DocFileView>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:RidFileDoc>?</urn:RidFileDoc>
+      </urn:DocFileView>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/DocFileViewRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocInfo" bindingOperationName="DocInfo" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:DocInfo>
+         <urn:DocsId>?</urn:DocsId>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:InfoType>?</urn:InfoType>
+         <urn:RidDoc>?</urn:RidDoc>
+      </urn:DocInfo>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/DocInfoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="FileDBegin" bindingOperationName="FileDBegin" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:FileDBegin>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:HostFileName>?</urn:HostFileName>
+      </urn:FileDBegin>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/FileDBeginRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="FileDChunk" bindingOperationName="FileDChunk" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:FileDChunk>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:HostFileName>?</urn:HostFileName>
+         <urn:BytesFrom>?</urn:BytesFrom>
+         <urn:BytesTo>?</urn:BytesTo>
+      </urn:FileDChunk>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/FileDChunkRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="FileDelete" bindingOperationName="FileDelete" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:FileDelete>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:HostFileName>?</urn:HostFileName>
+      </urn:FileDelete>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/FileDeleteRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="FileUBegin" bindingOperationName="FileUBegin" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:FileUBegin>
+         <urn:ContextId>?</urn:ContextId>
+      </urn:FileUBegin>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/FileUBeginRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="FileUChunk" bindingOperationName="FileUChunk" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-document:Oblik_Document">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:FileUChunk>
+         <urn:ContextId>?</urn:ContextId>
+         <urn:HostFileName>?</urn:HostFileName>
+         <urn:FileBinary>cid:991415111739</urn:FileBinary>
+      </urn:FileUChunk>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-document/Oblik_DocumentObj/FileUChunkRequest"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="DocEditorObj" type="wsdl" bindingName="{urn:oblikerp-com-doceditor}DocEditorObj" soapVersion="1_1" anonymous="optional" definition="https://maximmonin:8443/omk/wsa1/wsdl?targetURI=Oblik_DocEditor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://maximmonin:8443/omk/wsa1/wsdl?targetURI=Oblik_DocEditor"><con:part><con:url>https://maximmonin:8443/omk/wsa1/wsdl?targetURI=Oblik_DocEditor</con:url><con:content><![CDATA[<definitions name="Oblik_DocEditor" targetNamespace="urn:oblikerp-com-doceditor" xmlns:S3="urn:oblikerp-com-doceditor:DocEditor" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:prodata="urn:schemas-progress-com:xml-prodata:0001" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="urn:oblikerp-com-doceditor" xmlns:S2="urn:oblikerp-com-doceditor:Oblik_DocEditor" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:S1="urn:soap-fault:details" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:documentation>EncodingType=DOC_LITERAL, WSA_Product=10.2A - N/A</wsdl:documentation>
+  <types>
+    <schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="FaultDetail">
+        <complexType>
+          <sequence>
+            <element name="errorMessage" type="xsd:string"/>
+            <element name="requestID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-doceditor:Oblik_DocEditor" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="checkservice">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="checkserviceResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="c" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CreatePO_DocEditor">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+            <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+            <element name="RidTypedoc" nillable="true" type="xsd:int"/>
+            <element name="NewDoc" nillable="true" type="xsd:boolean"/>
+            <element name="PutOff" nillable="true" type="xsd:boolean"/>
+            <element name="RidMainDoc" nillable="true" type="xsd:int"/>
+            <element name="EditMode" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CreatePO_DocEditorResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+            <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+            <element name="RidTypedoc" nillable="true" type="xsd:int"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+            <element name="ViewReason" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-doceditor:DocEditor" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="DocEditorID">
+        <complexType>
+          <sequence>
+            <element name="UUID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Release_DocEditor">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="Release_DocEditorResponse">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <complexType name="TableHandleParam">
+        <sequence>
+          <any namespace="##local"/>
+        </sequence>
+      </complexType>
+      <complexType name="FrameDataRow">
+        <sequence>
+          <element name="RidFF" nillable="true" type="xsd:int"/>
+          <element name="InternalValue" nillable="true" type="xsd:string"/>
+          <element name="FormValue" nillable="true" type="xsd:string"/>
+        </sequence>
+      </complexType>
+      <complexType name="FrameDataParam">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="FrameDataRow" type="S3:FrameDataRow"/>
+        </sequence>
+      </complexType>
+      <element name="ViewStatus">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="ViewStatusResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+            <element name="Reason" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Ping">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="PingResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocHeaderData">
+        <complexType>
+          <sequence>
+            <element name="FrameKey" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocHeaderDataResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="FrameKey" nillable="true" type="xsd:int"/>
+            <element name="FrameData" nillable="true" type="S3:FrameDataParam"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocTableData">
+        <complexType>
+          <sequence>
+            <element name="FrameKey" nillable="true" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DocTableDataResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="FrameKey" nillable="true" type="xsd:int"/>
+            <element name="DocTableData" nillable="true" type="S3:TableHandleParam"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="DocEditor_DocHeaderData">
+    <part name="parameters" element="S3:DocHeaderData"/>
+  </message>
+  <message name="DocEditor_DocTableDataResponse">
+    <part name="parameters" element="S3:DocTableDataResponse"/>
+  </message>
+  <message name="DocEditor_DocTableData">
+    <part name="parameters" element="S3:DocTableData"/>
+  </message>
+  <message name="FaultDetailMessage">
+    <part name="FaultDetail" element="S1:FaultDetail"/>
+  </message>
+  <message name="DocEditor">
+    <part name="parameters" element="S2:CreatePO_DocEditor"/>
+  </message>
+  <message name="Oblik_DocEditor_checkserviceResponse">
+    <part name="parameters" element="S2:checkserviceResponse"/>
+  </message>
+  <message name="DocEditor_ViewStatus">
+    <part name="parameters" element="S3:ViewStatus"/>
+  </message>
+  <message name="DocEditorRelease">
+    <part name="parameters" element="S3:Release_DocEditor"/>
+  </message>
+  <message name="DocEditor_PingResponse">
+    <part name="parameters" element="S3:PingResponse"/>
+  </message>
+  <message name="DocEditorResponse">
+    <part name="parameters" element="S2:CreatePO_DocEditorResponse"/>
+  </message>
+  <message name="Oblik_DocEditor_checkservice">
+    <part name="parameters" element="S2:checkservice"/>
+  </message>
+  <message name="DocEditorReleaseResponse">
+    <part name="parameters" element="S3:Release_DocEditorResponse"/>
+  </message>
+  <message name="DocEditorID">
+    <part name="DocEditorID" element="S3:DocEditorID"/>
+  </message>
+  <message name="DocEditor_Ping">
+    <part name="parameters" element="S3:Ping"/>
+  </message>
+  <message name="DocEditor_ViewStatusResponse">
+    <part name="parameters" element="S3:ViewStatusResponse"/>
+  </message>
+  <message name="DocEditor_DocHeaderDataResponse">
+    <part name="parameters" element="S3:DocHeaderDataResponse"/>
+  </message>
+  <portType name="Oblik_DocEditorObj">
+    <operation name="CreatePO_DocEditor">
+      <input message="tns:DocEditor"/>
+      <output message="tns:DocEditorResponse"/>
+      <fault name="Oblik_DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="checkservice">
+      <input message="tns:Oblik_DocEditor_checkservice"/>
+      <output message="tns:Oblik_DocEditor_checkserviceResponse"/>
+      <fault name="Oblik_DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+  </portType>
+  <portType name="DocEditorObj">
+    <operation name="Release_DocEditor">
+      <input message="tns:DocEditorRelease"/>
+      <output message="tns:DocEditorReleaseResponse"/>
+      <fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="ViewStatus">
+      <input message="tns:DocEditor_ViewStatus"/>
+      <output message="tns:DocEditor_ViewStatusResponse"/>
+      <fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="Ping">
+      <input message="tns:DocEditor_Ping"/>
+      <output message="tns:DocEditor_PingResponse"/>
+      <fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocHeaderData">
+      <input message="tns:DocEditor_DocHeaderData"/>
+      <output message="tns:DocEditor_DocHeaderDataResponse"/>
+      <fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="DocTableData">
+      <input message="tns:DocEditor_DocTableData"/>
+      <output message="tns:DocEditor_DocTableDataResponse"/>
+      <fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+  </portType>
+  <binding name="Oblik_DocEditorObj" type="tns:Oblik_DocEditorObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="CreatePO_DocEditor">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal"></soap:header>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocEditorFault">
+        <soap:fault name="Oblik_DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="checkservice">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocEditorFault">
+        <soap:fault name="Oblik_DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <binding name="DocEditorObj" type="tns:DocEditorObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Release_DocEditor">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" required="true"></soap:header>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="ViewStatus">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" required="true"></soap:header>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="Ping">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" required="true"></soap:header>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocHeaderData">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" required="true"></soap:header>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="DocTableData">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" required="true"></soap:header>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="Oblik_DocEditorService">
+    <port name="DocEditorObj" binding="tns:DocEditorObj">
+      <wsdl:documentation/>
+      <soap:address location="http://maximmonin:8080/omk/wsa1"/>
+    </port>
+    <port name="Oblik_DocEditorObj" binding="tns:Oblik_DocEditorObj">
+      <wsdl:documentation/>
+      <soap:address location="http://maximmonin:8080/omk/wsa1"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:endpoint>http://maximmonin:8080/omk/wsa1</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="Release_DocEditor" bindingOperationName="Release_DocEditor" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/omk/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-doceditor:DocEditor">
+   <soapenv:Header>
+      <urn:DocEditorID>
+         <urn:UUID>37cb61f8f3397d86:5fbbfba3:1279c57a224:-7fff;&lt;Oblik_DocEditor|PX-000003|PO>;5YyW1iG7idufiaAbB9I23A==</urn:UUID>
+      </urn:DocEditorID>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn:Release_DocEditor/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-doceditor/DocEditorObj/Release_DocEditorRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="ViewStatus" bindingOperationName="ViewStatus" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/omk/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-doceditor:DocEditor">
+   <soapenv:Header>
+      <urn:DocEditorID>
+         <urn:UUID>37cb61f8f3397d86:5fbbfba3:1279c57a224:-7ffa;&lt;Oblik_DocEditor|PX-000087|PO>;W9zyyYCwGBhbHBIou2795A==</urn:UUID>
+      </urn:DocEditorID>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn:ViewStatus/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-doceditor/DocEditorObj/ViewStatusRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="Ping" bindingOperationName="Ping" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-doceditor:DocEditor">
+   <soapenv:Header>
+      <urn:DocEditorID>
+         <urn:UUID>?</urn:UUID>
+      </urn:DocEditorID>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn:Ping/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-doceditor/DocEditorObj/PingRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocHeaderData" bindingOperationName="DocHeaderData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-doceditor:DocEditor">
+   <soapenv:Header>
+      <urn:DocEditorID>
+         <urn:UUID>?</urn:UUID>
+      </urn:DocEditorID>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn:DocHeaderData>
+         <urn:FrameKey>?</urn:FrameKey>
+      </urn:DocHeaderData>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-doceditor/DocEditorObj/DocHeaderDataRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="DocTableData" bindingOperationName="DocTableData" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-doceditor:DocEditor">
+   <soapenv:Header>
+      <urn:DocEditorID>
+         <urn:UUID>39e706a46ad531be:-594200a5:128a24c0399:-7ffa;&lt;Oblik_DocEditor|PX-000044|PO>;JRCI/+s5Wq</urn:UUID>
+      </urn:DocEditorID>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn:DocTableData>
+         <urn:FrameKey>1</urn:FrameKey>
+      </urn:DocTableData>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-doceditor/DocEditorObj/DocTableDataRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="Oblik_DocEditorObj" type="wsdl" bindingName="{urn:oblikerp-com-doceditor}Oblik_DocEditorObj" soapVersion="1_1" anonymous="optional" definition="https://maximmonin:8443/omk/wsa1/wsdl?targetURI=Oblik_DocEditor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://maximmonin:8443/omk/wsa1/wsdl?targetURI=Oblik_DocEditor"><con:part><con:url>https://maximmonin:8443/omk/wsa1/wsdl?targetURI=Oblik_DocEditor</con:url><con:content><![CDATA[<definitions name="Oblik_DocEditor" targetNamespace="urn:oblikerp-com-doceditor" xmlns:S3="urn:oblikerp-com-doceditor:DocEditor" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:prodata="urn:schemas-progress-com:xml-prodata:0001" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="urn:oblikerp-com-doceditor" xmlns:S2="urn:oblikerp-com-doceditor:Oblik_DocEditor" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:S1="urn:soap-fault:details" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:documentation>EncodingType=DOC_LITERAL, WSA_Product=10.2A03 - N/A</wsdl:documentation>
+  <types>
+    <schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="FaultDetail">
+        <complexType>
+          <sequence>
+            <element name="errorMessage" type="xsd:string"/>
+            <element name="requestID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-doceditor:Oblik_DocEditor" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="checkservice">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="checkserviceResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="c" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CreatePO_DocEditor">
+        <complexType>
+          <sequence>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+            <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+            <element name="RidTypedoc" nillable="true" type="xsd:int"/>
+            <element name="NewDoc" nillable="true" type="xsd:boolean"/>
+            <element name="PutOff" nillable="true" type="xsd:boolean"/>
+            <element name="RidMainDoc" nillable="true" type="xsd:int"/>
+            <element name="EditMode" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CreatePO_DocEditorResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ContextId" nillable="true" type="xsd:string"/>
+            <element name="RidDoc" nillable="true" type="xsd:int"/>
+            <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+            <element name="RidTypedoc" nillable="true" type="xsd:int"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+            <element name="ViewReason" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com-doceditor:DocEditor" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="DocEditorID">
+        <complexType>
+          <sequence>
+            <element name="UUID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Release_DocEditor">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="Release_DocEditorResponse">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="ViewStatus">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="ViewStatusResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="ViewOnly" nillable="true" type="xsd:boolean"/>
+            <element name="Reason" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Ping">
+        <complexType>
+          <sequence/>
+        </complexType>
+      </element>
+      <element name="PingResponse">
+        <complexType>
+          <sequence>
+            <element name="result" nillable="true" type="xsd:string"/>
+            <element name="OutMessage" nillable="true" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="DocEditor_ViewStatus">
+    <part name="parameters" element="S3:ViewStatus"/>
+  </message>
+  <message name="DocEditor_PingResponse">
+    <part name="parameters" element="S3:PingResponse"/>
+  </message>
+  <message name="DocEditorRelease">
+    <part name="parameters" element="S3:Release_DocEditor"/>
+  </message>
+  <message name="DocEditorResponse">
+    <part name="parameters" element="S2:CreatePO_DocEditorResponse"/>
+  </message>
+  <message name="Oblik_DocEditor_checkservice">
+    <part name="parameters" element="S2:checkservice"/>
+  </message>
+  <message name="DocEditorReleaseResponse">
+    <part name="parameters" element="S3:Release_DocEditorResponse"/>
+  </message>
+  <message name="DocEditor_Ping">
+    <part name="parameters" element="S3:Ping"/>
+  </message>
+  <message name="DocEditorID">
+    <part name="DocEditorID" element="S3:DocEditorID"/>
+  </message>
+  <message name="DocEditor_ViewStatusResponse">
+    <part name="parameters" element="S3:ViewStatusResponse"/>
+  </message>
+  <message name="FaultDetailMessage">
+    <part name="FaultDetail" element="S1:FaultDetail"/>
+  </message>
+  <message name="Oblik_DocEditor_checkserviceResponse">
+    <part name="parameters" element="S2:checkserviceResponse"/>
+  </message>
+  <message name="DocEditor">
+    <part name="parameters" element="S2:CreatePO_DocEditor"/>
+  </message>
+  <portType name="Oblik_DocEditorObj">
+    <operation name="CreatePO_DocEditor">
+      <input message="tns:DocEditor"/>
+      <output message="tns:DocEditorResponse"/>
+      <fault name="Oblik_DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="checkservice">
+      <input message="tns:Oblik_DocEditor_checkservice"/>
+      <output message="tns:Oblik_DocEditor_checkserviceResponse"/>
+      <fault name="Oblik_DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+  </portType>
+  <portType name="DocEditorObj">
+    <operation name="Release_DocEditor">
+      <input message="tns:DocEditorRelease"/>
+      <output message="tns:DocEditorReleaseResponse"/>
+      <fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="ViewStatus">
+      <input message="tns:DocEditor_ViewStatus"/>
+      <output message="tns:DocEditor_ViewStatusResponse"/>
+      <fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+    <operation name="Ping">
+      <input message="tns:DocEditor_Ping"/>
+      <output message="tns:DocEditor_PingResponse"/>
+      <fault name="DocEditorFault" message="tns:FaultDetailMessage"/>
+    </operation>
+  </portType>
+  <binding name="Oblik_DocEditorObj" type="tns:Oblik_DocEditorObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="CreatePO_DocEditor">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal"></soap:header>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocEditorFault">
+        <soap:fault name="Oblik_DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="checkservice">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="Oblik_DocEditorFault">
+        <soap:fault name="Oblik_DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <binding name="DocEditorObj" type="tns:DocEditorObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Release_DocEditor">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" required="true"></soap:header>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="ViewStatus">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" required="true"></soap:header>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="Ping">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:header message="tns:DocEditorID" part="DocEditorID" use="literal" required="true"></soap:header>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="DocEditorFault">
+        <soap:fault name="DocEditorFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="Oblik_DocEditorService">
+    <port name="DocEditorObj" binding="tns:DocEditorObj">
+      <wsdl:documentation/>
+      <soap:address location="http://maximmonin:8080/omk/wsa1"/>
+    </port>
+    <port name="Oblik_DocEditorObj" binding="tns:Oblik_DocEditorObj">
+      <wsdl:documentation/>
+      <soap:address location="http://maximmonin:8080/omk/wsa1"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:endpoint>http://maximmonin:8080/omk/wsa1</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="CreatePO_DocEditor" bindingOperationName="CreatePO_DocEditor" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/omk/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-doceditor:Oblik_DocEditor">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:CreatePO_DocEditor>
+         <urn:ContextId>paTncaTlbMkjpifd</urn:ContextId>
+         <urn:RidDoc>319742</urn:RidDoc>
+         <urn:ViewOnly>false</urn:ViewOnly>
+         <urn:RidTypedoc>300171877</urn:RidTypedoc>
+         <urn:NewDoc>false</urn:NewDoc>
+         <urn:PutOff>false</urn:PutOff>
+         <urn:RidMainDoc>0</urn:RidMainDoc>
+         <urn:EditMode>""</urn:EditMode>
+      </urn:CreatePO_DocEditor>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-doceditor/Oblik_DocEditorObj/CreatePO_DocEditorRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkservice" bindingOperationName="checkservice" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://maximmonin:8080/oblik/wsa1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:oblikerp-com-doceditor:Oblik_DocEditor">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:checkservice/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:oblikerp-com-doceditor/Oblik_DocEditorObj/checkserviceRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

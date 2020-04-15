@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Oblik_Main" targetNamespace="urn:oblikerp-com" xmlns:tns="urn:oblikerp-com" xmlns:S2="urn:oblikerp-com:Oblik_Main" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:S1="urn:soap-fault:details" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:documentation>EncodingType=DOC_LITERAL, Proxygen_Product=Progress Version 10.1B</wsdl:documentation>
+  <wsdl:types>
+<schema elementFormDefault="unqualified" targetNamespace="urn:soap-fault:details" xmlns="http://www.w3.org/2001/XMLSchema"><element name="FaultDetail"><complexType><sequence><element name="errorMessage" type="xsd:string"/><element name="requestID" type="xsd:string"/></sequence></complexType></element></schema>
+<schema elementFormDefault="qualified" targetNamespace="urn:oblikerp-com:Oblik_Main" xmlns="http://www.w3.org/2001/XMLSchema"><complexType name="AvailApps_AvailEntRow"><sequence><element name="EntName" nillable="true" type="xsd:string"/><element name="rident" nillable="true" type="xsd:int"/></sequence></complexType><complexType name="AvailApps_AvailEntParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AvailEntRow" type="S2:AvailApps_AvailEntRow"/></sequence></complexType><complexType name="AvailApps_AvailCathgRow"><sequence><element name="CathgName" nillable="true" type="xsd:string"/><element name="ridcathg" nillable="true" type="xsd:int"/></sequence></complexType><complexType name="AvailApps_AvailCathgParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AvailCathgRow" type="S2:AvailApps_AvailCathgRow"/></sequence></complexType><complexType name="AvailApps_AvailAppRow"><sequence><element name="AppName" nillable="true" type="xsd:string"/><element name="ridcathg" nillable="true" type="xsd:int"/><element name="ridapp" nillable="true" type="xsd:int"/></sequence></complexType><complexType name="AvailApps_AvailAppParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="AvailAppRow" type="S2:AvailApps_AvailAppRow"/></sequence></complexType><complexType name="GetMenu_MainMenuRow"><sequence><element name="RidMenu" nillable="true" type="xsd:int"/><element name="ItemId" nillable="true" type="xsd:int"/><element name="ItemLevel" nillable="true" type="xsd:int"/><element name="ParentId" nillable="true" type="xsd:int"/><element name="ItemName" nillable="true" type="xsd:string"/><element name="ItemHelp" nillable="true" type="xsd:string"/><element name="ImagePath" nillable="true" type="xsd:string"/><element name="ModulePath" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="GetMenu_MainMenuParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="MainMenuRow" type="S2:GetMenu_MainMenuRow"/></sequence></complexType><complexType name="GetMenu_FastMenuRow"><sequence><element name="RidMenu" nillable="true" type="xsd:int"/><element name="ItemName" nillable="true" type="xsd:string"/><element name="ItemHelp" nillable="true" type="xsd:string"/><element name="ImagePath" nillable="true" type="xsd:string"/><element name="RunCount" nillable="true" type="xsd:int"/><element name="ModulePath" nillable="true" type="xsd:string"/></sequence></complexType><complexType name="GetMenu_FastMenuParam"><sequence><element maxOccurs="unbounded" minOccurs="0" name="FastMenuRow" type="S2:GetMenu_FastMenuRow"/></sequence></complexType><element name="AppContext"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="AppContextResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="AppName" nillable="true" type="xsd:string"/><element name="Db_Name" nillable="true" type="xsd:string"/><element name="UserName" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="AvailApps"><complexType><sequence><element name="AppId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="ServiceId" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="AvailAppsResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="AppId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="UserName" nillable="true" type="xsd:string"/><element name="Db_Name" nillable="true" type="xsd:string"/><element name="DefEnt" nillable="true" type="xsd:int"/><element name="DefCathg" nillable="true" type="xsd:int"/><element name="DefApp" nillable="true" type="xsd:int"/><element name="AvailEnt" nillable="true" type="S2:AvailApps_AvailEntParam"/><element name="AvailCathg" nillable="true" type="S2:AvailApps_AvailCathgParam"/><element name="AvailApp" nillable="true" type="S2:AvailApps_AvailAppParam"/></sequence></complexType></element><element name="GetMenu"><complexType><sequence><element name="AppId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="RidEnt" nillable="true" type="xsd:int"/><element name="RidCathg" nillable="true" type="xsd:int"/><element name="RidApp" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="GetMenuResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="AppId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="MainMenu" nillable="true" type="S2:GetMenu_MainMenuParam"/><element name="FastMenu" nillable="true" type="S2:GetMenu_FastMenuParam"/></sequence></complexType></element><element name="RunModule"><complexType><sequence><element name="AppId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="Module" nillable="true" type="xsd:string"/><element name="RidEnt" nillable="true" type="xsd:int"/><element name="RidCathg" nillable="true" type="xsd:int"/><element name="RidApp" nillable="true" type="xsd:int"/><element name="RidMenu" nillable="true" type="xsd:int"/></sequence></complexType></element><element name="RunModuleResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="AppId" nillable="true" type="xsd:int"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="Module" nillable="true" type="xsd:string"/><element name="ModuleContextId" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="Start"><complexType><sequence><element name="ContextId" nillable="true" type="xsd:string"/><element name="ServiceId" nillable="true" type="xsd:int"/><element name="login" nillable="true" type="xsd:string"/><element name="pwd" nillable="true" type="xsd:string"/></sequence></complexType></element><element name="StartResponse"><complexType><sequence><element name="result" nillable="true" type="xsd:string"/><element name="ContextId" nillable="true" type="xsd:string"/><element name="OblikContextId" nillable="true" type="xsd:string"/></sequence></complexType></element></schema>
+  </wsdl:types>
+  <wsdl:message name="Oblik_Main_RunModule">
+    <wsdl:part name="parameters" element="S2:RunModule"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_GetMenuResponse">
+    <wsdl:part name="parameters" element="S2:GetMenuResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_AvailApps">
+    <wsdl:part name="parameters" element="S2:AvailApps"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_RunModuleResponse">
+    <wsdl:part name="parameters" element="S2:RunModuleResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_AvailAppsResponse">
+    <wsdl:part name="parameters" element="S2:AvailAppsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_AppContextResponse">
+    <wsdl:part name="parameters" element="S2:AppContextResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_StartResponse">
+    <wsdl:part name="parameters" element="S2:StartResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_Start">
+    <wsdl:part name="parameters" element="S2:Start"/>
+  </wsdl:message>
+  <wsdl:message name="FaultDetailMessage">
+    <wsdl:part name="FaultDetail" element="S1:FaultDetail"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_AppContext">
+    <wsdl:part name="parameters" element="S2:AppContext"/>
+  </wsdl:message>
+  <wsdl:message name="Oblik_Main_GetMenu">
+    <wsdl:part name="parameters" element="S2:GetMenu"/>
+  </wsdl:message>
+  <wsdl:portType name="Oblik_MainObj">
+    <wsdl:operation name="AppContext">
+      <wsdl:input message="tns:Oblik_Main_AppContext"/>
+      <wsdl:output message="tns:Oblik_Main_AppContextResponse"/>
+      <wsdl:fault name="Oblik_MainFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="AvailApps">
+      <wsdl:input message="tns:Oblik_Main_AvailApps"/>
+      <wsdl:output message="tns:Oblik_Main_AvailAppsResponse"/>
+      <wsdl:fault name="Oblik_MainFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetMenu">
+      <wsdl:input message="tns:Oblik_Main_GetMenu"/>
+      <wsdl:output message="tns:Oblik_Main_GetMenuResponse"/>
+      <wsdl:fault name="Oblik_MainFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="RunModule">
+      <wsdl:input message="tns:Oblik_Main_RunModule"/>
+      <wsdl:output message="tns:Oblik_Main_RunModuleResponse"/>
+      <wsdl:fault name="Oblik_MainFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="Start">
+      <wsdl:input message="tns:Oblik_Main_Start"/>
+      <wsdl:output message="tns:Oblik_Main_StartResponse"/>
+      <wsdl:fault name="Oblik_MainFault" message="tns:FaultDetailMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Oblik_MainObj" type="tns:Oblik_MainObj">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="AppContext">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_MainFault">
+        <soap:fault name="Oblik_MainFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AvailApps">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_MainFault">
+        <soap:fault name="Oblik_MainFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMenu">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_MainFault">
+        <soap:fault name="Oblik_MainFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RunModule">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_MainFault">
+        <soap:fault name="Oblik_MainFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Start">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Oblik_MainFault">
+        <soap:fault name="Oblik_MainFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Oblik_MainService">
+    <wsdl:port name="Oblik_MainObj" binding="tns:Oblik_MainObj">
+<wsdl:documentation></wsdl:documentation>
+      <soap:address location="http://www.oblikerp.com/wsa/wsa1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

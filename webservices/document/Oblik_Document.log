@@ -1,0 +1,419 @@
+
+**  ProxyGen, Progress Version 10.2A
+
+** Checking for existence of .r files ...
+
+** Processing non-persistent procedures ...
+
+** Processing: D:\Maxim\webservices\document\src\AppDocMenu.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\AppDocMenu.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT AppDocMenu TABLE
+       TABLE: AppDocMenu
+          MenuItem character
+          IdItem integer
+          RidMenu integer
+          RidApp integer
+          RidTypedoc integer
+          PutOff logical
+          Scope character
+          ScopeList character
+          DateFrom date
+          DateTo date
+          ViewOnly logical
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: D:\Maxim\webservices\document\src\AppReportMenu.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\AppReportMenu.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT AppDocMenu TABLE
+       TABLE: AppDocMenu
+          MenuItem character
+          IdItem integer
+          ItemLevel integer
+          ParentId integer
+          RidMenu integer
+          RidTypedoc integer
+          ViewOnly logical
+          IsAvailable logical
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\BasetypeSearch.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\BasetypeSearch.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT basetype CHARACTER
+          INPUT AppendParam CHARACTER
+          INPUT ContextParam CHARACTER
+          INPUT SearchString CHARACTER
+          OUTPUT SearchData TABLE-HANDLE
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: D:\Maxim\webservices\document\src\BasetypeSelect.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\BasetypeSelect.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT basetype CHARACTER
+          INPUT AppendParam CHARACTER
+          INPUT ContextParam CHARACTER
+          INPUT SearchString CHARACTER
+          OUTPUT SearchData TABLE-HANDLE
+          OUTPUT AllRecords LOGICAL
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\CheckDocView.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\CheckDocView.p 
+          INPUT-OUTPUT DocsId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidDoc INTEGER
+          OUTPUT DocRight INTEGER
+          OUTPUT OutMessage CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\CopyContext.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\CopyContext.p 
+          INPUT-OUTPUT KeyId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT ContextType CHARACTER
+          OUTPUT NewContextId CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocContextMenu.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocContextMenu.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidDoc INTEGER
+          INPUT ViewOnly LOGICAL
+          OUTPUT ContextMenu TABLE
+       TABLE: ContextMenu
+          ItemId integer
+          ItemKey character
+          ItemName character
+          UpItem integer
+          AppParam character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocData.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocData.p 
+          INPUT-OUTPUT DocsId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidDoc INTEGER
+          INPUT-OUTPUT FrameKey INTEGER
+          OUTPUT FrameData TABLE
+       TABLE: FrameData
+          RidFF integer
+          InternalValue character
+          FormValue character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocFileAdd.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocFileAdd.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidDoc INTEGER
+          INPUT HostFileName CHARACTER
+          INPUT LocalFileName CHARACTER
+          OUTPUT OutMessage CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocFileDel.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocFileDel.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidFileDoc INTEGER
+          OUTPUT OutMessage CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocFileView.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocFileView.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidFileDoc INTEGER
+          OUTPUT HostFileName CHARACTER
+          OUTPUT LocalFileName CHARACTER
+          OUTPUT OutMessage CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocForm.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocForm.p 
+          INPUT-OUTPUT DocsId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidTypeDoc INTEGER
+          OUTPUT Frames TABLE
+          OUTPUT FrameFields TABLE
+       TABLE: Frames
+          FrameKey integer
+          RidFrame integer
+          IsTable logical
+          N integer
+          PageN integer
+          FrameHeight integer
+          FrameTitle character
+       TABLE: FrameFields
+          RidFF integer
+          FrameKey integer
+          RidFrame integer
+          FieldNum integer
+          IsMandatory logical
+          IsLim logical
+          ViewOnly logical
+          IsSelect logical
+          IsAutoSelect logical
+          FieldCol integer
+          FieldRow integer
+          FieldWidth integer
+          FieldHeight integer
+          ColNumber integer
+          AppendParam character
+          BaseType character
+          FieldFormat character
+          FieldLabel character
+          FieldAlign character
+          ObjectType character
+          ProgressType character
+          HelpString character
+          FreeEdit logical
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocHeader.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocHeader.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidDoc INTEGER
+          OUTPUT DocHeader TABLE
+          OUTPUT AttachedFiles TABLE
+       TABLE: DocHeader
+          Typedoc character
+          GroupDoc character
+          DateDoc date
+          IdDoc integer
+          RidDoc integer
+          CreationTime datetime-tz
+          CreatedBy character
+          SavedBy character
+          Ent character
+          Divis character
+          Application character
+          Workcenter character
+          Sum decimal
+          Currency character
+          DocCommitted logical
+          RO logical
+          NeedCalc logical
+          Filled logical
+          ExecFlag logical
+          Error logical
+          AuditEnabled logical
+          DocStatus character
+          Description character
+          BlockedBy character
+       TABLE: AttachedFiles
+          FileNumber integer
+          FileName character
+          FileSize integer
+          FileDate date
+          AddedBy character
+          FileDescr character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocInfo.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocInfo.p 
+          INPUT-OUTPUT DocsId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT-OUTPUT InfoType CHARACTER
+          INPUT RidDoc INTEGER
+          OUTPUT CollumnData TABLE
+          OUTPUT DocumentData TABLE-HANDLE
+       TABLE: CollumnData
+          IdField integer
+          fLabel character
+          fName character
+          fWidth integer
+          fType character
+          fAlign character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\DocTableData.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\DocTableData.p 
+          INPUT-OUTPUT DocsId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT RidDoc INTEGER
+          INPUT-OUTPUT FrameKey INTEGER
+          OUTPUT DocTableData TABLE-HANDLE
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\FileDBegin.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\FileDBegin.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT HostFileName CHARACTER
+          OUTPUT OutMessage CHARACTER
+          OUTPUT HostFileSize INTEGER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\FileDChunk.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\FileDChunk.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT HostFileName CHARACTER
+          INPUT-OUTPUT BytesFrom INTEGER
+          INPUT-OUTPUT BytesTo INTEGER
+          OUTPUT OutMessage CHARACTER
+          OUTPUT HostFileSize INTEGER
+          OUTPUT FileBinary MEMPTR
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\FileDelete.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\FileDelete.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT HostFileName CHARACTER
+          OUTPUT OutMessage CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\FileUBegin.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\FileUBegin.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          OUTPUT HostFileName CHARACTER
+          OUTPUT OutMessage CHARACTER
+   -- Validating saved information against latest .r ...
+      Customizations applied
+      Defaults used for parameters
+
+** Processing: D:\Maxim\webservices\document\src\FileUChunk.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\FileUChunk.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT HostFileName CHARACTER
+          INPUT FileBinary MEMPTR
+          OUTPUT OutMessage CHARACTER
+          OUTPUT HostFileSize INTEGER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\GetDocList.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\GetDocList.p 
+          INPUT-OUTPUT DocsId INTEGER
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT PutOff LOGICAL
+          INPUT RidApp INTEGER
+          INPUT RidTypedoc INTEGER
+          INPUT DateFrom DATE
+          INPUT DateTo DATE
+          INPUT Scope CHARACTER
+          INPUT IdDocument INTEGER
+          INPUT RidDocument INTEGER
+          INPUT MaxRecCount INTEGER
+          INPUT DocFilterParams CHARACTER
+          INPUT FieldFilterParams CHARACTER
+          INPUT SortBy CHARACTER
+          OUTPUT CollumnData TABLE
+          OUTPUT DocumentData TABLE-HANDLE
+       TABLE: CollumnData
+          IdField integer
+          fLabel character
+          fName character
+          fWidth integer
+          fType character
+          fAlign character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\PrintDoc.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\PrintDoc.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT-OUTPUT RidDoc INTEGER
+          OUTPUT OutMessage CHARACTER
+          OUTPUT PrintOpers TABLE
+       TABLE: PrintOpers
+          Module character
+          ViewOnly logical
+          FileName character
+          FileType character
+          PrintParams character
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\PrintDriver.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\PrintDriver.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT Module CHARACTER
+          INPUT ViewOnly LOGICAL
+          INPUT FileName CHARACTER
+          INPUT FileType CHARACTER
+          INPUT PrintParams CHARACTER
+          OUTPUT HostFileName CHARACTER
+          OUTPUT LocalFileName CHARACTER
+          OUTPUT OutMessage CHARACTER
+   -- No customizations; Validation not necessary
+
+** Processing: D:\Maxim\webservices\document\src\SendEvent.r ...
+   -- Parsing r-code ...
+       MAIN D:\Maxim\webservices\document\src\SendEvent.p 
+          INPUT-OUTPUT ContextId CHARACTER
+          INPUT-OUTPUT RidDoc INTEGER
+          INPUT-OUTPUT ViewOnly LOGICAL
+          INPUT-OUTPUT RidTypedoc INTEGER
+          INPUT NewDoc LOGICAL
+          INPUT EditMode CHARACTER
+          INPUT DumpFile CHARACTER
+          INPUT-OUTPUT QueryId INTEGER
+          INPUT EventName CHARACTER
+          INPUT RidFF INTEGER
+          INPUT row INTEGER
+          INPUT InputValue CHARACTER
+          OUTPUT OutMessage CHARACTER
+          OUTPUT OutputValue CHARACTER
+          OUTPUT ModifiedFields TABLE
+          OUTPUT DisabledFields TABLE
+          OUTPUT TableOpers TABLE
+          OUTPUT PrintOpers TABLE
+       TABLE: DisabledFields
+          RidFrame integer
+          RidFF integer
+          TRow integer
+          ReadOnly logical
+          Disabled logical
+       TABLE: ModifiedFields
+          RidFrame integer
+          RidFF integer
+          TRow integer
+          InternalValue character
+          FormValue character
+       TABLE: TableOpers
+          RidFrame integer
+          OperOrder integer
+          OperName character
+          TRow integer
+       TABLE: PrintOpers
+          Module character
+          ViewOnly logical
+          FileName character
+          FileType character
+          PrintParams character
+   -- No customizations; Validation not necessary
+
+** Processing persistent procedures ...
+
+** Checking method and parameter names ...
+
+** Generating Web Services files ...
+   Creating wsm file ...
+   Generation of wsm file complete ...
+   Creating test wsdl file ...
+   Generation of test wsdl file complete ...
+
+** Generation complete
